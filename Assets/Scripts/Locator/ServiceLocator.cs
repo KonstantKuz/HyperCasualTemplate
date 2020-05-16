@@ -16,7 +16,6 @@ public interface ServiceRequester
 
 public class ServiceLocator : Singleton<ServiceLocator>
 {
-
     private readonly Dictionary<string, IService> services = new Dictionary<string, IService>();
 
     private void Awake()
@@ -42,7 +41,7 @@ public class ServiceLocator : Singleton<ServiceLocator>
             throw new InvalidOperationException();
         }
 
-        Debug.Log($"<color=red> {key} has been requested from ServiceLocator. </color>");
+        Debug.LogWarning($"<color=red> {key} has been requested from ServiceLocator. </color>");
         return (T)services[key];
     }
 
@@ -56,7 +55,7 @@ public class ServiceLocator : Singleton<ServiceLocator>
             return;
         }
 
-        Debug.Log($"<color=green> Added new service : {key} </color>");
+        Debug.LogWarning($"<color=green> Added new service : {key} </color>");
         services.Add(key, service);
     }
     
