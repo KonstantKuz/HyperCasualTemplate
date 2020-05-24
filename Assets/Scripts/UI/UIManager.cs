@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UIManager : Service, ServiceRequester, ObserverSubscriber
+public class UIManager : MonoBehaviour
 {
     [SerializeField] public GameObject mainMenuPanel;
     [SerializeField] public GameObject losePanel;
@@ -12,42 +12,28 @@ public class UIManager : Service, ServiceRequester, ObserverSubscriber
     
     private List<GameObject> allPanels = new List<GameObject>();
     
-    public Observer observer { get; private set; }
-
-    public override void RegisterService()
-    {
-        ServiceLocator.Instance.Register(this);
-    }
-
     private void OnEnable()
     {
-        CacheNecessaryService();
         SubscribeToNecessaryEvets();
+    }
+
+    public void SubscribeToNecessaryEvets()
+    {
+        Observer.Instance.OnLoadMainMenu += delegate { ActivatePanel(mainMenuPanel); };
+        Observer.Instance.OnPlayerDie += delegate { ActivatePanel(losePanel); };
+        Observer.Instance.OnFinish += delegate { ActivatePanel(winPanel); };
     }
 
     private void Start()
     {
         SetAllPanels();
     }
-
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
-    }
-
-    public void SubscribeToNecessaryEvets()
-    {
-        observer.OnLoadMainMenu += delegate { ActivatePanel(mainMenuPanel); };
-        observer.OnPlayerDie += delegate { ActivatePanel(losePanel); };
-        observer.OnFinish += delegate { ActivatePanel(winPanel); };
-    }
-
     /// <summary>
     /// Метод для вызова с кнопки UI
     /// </summary>
     public void StartGame()
     {
-        observer.OnStartGame();
+        Observer.Instance.OnStartGame();
     }
     
     private void ActivatePanel(params GameObject[] panels)
@@ -79,11 +65,11 @@ public class UIManager : Service, ServiceRequester, ObserverSubscriber
     /// </summary>
     public void LoadNextLevel()
     {
-        observer.OnLoadNextLevel();
+        Observer.Instance.OnLoadNextLevel();
     }
 
     public void RestartGame()
     {
-        observer.OnRestartGame();
+        Observer.Instance.OnRestartGame();
     }
 }

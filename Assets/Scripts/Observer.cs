@@ -1,14 +1,7 @@
 ﻿using System;
 using UnityEngine;
-
-public interface ObserverSubscriber
-{
-    Observer observer { get; }
-
-    void SubscribeToNecessaryEvets();
-}
-
-public class Observer : Service
+using Singleton;
+public class Observer : Singleton<Observer>
 {
     // Common
     public Action OnStartGame = delegate { Debug.Log("OnStartGame trigerred"); };
@@ -22,9 +15,4 @@ public class Observer : Service
     public Action OnLevelProgressChange = delegate { Debug.Log("OnLevelProgressChange trigerred"); };
     public Action<StimulType> OnGetStimulationText = delegate { Debug.Log("OnGetStimulationText triggered"); };
     public Action OnLeftMouseButtonDown;
-    
-    public override void RegisterService()
-    {
-        ServiceLocator.Instance.Register(this);
-    }
 }

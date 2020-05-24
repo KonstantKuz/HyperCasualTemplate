@@ -4,37 +4,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : Service, ServiceRequester, ObserverSubscriber
+public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
     private int score;
 
-    public Observer observer { get; private set; }
-    
-    public override void RegisterService()
-    {
-        ServiceLocator.Instance.Register(this);
-    }
-
     private void OnEnable()
     {
-        CacheNecessaryService();
         SubscribeToNecessaryEvets();
     }
-
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
-    }
-
     public void SubscribeToNecessaryEvets()
     {
-        observer.OnAddingScore += AddScore;
+        Observer.Instance.OnAddingScore += AddScore;
     }
 
     private void OnDestroy()
     {
-        observer.OnAddingScore -= AddScore;
+        Observer.Instance.OnAddingScore -= AddScore;
     }
 
     private void AddScore(int value)

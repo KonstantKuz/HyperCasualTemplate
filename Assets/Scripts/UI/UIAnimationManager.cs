@@ -5,38 +5,28 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Diagnostics;
 
-public class UIAnimationManager : MonoBehaviour, ServiceRequester, ObserverSubscriber
+public class UIAnimationManager : MonoBehaviour
 {
 	private GameObject confettiVFX;
     private GameObject fireworkVFX;
     private StimulationText stimulText;
 
-    public Observer observer { get; private set; }
-
-    private UIManager uiManager;
-    private UIEffectsHolder uiEffectsHolder;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private UIEffectsHolder uiEffectsHolder;
 
     private void OnEnable()
 	{
-        CacheNecessaryService();
         SubscribeToNecessaryEvets();
-    }
-
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
-        uiManager = ServiceLocator.Instance.Get<UIManager>();
-        uiEffectsHolder = ServiceLocator.Instance.Get<UIEffectsHolder>();
     }
 
     public void SubscribeToNecessaryEvets()
     {
-        observer.OnLoadMainMenu += ShowMainMenu;
-        observer.OnStartGame += CloseMainMenu;
-        observer.OnFinish += ShowWinPanel;
-        observer.OnFinish += delegate { StartCoroutine(PlayUIVFX(confettiVFX, 0f, 2.5f)); };
-        observer.OnPlayerDie += SlideLosePanel;
-        observer.OnGetStimulationText += ShowStimulationText;
+        Observer.Instance.OnLoadMainMenu += ShowMainMenu;
+        Observer.Instance.OnStartGame += CloseMainMenu;
+        Observer.Instance.OnFinish += ShowWinPanel;
+        Observer.Instance.OnFinish += delegate { StartCoroutine(PlayUIVFX(confettiVFX, 0f, 2.5f)); };
+        Observer.Instance.OnPlayerDie += SlideLosePanel;
+        Observer.Instance.OnGetStimulationText += ShowStimulationText;
     }
 
     private void Start()

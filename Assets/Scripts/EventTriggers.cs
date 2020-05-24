@@ -3,30 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventTriggers : MonoBehaviour, ServiceRequester
+public class EventTriggers : MonoBehaviour
 {
     private int stimulationTypeCounter = 1;
-
-    private Observer observer;
-
-    private void OnEnable()
-    {
-        CacheNecessaryService();
-    }
-
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
-    }
 
     private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.A))
-			observer.OnFinish();
+            Observer.Instance.OnFinish();
 		if (Input.GetKeyDown(KeyCode.S))
-			observer.OnPlayerDie();
+            Observer.Instance.OnPlayerDie();
 		if (Input.GetKey(KeyCode.D))
-			observer.OnLevelProgressChange();
+            Observer.Instance.OnLevelProgressChange();
 
         if(Input.GetKeyDown(KeyCode.W))
         {
@@ -34,7 +22,7 @@ public class EventTriggers : MonoBehaviour, ServiceRequester
             if (stimulationTypeCounter > 3)
                 stimulationTypeCounter = 1;
 
-            observer.OnGetStimulationText((StimulType)stimulationTypeCounter);
+            Observer.Instance.OnGetStimulationText((StimulType)stimulationTypeCounter);
         }
     }
 }

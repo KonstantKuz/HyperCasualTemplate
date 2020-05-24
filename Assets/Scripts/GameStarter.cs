@@ -3,22 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStarter : MonoBehaviour, ServiceRequester
+public class GameStarter : MonoBehaviour
 {
-    private Observer observer;
+    private static bool isGameStarted;
+    public static bool IsGameStarted => isGameStarted;
 
     private void OnEnable()
     {
-        CacheNecessaryService();
-    }
+        Observer.Instance.OnStartGame += delegate { isGameStarted = true; };
 
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
+        Observer.Instance.OnFinish += delegate { isGameStarted = false; };
+        Observer.Instance.OnPlayerDie += delegate { isGameStarted = false; };
     }
-
     private void Start()
     {
-        observer.OnLoadMainMenu();
+        Observer.Instance.OnLoadMainMenu();
     }
 }

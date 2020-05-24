@@ -4,40 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : Service, ServiceRequester, ObserverSubscriber
+public class LevelManager : MonoBehaviour
 {
     [SerializeField] private int currentLevel;
 
     public int CurrentLevel => currentLevel;
 
-
-    public Observer observer { get; private set; }
-    
-    public override void RegisterService()
-    {
-        ServiceLocator.Instance.Register(this);
-    }
-
     private void OnEnable()
     {
-        CacheNecessaryService();
         SubscribeToNecessaryEvets();
     }
 
-    public void CacheNecessaryService()
-    {
-        observer = ServiceLocator.Instance.Get<Observer>();
-    }
-    
     public void SubscribeToNecessaryEvets()
     {
-        observer.OnLoadNextLevel += LoadNextLevel;
-        observer.OnRestartGame += RestartLevel;
+        Observer.Instance.OnLoadNextLevel += LoadNextLevel;
+        Observer.Instance.OnRestartGame += RestartLevel;
     }
 
     private void OnDestroy()
     {
-        observer.OnLoadNextLevel -= LoadNextLevel;
+        Observer.Instance.OnLoadNextLevel -= LoadNextLevel;
     }
 
     private void Start()
