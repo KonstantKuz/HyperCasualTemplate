@@ -15,4 +15,6 @@ public class Observer : Singleton<Observer>
     public Action OnLevelProgressChange = delegate { Debug.Log("OnLevelProgressChange trigerred"); };
     public Action<StimulType> OnGetStimulationText = delegate { Debug.Log("OnGetStimulationText triggered"); };
     public Action OnLeftMouseButtonDown;
+
+    public Action<int> OnLevelManagerLoaded;
 }

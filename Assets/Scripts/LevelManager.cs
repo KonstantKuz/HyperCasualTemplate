@@ -8,8 +8,6 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private int currentLevel;
 
-    public int CurrentLevel => currentLevel;
-
     private void OnEnable()
     {
         SubscribeToNecessaryEvets();
@@ -31,12 +29,14 @@ public class LevelManager : MonoBehaviour
         currentLevel = PlayerPrefs.HasKey(GameConstants.PrefsCurrentLevel)
             ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentLevel)
             : 1;
+
+        Observer.Instance.OnLevelManagerLoaded(currentLevel);
     }
     
     private void LoadNextLevel()
     {
         UpdateCurrentLevel();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(currentLevel);
     }
 
     private void UpdateCurrentLevel()
@@ -49,6 +49,6 @@ public class LevelManager : MonoBehaviour
 
     private void RestartLevel()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

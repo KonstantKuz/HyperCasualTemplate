@@ -26,23 +26,21 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        SetAllPanels();
+        CachePanels();
     }
-    /// <summary>
-    /// Метод для вызова с кнопки UI
-    /// </summary>
-    public void StartGame()
+
+    private void CachePanels()
     {
-        Observer.Instance.OnStartGame();
+        allPanels.Add(mainMenuPanel);
+        allPanels.Add(losePanel);
+        allPanels.Add(winPanel);
     }
     
-    private void ActivatePanel(params GameObject[] panels)
+    
+    private void ActivatePanel(GameObject panel)
     {
         DeactivateAllPanels();
-        foreach (var panel in panels)
-        {
-            panel.SetActive(true);
-        }
+        panel.SetActive(true);
     }
     
     private void DeactivateAllPanels()
@@ -52,14 +50,14 @@ public class UIManager : MonoBehaviour
             allPanels[i].SetActive(false);
         }
     }
-    
-    private void SetAllPanels()
+
+    /// <summary>
+    /// Метод для вызова с кнопки UI
+    /// </summary>
+    public void StartGame()
     {
-        allPanels.Add(mainMenuPanel);
-        allPanels.Add(losePanel);
-        allPanels.Add(winPanel);
+        Observer.Instance.OnStartGame();
     }
-    
     /// <summary>
     /// Метод для вызова с кнопки UI (загрузить следующий уровень)
     /// </summary>
@@ -67,7 +65,9 @@ public class UIManager : MonoBehaviour
     {
         Observer.Instance.OnLoadNextLevel();
     }
-
+    /// <summary>
+    /// Метод для вызова с кнопки UI (загрузить следующий уровень)
+    /// </summary>
     public void RestartGame()
     {
         Observer.Instance.OnRestartGame();
