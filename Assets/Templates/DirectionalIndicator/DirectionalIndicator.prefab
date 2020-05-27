@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 5360255014225783559}
   - component: {fileID: 5360255014225783544}
   m_Layer: 5
-  m_Name: RollBar
+  m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 5360255014348548564}
   - component: {fileID: 5360255014348548566}
   m_Layer: 5
-  m_Name: DirectionIndicator
+  m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,7 +462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5360255015618516393}
   m_Layer: 5
-  m_Name: DirectionBar
+  m_Name: DirectionalIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
