@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
 public class EndPanelLevelText : MonoBehaviour
 {
-	[SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI levelText;
 
     private void OnEnable()
     {
