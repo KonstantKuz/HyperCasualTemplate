@@ -4,21 +4,13 @@ namespace Singleton
 {
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-
-        public static bool isApplicationQuitting;
         private static T _instance;
         private static System.Object _lock = new System.Object();
-
-
 
         public static T Instance
         {
             get
             {
-
-                //if (isApplicationQuitting)
-                //    return null;
-
                 lock (_lock)
                 {
                     if (_instance == null)
@@ -27,25 +19,12 @@ namespace Singleton
 
                         if (_instance == null)
                         {
-                            Debug.LogWarning("В сцене не найдено синглтона" + typeof(T) + ", поэтому он был создан принудительно");
-                            var singleton = new GameObject("[SINGLETON] " + typeof(T));
-                            _instance = singleton.AddComponent<T>();
-                            //DontDestroyOnLoad(singleton);
+                            Debug.LogError("В сцене не найдено синглтона" + typeof(T));
                         }
-
                     }
-
                     return _instance;
                 }
             }
         }
-
-
-        public virtual void OnDestroy()
-        {
-            isApplicationQuitting = true;
-        }
-
-
     }
 }

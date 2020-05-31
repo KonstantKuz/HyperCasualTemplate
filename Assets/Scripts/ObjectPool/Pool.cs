@@ -4,10 +4,14 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "ObjectPooler/Pool", fileName = "NewPool")]
 [System.Serializable]
-public class PoolData : ScriptableObject
+public class Pool : ScriptableObject
 {
     public GameObject prefab = null;
+    //public GameObject parentPrefab;
     public string poolTag = "";
-    public bool useDefaultReturn;
-    public float defaultReturnDelay = 5f;
+    public bool autoReturn;
+    public float autoReturnDelay = 5f;
+
+    [HideInInspector] public Queue<GameObject> poolQueue;
+    [HideInInspector] public Transform parent;
 }

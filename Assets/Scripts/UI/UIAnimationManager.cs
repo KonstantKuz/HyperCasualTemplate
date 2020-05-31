@@ -23,9 +23,9 @@ public class UIAnimationManager : MonoBehaviour
     {
         Observer.Instance.OnLoadMainMenu += ShowMainMenu;
         Observer.Instance.OnStartGame += CloseMainMenu;
-        Observer.Instance.OnFinish += ShowWinPanel;
-        Observer.Instance.OnFinish += delegate { StartCoroutine(PlayUIVFX(confettiVFX, 0f, 2.5f)); };
-        Observer.Instance.OnPlayerDie += SlideLosePanel;
+        Observer.Instance.OnWinLevel += ShowWinPanel;
+        Observer.Instance.OnWinLevel += delegate { StartCoroutine(PlayUIVFX(confettiVFX, 0f, 2.5f)); };
+        Observer.Instance.OnLoseLevel += SlideLosePanel;
         Observer.Instance.OnGetStimulationText += ShowStimulationText;
     }
 

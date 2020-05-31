@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1986665021936337090, guid: 7b3fb9212f1d50d44a95f44fdb9e25c2, type: 3}
   poolTag: Car_4
-  useDefaultReturn: 1
-  defaultReturnDelay: 0.5
+  autoReturn: 1
+  autoReturnDelay: 0.5
+  parent: {fileID: 0}

@@ -20,8 +20,8 @@ public class UIManager : MonoBehaviour
     public void SubscribeToNecessaryEvets()
     {
         Observer.Instance.OnLoadMainMenu += delegate { ActivatePanel(mainMenuPanel); };
-        Observer.Instance.OnPlayerDie += delegate { ActivatePanel(losePanel); };
-        Observer.Instance.OnFinish += delegate { ActivatePanel(winPanel); };
+        Observer.Instance.OnLoseLevel += delegate { ActivatePanel(losePanel); };
+        Observer.Instance.OnWinLevel += delegate { ActivatePanel(winPanel); };
     }
 
     private void Start()

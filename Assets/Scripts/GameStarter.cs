@@ -12,8 +12,8 @@ public class GameStarter : MonoBehaviour
     {
         Observer.Instance.OnStartGame += delegate { isGameStarted = true; };
 
-        Observer.Instance.OnFinish += delegate { isGameStarted = false; };
-        Observer.Instance.OnPlayerDie += delegate { isGameStarted = false; };
+        Observer.Instance.OnWinLevel += delegate { isGameStarted = false; };
+        Observer.Instance.OnLoseLevel += delegate { isGameStarted = false; };
     }
     private void Start()
     {

@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using Singleton;
 using UnityEngine;
-[System.Serializable]
-public class Pool
-{
-    public Transform parent;
-    public Queue<GameObject> poolQueue;
-    public PoolData poolData;
-}
 
 public class ObjectPooler : Singleton<ObjectPooler>
 {
@@ -34,7 +27,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
         for (int i = 0; i < pools.Count; i++)
         {
             pools[i].poolQueue = new Queue<GameObject>();
-            poolsDictionary.Add(pools[i].poolData.poolTag, pools[i]);
+            poolsDictionary.Add(pools[i].poolTag, pools[i]);
         }
     }
     private void InitializeObjectPoolGroups()
@@ -66,12 +59,17 @@ public class ObjectPooler : Singleton<ObjectPooler>
         }
         else
         {
-            objToReturn = Instantiate(poolsDictionary[poolTag].poolData.prefab, poolsDictionary[poolTag].parent);
+            if(poolsDictionary[poolTag].parent == null)
+            {
+                poolsDictionary[poolTag].parent = new GameObject(poolTag + "Pool").transform;
+                poolsDictionary[poolTag].parent.parent = transform;
+            }
+            objToReturn = Instantiate(poolsDictionary[poolTag].prefab, poolsDictionary[poolTag].parent);
         }
 
-        if(poolsDictionary[poolTag].poolData.useDefaultReturn)
+        if(poolsDictionary[poolTag].autoReturn)
         {
-            DelayedReturnObject(objToReturn, poolTag, poolsDictionary[poolTag].poolData.defaultReturnDelay);
+            DelayedReturnObject(objToReturn, poolTag, poolsDictionary[poolTag].autoReturnDelay);
         }
 
         return objToReturn;

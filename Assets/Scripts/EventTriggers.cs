@@ -10,11 +10,9 @@ public class EventTriggers : MonoBehaviour
     private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.A))
-            Observer.Instance.OnFinish();
+            Observer.Instance.OnWinLevel();
 		if (Input.GetKeyDown(KeyCode.S))
-            Observer.Instance.OnPlayerDie();
-		if (Input.GetKey(KeyCode.D))
-            Observer.Instance.OnLevelProgressChange();
+            Observer.Instance.OnLoseLevel();
 
         if(Input.GetKeyDown(KeyCode.W))
         {
