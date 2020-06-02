@@ -7,10 +7,10 @@ using UnityEngine;
 public class Pool : ScriptableObject
 {
     public GameObject prefab = null;
-    //public GameObject parentPrefab;
+    public bool nameAsTag = true;
     public string poolTag = "";
-    public bool autoReturn;
-    public float autoReturnDelay = 5f;
+    public bool autoReturn = false;
+    public float autoReturnDelay = 1f;
 
     [HideInInspector] public Queue<GameObject> poolQueue;
     [HideInInspector] public Transform parent;

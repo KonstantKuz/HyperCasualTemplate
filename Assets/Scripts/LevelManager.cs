@@ -51,4 +51,9 @@ public class LevelManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void ResetLevelData()
+    {
+        PlayerPrefs.DeleteKey(GameConstants.PrefsCurrentLevel);
+    }
 }

@@ -15,6 +15,8 @@ public class ObjectPooler : Singleton<ObjectPooler>
     {
         InitializePooler();
     }
+
+    #region Initialization
     private void InitializePooler()
     {
         InitializeSingleObjectPools();
@@ -27,6 +29,12 @@ public class ObjectPooler : Singleton<ObjectPooler>
         for (int i = 0; i < pools.Count; i++)
         {
             pools[i].poolQueue = new Queue<GameObject>();
+
+            if (pools[i].nameAsTag)
+            {
+                pools[i].poolTag = pools[i].prefab.name;
+            }
+
             poolsDictionary.Add(pools[i].poolTag, pools[i]);
         }
     }
@@ -44,13 +52,14 @@ public class ObjectPooler : Singleton<ObjectPooler>
             groupTagToPoolTagDictionary.Add(poolGroups[groupIndex].groupTag, singlePoolTags);
         }
     }
+    #endregion
 
-    #region Spawning from concrete object pool
+    #region Spawning from concrete object pool (General)
     public GameObject SpawnObject(string poolTag)
     {
         GameObject objToReturn;
 
-        TryFindInSinglePoolsDictionary(poolTag);
+        TryFindPoolTag(poolTag);
 
         if (poolsDictionary[poolTag].poolQueue.Count > 0)
         {
@@ -65,6 +74,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
                 poolsDictionary[poolTag].parent.parent = transform;
             }
             objToReturn = Instantiate(poolsDictionary[poolTag].prefab, poolsDictionary[poolTag].parent);
+            objToReturn.name = poolsDictionary[poolTag].prefab.name;
         }
 
         if(poolsDictionary[poolTag].autoReturn)
@@ -74,9 +84,8 @@ public class ObjectPooler : Singleton<ObjectPooler>
 
         return objToReturn;
     }
-    public void TryFindInSinglePoolsDictionary(string poolTag)
+    private void TryFindPoolTag(string poolTag)
     {
-
         if (!poolsDictionary.ContainsKey(poolTag))
         {
             Debug.LogError($"Threse is no pool with pooltag == {poolTag}");
@@ -105,15 +114,11 @@ public class ObjectPooler : Singleton<ObjectPooler>
 
     #region Spawning from object pool group
     // just using a group tag that points to an array of Concrete object pools tags
-
     public GameObject SpawnRandomObject(string groupTag)
     {
         GameObject objToReturn;
 
-        if (!groupTagToPoolTagDictionary.ContainsKey(groupTag))
-        {
-            Debug.LogError($"Threse is no poolgroup with grouptag == {groupTag}");
-        }
+        TryFindGroupTag(groupTag);
 
         int rndSingleObjectPoolTagIndex = Random.Range(0, groupTagToPoolTagDictionary[groupTag].Count);
         string rndSingleObjectPoolTag = groupTagToPoolTagDictionary[groupTag][rndSingleObjectPoolTagIndex];
@@ -121,6 +126,13 @@ public class ObjectPooler : Singleton<ObjectPooler>
         objToReturn = SpawnObject(rndSingleObjectPoolTag);
 
         return objToReturn;
+    }
+    private void TryFindGroupTag(string groupTag)
+    {
+        if (!groupTagToPoolTagDictionary.ContainsKey(groupTag))
+        {
+            Debug.LogError($"Threse is no poolgroup with grouptag == {groupTag}");
+        }
     }
     public GameObject SpawnRandomObject(string groupTag, Vector3 position)
     {
@@ -141,12 +153,12 @@ public class ObjectPooler : Singleton<ObjectPooler>
 
         return objToReturn;
     }
-
     #endregion
 
+    #region Return object
     public void ReturnObject(GameObject toReturn, string poolTag)
     {
-        TryFindInSinglePoolsDictionary(poolTag);
+        TryFindPoolTag(poolTag);
 
         if (!poolsDictionary[poolTag].poolQueue.Contains(toReturn))
         {
@@ -154,17 +166,16 @@ public class ObjectPooler : Singleton<ObjectPooler>
             poolsDictionary[poolTag].poolQueue.Enqueue(toReturn);
         }
     }
-
     public void DelayedReturnObject(GameObject toReturn, string poolTag, float delay)
     {
-        TryFindInSinglePoolsDictionary(poolTag);
+        TryFindPoolTag(poolTag);
 
         StartCoroutine(DelayedReturn(toReturn, poolTag, delay));
     }
-
     private IEnumerator DelayedReturn(GameObject toReturn, string poolTag, float delay)
     {
         yield return new WaitForSeconds(delay);
         ReturnObject(toReturn, poolTag);
     }
+    #endregion
 }
