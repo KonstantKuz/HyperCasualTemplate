@@ -52,6 +52,8 @@ public class PoolGroupEditor : Editor
             Pool addablePool = (Pool) dragged_object;
             if (dragged_object == null)
                 return;
+            if(poolGroup.poolsInGroup == null)
+                poolGroup.poolsInGroup = new List<Pool>();
             if (poolGroup.poolsInGroup.Contains(addablePool))
                 Debug.LogWarning($"Pool with prefab name {addablePool.prefab.name} is already exists in group.");
             else

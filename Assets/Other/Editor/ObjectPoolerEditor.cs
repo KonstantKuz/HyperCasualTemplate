@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -63,6 +64,8 @@ public class ObjectPoolerEditor : Editor
             Pool draggedPool = draggedObject as Pool;
             if (draggedPool == null)
                 return;
+            if(pooler.EditorOnlyPools == null)
+                pooler.EditorOnlyPools = new List<Pool>();
             if (pooler.EditorOnlyPools.Contains(draggedPool))
                 Debug.LogWarning(
                     $"Pool with prefab name {draggedPool.prefab.name} already exists in pools.");
@@ -81,6 +84,8 @@ public class ObjectPoolerEditor : Editor
             PoolGroup draggedGroup = draggedObject as PoolGroup;
             if (draggedGroup == null)
                 return;
+            if(pooler.EditorOnlyPoolGroups == null)
+                pooler.EditorOnlyPoolGroups = new List<PoolGroup>();
             if (pooler.EditorOnlyPoolGroups.Contains(draggedGroup))
                 Debug.LogWarning($"Pool group with tag {draggedGroup.groupTag} already exists in pool groups.");
             else
