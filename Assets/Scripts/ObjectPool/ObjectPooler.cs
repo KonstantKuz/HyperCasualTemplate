@@ -11,12 +11,13 @@ public class ObjectPooler : Singleton<ObjectPooler>
     private Dictionary<string, Pool> poolsDictionary;
     private Dictionary<string, List<string>> groupTagToPoolTagDictionary;
 
+    #region Initialization
+
     private void Awake()
     {
         InitializePooler();
     }
-
-    #region Initialization
+    
     private void InitializePooler()
     {
         InitializeSingleObjectPools();
@@ -45,9 +46,9 @@ public class ObjectPooler : Singleton<ObjectPooler>
         for (int groupIndex = 0; groupIndex < poolGroups.Count; groupIndex++)
         {
             List<string> singlePoolTags = new List<string>();
-            for (int singleIndex = 0; singleIndex < poolGroups[groupIndex].group.Length; singleIndex++)
+            for (int singleIndex = 0; singleIndex < poolGroups[groupIndex].poolsInGroup.Count; singleIndex++)
             {
-                singlePoolTags.Add(poolGroups[groupIndex].group[singleIndex].poolTag);
+                singlePoolTags.Add(poolGroups[groupIndex].poolsInGroup[singleIndex].poolTag);
             }
             groupTagToPoolTagDictionary.Add(poolGroups[groupIndex].groupTag, singlePoolTags);
         }
@@ -178,4 +179,20 @@ public class ObjectPooler : Singleton<ObjectPooler>
         ReturnObject(toReturn, poolTag);
     }
     #endregion
+    
+#if UNITY_EDITOR
+    #region EditorOnly
+    public List<Pool> EditorOnlyPools
+    {
+        get { return pools; }
+        set { pools = value; }
+    }
+
+    public List<PoolGroup> EditorOnlyPoolGroups
+    {
+        get { return poolGroups; }
+        set { poolGroups = value; }
+    }
+    #endregion
+#endif
 }

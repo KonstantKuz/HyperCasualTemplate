@@ -8,5 +8,5 @@ public class PoolGroup : ScriptableObject
 {
     public string groupTag;
 
-    public Pool[] group;
+    public List<Pool> poolsInGroup;
 }

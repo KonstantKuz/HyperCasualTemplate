@@ -173,7 +173,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
       propertyPath: pools.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
       propertyPath: poolGroups.Array.size
@@ -187,18 +187,33 @@ PrefabInstance:
     - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
       propertyPath: pools.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 2a1f56f2a058db4438546279afede3d6,
+      objectReference: {fileID: 11400000, guid: 05f32ba3839d21e45b439ab5d07808da,
         type: 2}
     - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
       propertyPath: pools.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 05f32ba3839d21e45b439ab5d07808da,
+      objectReference: {fileID: 11400000, guid: 2a1f56f2a058db4438546279afede3d6,
         type: 2}
     - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
       propertyPath: poolGroups.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: fa2281c1047086942aff46d9043ad85e,
         type: 2}
+    - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
+      propertyPath: pools.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e27432977554b2b4097ee4de4f2d292d,
+        type: 2}
+    - target: {fileID: 1629709038, guid: 6136ded66c8204349a8827aec93de431, type: 3}
+      propertyPath: pools.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 05f32ba3839d21e45b439ab5d07808da,
+        type: 2}
+    - target: {fileID: 3719068551294297408, guid: 6136ded66c8204349a8827aec93de431,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.1000061
+      objectReference: {fileID: 0}
     - target: {fileID: 3769903608847389995, guid: 6136ded66c8204349a8827aec93de431,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -258,6 +273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RegularTemplate
+      objectReference: {fileID: 0}
+    - target: {fileID: 5623192229800920539, guid: 6136ded66c8204349a8827aec93de431,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.1000061
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6136ded66c8204349a8827aec93de431, type: 3}

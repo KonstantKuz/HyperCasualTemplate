@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 4884864210720824309, guid: 116b32015c8ef7f4d9759de330e984d5, type: 3}
   nameAsTag: 1
-  poolTag: Cube 2
+  poolTag: Third
   autoReturn: 1
   autoReturnDelay: 0.3
   parent: {fileID: 0}
