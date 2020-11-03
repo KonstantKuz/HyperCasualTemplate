@@ -5,12 +5,12 @@ using Singleton;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : Singleton<LevelManager>
+public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private int currentLevel;
+    [SerializeField] private int currentSceneIndex;
     private int maxLevelCount;
 
-    public int CurrentLevel => currentLevel;
+    public int CurrentSceneIndex => currentSceneIndex;
 
     private void OnEnable()
     {
@@ -20,56 +20,58 @@ public class LevelManager : Singleton<LevelManager>
 
     public void SubscribeToNecessaryEvets()
     {
-        Observer.Instance.OnLoadNextLevel += LoadNextLevel;
-        Observer.Instance.OnRestartGame += RestartLevel;
+        Observer.Instance.OnLoadNextScene += LoadNextScene;
+        Observer.Instance.OnRestartScene += RestartScene;
     }
 
     private void OnDestroy()
     {
-        Observer.Instance.OnLoadNextLevel -= LoadNextLevel;
+        Observer.Instance.OnLoadNextScene -= LoadNextScene;
     }
 
     private void Start()
     {
-        currentLevel = PlayerPrefs.HasKey(GameConstants.PrefsCurrentLevel)
-            ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentLevel)
+        currentSceneIndex = PlayerPrefs.HasKey(GameConstants.PrefsCurrentScene)
+            ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentScene)
             : 0;
 
-        if (SceneManager.GetActiveScene().buildIndex != currentLevel)
+        if (SceneManager.GetActiveScene().buildIndex != currentSceneIndex)
         {
-            SceneManager.LoadScene(currentLevel);
-            return;
+            SceneManager.LoadScene(currentSceneIndex);
         }
-
-        Observer.Instance.OnLevelManagerLoaded(currentLevel);
     }
 
-    private void LoadNextLevel()
+    private void LoadNextScene()
     {
-        UpdateCurrentLevel();
-        SceneManager.LoadScene(currentLevel);
+        UpdateCurrentScene();
+        SceneManager.LoadScene(currentSceneIndex);
     }
 
-    private void UpdateCurrentLevel()
+    private void UpdateCurrentScene()
     {
-        Debug.Log("UpdateActiveLevel");
-        Debug.Log($"<color=red> Setted active level prefs to currentlevel = {currentLevel} </color>");
-        currentLevel++;
-        if (currentLevel >= maxLevelCount)
+        currentSceneIndex++;
+
+        if (currentSceneIndex >= maxLevelCount)
         {
-            currentLevel = 0;
+            currentSceneIndex = 0;
         }
-        PlayerPrefs.SetInt(GameConstants.PrefsCurrentLevel, currentLevel);
+        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
+        
+        Debug.Log($"<color=red> Saved current scene prefs as {currentSceneIndex} </color>");
     }
 
-    private void RestartLevel()
+    private void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    [ContextMenu("Clean prefs")]
     public void CleanPrefs()
     {
-        PlayerPrefs.DeleteKey(GameConstants.PrefsCurrentLevel);
+        PlayerPrefs.DeleteKey(GameConstants.PrefsCurrentScene);
+    }
+
+    public void SetCurrentScene()
+    {
+        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
     }
 }

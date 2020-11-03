@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class GameConstants : MonoBehaviour
 {
-    public const string PrefsCurrentLevel = "currentLevel";
+    public const string PrefsCurrentScene = "currentLevel";
 }
