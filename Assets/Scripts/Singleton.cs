@@ -15,12 +15,18 @@ namespace Singleton
                 {
                     if (_instance == null)
                     {
-                        _instance = FindObjectOfType<T>();
+                        T[] instances = FindObjectsOfType<T>();
+                        if (instances.Length > 1)
+                        {
+                            Debug.LogError("В сцене найдено несколько синглтонов.");
+                        }
 
-                        if (_instance == null)
+                        if (instances[0] == null)
                         {
                             Debug.LogError("В сцене не найдено синглтона" + typeof(T));
                         }
+                        
+                        _instance = instances[0];
                     }
                     return _instance;
                 }
