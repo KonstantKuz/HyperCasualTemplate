@@ -1,3 +1,6 @@
+
+# Основной шаблон
+
 Template Scene -> SceneManagers  
 В SceneManagers висят обязательные Observer и LevelManager.  
 Observer является связующим компонентом между игровыми сущностями и\или интерфейсом со списком всех событий в игре.  
@@ -30,7 +33,7 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 
  - В GameConstants в идеале пишутся все константы игры как строковые так и численные, чтобы к ключевым константам игры был доступ без поиска в коде.  
 
-Дополнительные шаблоны - Assets/Templates
+# Дополнительные шаблоны - Assets/Templates
 
  - ProgressBars Templates  
 В папке Assets/Templates/ProgressBars Templates есть примеры  
