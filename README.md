@@ -32,24 +32,24 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 
 Дополнительные шаблоны - Assets/Templates
 
- - ProgressBars Templates
-В папке Assets/Templates/ProgressBars Templates есть примеры
+ - ProgressBars Templates  
+В папке Assets/Templates/ProgressBars Templates есть примеры  
 Подробное описание по ссылке https://github.com/KonstantKuz/ProgressBars-Templates  
 Плюшки - canvas\world space прогресс\стейдж бары с легкой сменой направления независимо от роста\убавления прогресса  
 
- - ObjectPooler
+ - ObjectPooler  
 В папке Assets/Templates/ObjectPooler/Example есть пример  
 Подробное описание по ссылке https://github.com/KonstantKuz/ObjectPooler  
 Плюшки - спавн с автовозвратом через n сек, спавн объектов рандомно, спавн объектов со взвешенным рандомом.  
 
- - ScreenshotMaker
+ - ScreenshotMaker  
 Рантайм эдитор скриншотер, делающий скрины в разных разрешениях за раз.  
 Исп. : кинуть в сцену префаб, добавить разрешения и поставить галочку MakeShot если нужен скрин в данном разрешении.  
 
- - Popup Text
+ - Popup Text  
 World space всплывашка с простенькой popup анимацией.  
 Пр. ObjectPooler.Instance.SpawnObject("Popup").GetComponent<PopupText>().SetPopup("+1", Color.red);  
 
- - StimulText
-Canvas space всплывашка с 3 анимациями.
+ - StimulText  
+Canvas space всплывашка с 3 анимациями.  
   
