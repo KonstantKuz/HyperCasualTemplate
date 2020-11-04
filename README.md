@@ -1,8 +1,7 @@
 
 # Основной шаблон
 
-Template Scene -> SceneManagers  
-В SceneManagers висят обязательные Observer и LevelManager.  
+В Template Scene -> SceneManagers висят обязательные Observer и LevelManager.  
 Observer является связующим компонентом между игровыми сущностями и\или интерфейсом со списком всех событий в игре.  
 
  - Основные события :  
@@ -33,6 +32,8 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 
  - В GameConstants в идеале пишутся все константы игры как строковые так и численные, чтобы к ключевым константам игры был доступ без поиска в коде.  
 
+ - ObjectPooler'у лучше делегировать всю работу со спавном, чтобы проще было тречить какие объекты где спавнятся.  
+ 
 # Дополнительные шаблоны - Assets/Templates
 
  - ProgressBars Templates  
@@ -47,7 +48,7 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 
  - ScreenshotMaker  
 Рантайм эдитор скриншотер, делающий скрины в разных разрешениях за раз.  
-Исп. : кинуть в сцену префаб, добавить разрешения и поставить галочку MakeShot если нужен скрин в данном разрешении.  
+Исп. : кинуть в сцену префаб, добавить нужные разрешения в окне GameView и в ScreenshotMaker, поставить галочку MakeShot напротив каждого нужного разрешения, запустить игру.  
 
  - Popup Text  
 World space всплывашка с простенькой popup анимацией.  
