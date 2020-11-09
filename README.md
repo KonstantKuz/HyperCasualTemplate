@@ -36,7 +36,7 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
  
  - В проекте имеется дженерик синглтон, благодаря которому синглтоны можно создавать просто наследуясь от Singletone<T>.  
  Прим. :  
- public class SomeClass : Singletone<SomeClass> {}  
+ public class SomeClass : Singletone< SomeClass> {}  
  
  - В проекте имеется ассет DOTween, с помощью которого можно легко реализовывать простенькие и не очень анимации движения.  
  Например чтобы заставить объект двигаться к заданной точке в течение 1 секунды достаточно одной строки кода transform.DOMove(position, 1f);  
