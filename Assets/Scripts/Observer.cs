@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using Singleton;
+
 public class Observer : Singleton<Observer>
 {
     public Action OnStartGame = delegate { Debug.Log("OnStartGame"); };

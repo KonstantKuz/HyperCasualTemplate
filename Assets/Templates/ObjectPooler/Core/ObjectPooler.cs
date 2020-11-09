@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Singleton;
 using UnityEngine;
 
 public class ObjectPooler : Singleton<ObjectPooler>
