@@ -44,14 +44,14 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 # Дополнительные полезные шаблоны - Assets/Templates
 
  - ProgressBars Templates  
+**Плюшки** - canvas\world space прогресс\стейдж бары с легкой сменой направления независимо от роста\убавления прогресса  
 В папке Assets/Templates/ProgressBars Templates есть примеры  
 Подробное описание по ссылке https://github.com/KonstantKuz/ProgressBars-Templates  
-Плюшки - canvas\world space прогресс\стейдж бары с легкой сменой направления независимо от роста\убавления прогресса  
 
  - ObjectPooler  
+**Плюшки** - спавн с автовозвратом через n сек, спавн объектов рандомно, спавн объектов со взвешенным рандомом.  
 В папке Assets/Templates/ObjectPooler/Example есть пример  
 Подробное описание по ссылке https://github.com/KonstantKuz/ObjectPooler  
-Плюшки - спавн с автовозвратом через n сек, спавн объектов рандомно, спавн объектов со взвешенным рандомом.  
 
  - ScreenshotMaker  
 Рантайм эдитор скриншотер, делающий скрины в разных разрешениях за раз.  
