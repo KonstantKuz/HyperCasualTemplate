@@ -7,26 +7,19 @@ using UnityEngine.UI;
 
 public class WinPanel : MonoBehaviour
 {
-    [SerializeField]
-    GameObject winBanner;
-    [SerializeField]
-    GameObject loseBanner;
+    [SerializeField] private GameObject winBanner;
+    [SerializeField] private GameObject loseBanner;
 
-    [SerializeField]
-    Animator animator1;
-    [SerializeField]
-    Animator animator2;
-    [SerializeField]
-    Animator animator3;
+    [SerializeField] private Animator star1;
+    [SerializeField] private Animator star2;
+    [SerializeField] private Animator star3;
 
-    [SerializeField]
-    GameObject nextBtn;
-    [SerializeField]
-    Text scoresLabel;
+    [SerializeField] private GameObject nextBtn;
+    [SerializeField] private Text scoresLabel;
 
     private int rating;
     
-    void Start()
+    private void Start()
     {
         winBanner.SetActive(false);
         loseBanner.SetActive(false);
@@ -55,21 +48,21 @@ public class WinPanel : MonoBehaviour
 
     private IEnumerator AnimateStars()
     {
-        animator1.transform.GetChild(1).gameObject.SetActive(true);
-        animator1.SetBool("active", true);
+        star1.transform.GetChild(1).gameObject.SetActive(true);
+        star1.SetBool("active", true);
         
         yield return new WaitForSeconds(0.6f);
         if (rating > 1)
         {
-            animator2.transform.GetChild(1).gameObject.SetActive(true);
-            animator2.SetBool("active", true);
+            star2.transform.GetChild(1).gameObject.SetActive(true);
+            star2.SetBool("active", true);
         }
         
         yield return new WaitForSeconds(0.6f);
         if (rating > 2)
         {
-            animator3.transform.GetChild(1).gameObject.SetActive(true);
-            animator3.SetBool("active", true);
+            star3.transform.GetChild(1).gameObject.SetActive(true);
+            star3.SetBool("active", true);
         }
     }
 

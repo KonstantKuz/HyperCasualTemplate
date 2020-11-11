@@ -2,21 +2,18 @@
 
 # Основной шаблон
 
-В Template Scene -> SceneManagers висят обязательные Observer и LevelManager.  
+В Template Scene -> RegularTemplate висят обязательные Observer и LevelManager. Так же в префаб RegularTemplate отправляются все компоненты и объекты необходимые в каждой сцене-уровне.  
 Observer является связующим компонентом между игровыми сущностями и\или интерфейсом со списком всех событий в игре.  
+
 
  - Основные события :  
 OnGameStarted срабатывает по нажатию кнопки-туториала (описано ниже).  
-OnWinLevel событие, которое необходимо вызывать при финише\выигрыша сцены.  
-После вызова вылетает панель победы (и другое в зависимости от подписок).  
-OnLoseLevel событие, которое соответственно необходимо вызывать при проигрыше.  
-После вызова вылетает панель проигрыша (и другое в зависимости от подписок).  
+OnWinLevel событие, которое необходимо вызывать при финише\выигрыша сцены. После вызова вылетает панель победы (и другое в зависимости от подписок).  
+OnLoseLevel событие, которое соответственно необходимо вызывать при проигрыше. После вызова вылетает панель проигрыша (и другое в зависимости от подписок).  
 
  - Вызов событий :  
-Observer.Instance.OnWinLevel();  
-Observer.Instance.CallOnWinLevel(); - метод исключающий множественные вызовы события OnWinLevel;  
-Observer.Instance.OnLoseLevel();  
-Observer.Instance.CallOnLoseLevel();  
+Observer.Instance.OnWinLevel(); (.CallOnWinLevel(); - метод исключающий множественные вызовы события OnWinLevel;)  
+Observer.Instance.OnLoseLevel(); (.CallOnLoseLevel(); )  
 
  - Подписка на события :  
 Observer.Instance.OnWinLevel += SomeMethod;  
