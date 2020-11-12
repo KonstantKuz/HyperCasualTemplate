@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class StartButton : MonoBehaviour
 {
-    public void StartGame()
+    private void Update()
     {
-        Observer.Instance.OnStartGame();
+        if (Input.GetMouseButtonDown(0))
+        {
+            Observer.Instance.OnStartGame();
+            gameObject.SetActive(false);
+        }
     }
 }
