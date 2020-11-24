@@ -7,22 +7,18 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private int currentSceneIndex;
-    private int maxLevelCount;
-
     public int CurrentSceneIndex => currentSceneIndex;
+
+    private int maxLevelCount;
+    private int firstSceneIndex = 1;
 
     private void OnEnable()
     {
         maxLevelCount = SceneManager.sceneCountInBuildSettings;
-        SubscribeToNecessaryEvets();
-    }
-
-    public void SubscribeToNecessaryEvets()
-    {
         Observer.Instance.OnLoadNextScene += LoadNextScene;
         Observer.Instance.OnRestartScene += RestartScene;
     }
-
+    
     private void OnDestroy()
     {
         Observer.Instance.OnLoadNextScene -= LoadNextScene;
@@ -32,16 +28,20 @@ public class LevelManager : MonoBehaviour
     {
         currentSceneIndex = PlayerPrefs.HasKey(GameConstants.PrefsCurrentScene)
             ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentScene)
-            : 0;
+            : firstSceneIndex;
 
         if (SceneManager.GetActiveScene().buildIndex != currentSceneIndex)
         {
             SceneManager.LoadScene(currentSceneIndex);
         }
+        
+        // TinySauce.OnGameStarted($"{currentSceneIndex}");
     }
 
     private void LoadNextScene()
     {
+        // TinySauce.OnGameFinished(currentSceneIndex);
+
         UpdateCurrentScene();
         SceneManager.LoadScene(currentSceneIndex);
     }
@@ -52,7 +52,7 @@ public class LevelManager : MonoBehaviour
 
         if (currentSceneIndex >= maxLevelCount)
         {
-            currentSceneIndex = 0;
+            currentSceneIndex = firstSceneIndex;
         }
         PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
         

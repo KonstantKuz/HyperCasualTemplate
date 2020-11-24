@@ -2,6 +2,7 @@
 
 public class InputManager : MonoBehaviour
 {
+    [SerializeField] private bool invertVertical;
     public static TapPhase tapPhase { get; private set; }
     public static Vector2 MoveVector { get; private set; }
 
@@ -28,7 +29,7 @@ public class InputManager : MonoBehaviour
         MoveVector = Vector2.zero;
         tapPhase = TapPhase.NONE;
         Vector2 deltaMove = Vector2.zero;
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE || UNITY_EDITOR
         if (Input.GetMouseButton(0))
         {
             deltaMove = (Vector2)Input.mousePosition - _lastTapPos;
@@ -40,6 +41,10 @@ public class InputManager : MonoBehaviour
             else
             {
                 tapPhase = TapPhase.MOVED;
+                if (invertVertical)
+                {
+                    deltaMove.y = -deltaMove.y;
+                }
                 MoveVector = deltaMove.normalized;
             }
             MoveVector = deltaMove.normalized;
@@ -71,9 +76,11 @@ public class InputManager : MonoBehaviour
                     break;
                 case TouchPhase.Moved:
                     tapPhase = TapPhase.MOVED;
-
                     deltaMove = touch.deltaPosition;
-                    deltaMove.y = -deltaMove.y;
+                    if (invertVertical)
+                    {
+                        deltaMove.y = -deltaMove.y;
+                    }
                     MoveVector = deltaMove.normalized;
                     break;
                 case TouchPhase.Stationary:
