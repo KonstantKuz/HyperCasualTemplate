@@ -3,9 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
+
+public enum ScenesLoadType
+{
+    RandomAfterLinear,
+    Linear,
+    Random,
+}
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private ScenesLoadType scenesLoadType;
     [SerializeField] private int currentSceneIndex;
     public int CurrentSceneIndex => currentSceneIndex;
 
@@ -48,15 +57,34 @@ public class LevelManager : MonoBehaviour
 
     private void UpdateCurrentScene()
     {
-        currentSceneIndex++;
+        UpdateSceneIndexAsLinear();
+        TryRandomizeSceneIndex();
+        
+        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
+        Debug.Log($"<color=red> Saved current scene prefs as currentSceneIndex=={currentSceneIndex} </color>");
+    }
 
+    private void UpdateSceneIndexAsLinear()
+    {
+        currentSceneIndex++;
         if (currentSceneIndex >= maxLevelCount)
         {
             currentSceneIndex = firstSceneIndex;
+            PlayerPrefs.SetInt(GameConstants.PrefsIsLevelCirclePassed, 1);
         }
-        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
-        
-        Debug.Log($"<color=red> Saved current scene prefs as {currentSceneIndex} </color>");
+    }
+
+    private void TryRandomizeSceneIndex()
+    {
+        if (scenesLoadType == ScenesLoadType.Random || RandomAfterLinear())
+        {
+            currentSceneIndex = Random.Range(0, maxLevelCount);
+        }
+    }
+
+    private bool RandomAfterLinear()
+    {
+        return scenesLoadType == ScenesLoadType.RandomAfterLinear && PlayerPrefs.GetInt(GameConstants.PrefsIsLevelCirclePassed) == 1;
     }
 
     private void RestartScene()
@@ -67,6 +95,7 @@ public class LevelManager : MonoBehaviour
     public void CleanPrefs()
     {
         PlayerPrefs.DeleteKey(GameConstants.PrefsCurrentScene);
+        PlayerPrefs.DeleteKey(GameConstants.PrefsIsLevelCirclePassed);
     }
 
     public void SetCurrentScene()

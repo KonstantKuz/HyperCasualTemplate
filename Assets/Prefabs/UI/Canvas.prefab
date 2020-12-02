@@ -343,16 +343,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WinPanel(AllScreens)
       objectReference: {fileID: 0}
-    - target: {fileID: 4768155460863739409, guid: 332e30d93cacc3f44b43158e1446541f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5638362089980568590, guid: 332e30d93cacc3f44b43158e1446541f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0025634766
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 332e30d93cacc3f44b43158e1446541f, type: 3}
 --- !u!224 &8252528299577521671 stripped

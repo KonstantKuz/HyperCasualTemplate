@@ -13,10 +13,7 @@ public class WinPanel : MonoBehaviour
     [SerializeField] private Animator star1;
     [SerializeField] private Animator star2;
     [SerializeField] private Animator star3;
-
-    [SerializeField] private GameObject nextBtn;
-    [SerializeField] private Text scoresLabel;
-
+    
     private int rating;
     
     private void Start()
@@ -35,7 +32,6 @@ public class WinPanel : MonoBehaviour
         gameObject.SetActive(true);
         if(this.rating < 3)
         {
-            nextBtn.SetActive(false);
             loseBanner.SetActive(true);
         }
         else

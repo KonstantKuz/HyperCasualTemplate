@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Observer : Singleton<Observer>
@@ -11,23 +12,48 @@ public class Observer : Singleton<Observer>
     public Action OnLoadNextScene = delegate { Debug.Log("OnLoadNextLevel"); };
     public Action OnRestartScene = delegate { Debug.Log("OnRestart"); };
     
-    private bool isGameOver = false;
+    public bool IsGameLaunched { get; private set; }
     
+    private void Start()
+    {
+        OnStartGame += delegate { IsGameLaunched = true; };
+    }
+
     public void CallOnWinLevel()
     {
-        if (!isGameOver)
+        if (IsGameLaunched)
         {
-            isGameOver = true;
+            IsGameLaunched = false;
             OnWinLevel();
+        }
+    }
+
+    public void CallOnWinLevel(float delay)
+    {
+        StartCoroutine(DelayedCallFinish());
+        IEnumerator DelayedCallFinish()
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            CallOnWinLevel();
         }
     }
     
     public void CallOnLoseLevel()
     {
-        if(!isGameOver)
+        if (IsGameLaunched)
         {
-            isGameOver = true;
+            IsGameLaunched = false;
             OnLoseLevel();
+        }
+    }
+
+    public void CallOnLoseLevel(float delay)
+    {
+        StartCoroutine(DelayedCallLose());
+        IEnumerator DelayedCallLose()
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            CallOnLoseLevel();
         }
     }
 }

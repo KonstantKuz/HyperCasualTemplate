@@ -5,7 +5,12 @@ using UnityEngine;
 public class GameConstants : MonoBehaviour
 {
     public const string PrefsCurrentScene = "currentLevel";
-
+    public const string PrefsIsLevelCirclePassed = "isLevelCirclePassed";
+    
+    public const string TagPlayer = "Player";
+    public const string TagFinish = "Finish";
+    public const string TagLose = "Lose";
+    
     private void Start()
     {
         AnimatorHashes.CacheHashes();
@@ -14,10 +19,9 @@ public class GameConstants : MonoBehaviour
 
 public class AnimatorHashes
 {
-    public static int IdleHash;
-    
+    public static int Idle;
     public static void CacheHashes()
     {
-        IdleHash = Animator.StringToHash("Idle");
+        Idle = Animator.StringToHash("Idle");
     }
 }
