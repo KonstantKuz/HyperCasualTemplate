@@ -78,7 +78,20 @@ public class LevelManager : MonoBehaviour
     {
         if (scenesLoadType == ScenesLoadType.Random || RandomAfterLinear())
         {
-            currentSceneIndex = Random.Range(0, maxLevelCount);
+            currentSceneIndex = RandomNotThisScene();
+        }
+    }
+
+    private int RandomNotThisScene()
+    {
+        currentSceneIndex = Random.Range(firstSceneIndex, maxLevelCount);
+        if (currentSceneIndex == SceneManager.GetActiveScene().buildIndex)
+        {
+            return RandomNotThisScene();
+        }
+        else
+        {
+            return currentSceneIndex;
         }
     }
 
