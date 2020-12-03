@@ -16,10 +16,10 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private ScenesLoadType scenesLoadType;
     [SerializeField] private int currentSceneIndex;
+    [SerializeField] private int firstSceneLevelIndex = 1;
     public int CurrentSceneIndex => currentSceneIndex;
 
     private int maxLevelCount;
-    private int firstSceneIndex = 1;
 
     private void OnEnable()
     {
@@ -37,7 +37,7 @@ public class LevelManager : MonoBehaviour
     {
         currentSceneIndex = PlayerPrefs.HasKey(GameConstants.PrefsCurrentScene)
             ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentScene)
-            : firstSceneIndex;
+            : firstSceneLevelIndex;
 
         if (SceneManager.GetActiveScene().buildIndex != currentSceneIndex)
         {
@@ -69,7 +69,7 @@ public class LevelManager : MonoBehaviour
         currentSceneIndex++;
         if (currentSceneIndex >= maxLevelCount)
         {
-            currentSceneIndex = firstSceneIndex;
+            currentSceneIndex = firstSceneLevelIndex;
             PlayerPrefs.SetInt(GameConstants.PrefsIsLevelCirclePassed, 1);
         }
     }
@@ -84,7 +84,12 @@ public class LevelManager : MonoBehaviour
 
     private int RandomNotThisScene()
     {
-        currentSceneIndex = Random.Range(firstSceneIndex, maxLevelCount);
+        if (maxLevelCount <= 2)
+        {
+            return firstSceneLevelIndex;
+        }
+        
+        currentSceneIndex = Random.Range(firstSceneLevelIndex, maxLevelCount);
         if (currentSceneIndex == SceneManager.GetActiveScene().buildIndex)
         {
             return RandomNotThisScene();
