@@ -15,8 +15,9 @@ public enum ScenesLoadType
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private ScenesLoadType scenesLoadType;
-    [SerializeField] private int currentSceneIndex;
     [SerializeField] private int firstSceneLevelIndex = 1;
+    [Header("Editor only")]
+    [SerializeField] private int currentSceneIndex;
     public int CurrentSceneIndex => currentSceneIndex;
 
     private int maxLevelCount;
