@@ -29,11 +29,6 @@ public class LevelManager : MonoBehaviour
         Observer.Instance.OnRestartScene += RestartScene;
     }
     
-    private void OnDestroy()
-    {
-        Observer.Instance.OnLoadNextScene -= LoadNextScene;
-    }
-
     private void Start()
     {
         currentSceneIndex = PlayerPrefs.HasKey(GameConstants.PrefsCurrentScene)
