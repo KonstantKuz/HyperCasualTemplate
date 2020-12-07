@@ -81,10 +81,10 @@ Observer.Instance.CallOnLoseLevel(5f);
 После настройки аналитики заполнить в Project settings->Player иконку, имя компании и приложения.  
 Подписать приложение ключом в Project settings->Publishing settings. Ключ с инструкцией и паролями находится в папке keystore.  
 Выставить в Project settings->player->Other settings->Configuration->Scripting backend на IL2CPP и ниже в target architectures галочки напротив ARMv7 и ARMv64 (требования гугл плей).  
-Выписать из Facebook Settings (Facebook->Edit settings)
- -Название пакета Google Play (Package Name)
- -Название класса (Activity Facebook) (Class Name)
- -Ключевые хэш-адреса (Debug Android Key Hash)
+Выписать из Facebook Settings (Facebook->Edit settings)  
+ - Название пакета Google Play (Package Name)  
+ - Название класса (Activity Facebook) (Class Name)  
+ - Ключевые хэш-адреса (Debug Android Key Hash)  
 .
 
  <a name="Templates"></a>
@@ -129,7 +129,8 @@ Canvas space всплывашка с 3 анимациями.
     
  - {+ UPD 07.12.20 +}
     - добавил обработчика основных игровых событий по адресу Templates->Analytics.  
- 
+    - добавил раздел импорта аналитики и сборки билда.  
+    .
  - {+ UPD 02.12.20 +}
     - добавил в Observer методы вызова выигрыша\проигрыша с задержкой.  
     - добавил в Observer флаг IsGameLaunched.  
