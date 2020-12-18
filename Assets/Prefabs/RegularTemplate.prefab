@@ -167,10 +167,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4373400470093704035}
-  - component: {fileID: 8777272760672253362}
-  - component: {fileID: 6843991244765985103}
   - component: {fileID: 6340405921309712306}
   - component: {fileID: 4110081764088670508}
+  - component: {fileID: 8777272760672253362}
+  - component: {fileID: 6843991244765985103}
+  - component: {fileID: 2039699909365462521}
   m_Layer: 0
   m_Name: RegularTemplate
   m_TagString: Untagged
@@ -194,6 +195,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6340405921309712306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843991244765985102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0fd7b04b9405647b4fdf5afcf6146f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenesLoadType: 0
+  firstSceneLevelIndex: 1
+  currentSceneIndex: 0
+--- !u!114 &4110081764088670508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843991244765985102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80b6839bd6069204f9ff23bf472045cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools: []
+  poolGroups: []
 --- !u!114 &8777272760672253362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a0c7c9b972e55498165b0c27c727fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6340405921309712306
+--- !u!114 &2039699909365462521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,22 +257,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6843991244765985102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e0fd7b04b9405647b4fdf5afcf6146f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f62e45dc56f1d848b78fee43da96854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scenesLoadType: 0
-  currentSceneIndex: 0
---- !u!114 &4110081764088670508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6843991244765985102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80b6839bd6069204f9ff23bf472045cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pools: []
-  poolGroups: []
