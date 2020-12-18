@@ -130,15 +130,20 @@ Canvas space всплывашка с 3 анимациями.
 4. свойство Swipe - возвращает тип свайпа в текущий момент. если в текущий момент времени свайпов нет, возвращает Swipe.NONE  
 
 - UsefulMethods  
-- UsefulMethods.Instance.DelayedCall - вызов метода\события с задержкой.  
+1. UsefulMethods.Instance.DelayedCall - вызов метода\события с задержкой.  
 Пример : UsefulMethods.Instance.DelayedCall(2f, SomeMethod);
-- UsefulMethods.Remap - приведение значения из одного промежутка значений к значению из другого промежутка значений.  
+1. UsefulMethods.Remap - приведение значения из одного промежутка значений к значению из другого промежутка значений.  
 Пример : необходима зависимость размера объекта от количества условного ресурса. тогда :  
 float size = UsefulMethods.Remap(resource, resourceMin, resourceMax, sizeMin, sizeMax);
  
   <a name="Changelist"></a>
 ### Список изменений
     
+ - {+ UPD 18.12.20 +}
+    - добавил контейнер полезных методов UsefulMethods.cs.  
+    - убрал пак эффектов.  
+    - обновил настройки проекта.  
+    .
  - {+ UPD 07.12.20 +}
     - добавил обработчика основных игровых событий по адресу Templates->Analytics.  
     - добавил раздел импорта аналитики и сборки билда.  
