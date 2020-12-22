@@ -8,8 +8,8 @@ public class GameConstants : MonoBehaviour
     public const string PrefsIsLevelCirclePassed = "isLevelCirclePassed";
     
     public const string TagPlayer = "Player";
-    public const string TagFinish = "Finish";
-    public const string TagLose = "Lose";
+    public const string TagFinishTrigger = "Finish";
+    public const string TagDefeatTrigger = "Defeat";
     
     private void Start()
     {
