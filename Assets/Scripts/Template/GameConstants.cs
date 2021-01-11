@@ -10,6 +10,8 @@ public class GameConstants : MonoBehaviour
     public const string TagPlayer = "Player";
     public const string TagFinishTrigger = "Finish";
     public const string TagDefeatTrigger = "Defeat";
+
+    public const int LayerGround = 8;
     
     private void Start()
     {

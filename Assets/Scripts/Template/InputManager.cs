@@ -5,7 +5,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private bool invertVertical;
     public static TapPhase tapPhase { get; private set; }
     public static Swipe swipe { get; private set; }
-    public static Vector2 MoveVector { get; private set; }
+    public static Vector2 InputDeltaNormalized { get; private set; }
 
     private static Vector2 _lastTapPos = Vector2.zero;
     private static Vector2 _startSwipePos = Vector2.zero;
@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MoveVector = Vector2.zero;
+        InputDeltaNormalized = Vector2.zero;
     }
 
     // Update is called once per frame
@@ -27,7 +27,7 @@ public class InputManager : MonoBehaviour
 #region Private
     private void HandleInput()
     {
-        MoveVector = Vector2.zero;
+        InputDeltaNormalized = Vector2.zero;
         tapPhase = TapPhase.NONE;
         swipe = Swipe.NONE;
         Vector2 deltaMove = Vector2.zero;
@@ -57,18 +57,18 @@ public class InputManager : MonoBehaviour
                 {
                     deltaMove.y = -deltaMove.y;
                 }
-                MoveVector = deltaMove.normalized;
+                InputDeltaNormalized = deltaMove.normalized;
                 if ((Mathf.Abs(deltaMove.x) > 50f || Mathf.Abs(deltaMove.y) > 50f))
                 {
                     //Debug.Log("Swiped!!!! " + deltaMove);
-                    if (MoveVector != Vector2.zero)
+                    if (InputDeltaNormalized != Vector2.zero)
                     {
                         swipe = GetSwipe(deltaMove);
                     }
                 }
             }
             
-            MoveVector = deltaMove.normalized;
+            InputDeltaNormalized = deltaMove.normalized;
             _lastTapPos = Input.mousePosition;
         }
         
@@ -169,7 +169,7 @@ public class InputManager : MonoBehaviour
     
     public override string ToString()
     {
-        string info = string.Format("Phase: {0}, Current position - {2}, Direction - {1}", tapPhase.ToString(), MoveVector, _lastTapPos);
+        string info = string.Format("Phase: {0}, Current position - {2}, Direction - {1}", tapPhase.ToString(), InputDeltaNormalized, _lastTapPos);
 
         return base.ToString();
         
