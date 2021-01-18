@@ -218,6 +218,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialText_StartButton
       objectReference: {fileID: 0}
+    - target: {fileID: 9137190036535221881, guid: 8dec1aee8beb5b047b0b1f1c25a17df3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dec1aee8beb5b047b0b1f1c25a17df3, type: 3}
 --- !u!224 &6286065049870629080 stripped

@@ -104,15 +104,15 @@ public class InputManager : MonoBehaviour
                     {
                         deltaMove.y = -deltaMove.y;
                     }
-                    MoveVector = deltaMove.normalized;
-                    if (MoveVector != Vector2.zero)
+                    InputDeltaNormalized = deltaMove.normalized;
+                    if (InputDeltaNormalized != Vector2.zero)
                     {
                         swipe = GetSwipe(deltaMove);
                     }
                     if ((Mathf.Abs(deltaMove.x) > 50f || Mathf.Abs(deltaMove.y) > 50f))
                     {
                         //Debug.Log("Swiped!!!! " + deltaMove);
-                        if (MoveVector != Vector2.zero)
+                        if (InputDeltaNormalized != Vector2.zero)
                         {
                             swipe = GetSwipe(deltaMove);
                         }
