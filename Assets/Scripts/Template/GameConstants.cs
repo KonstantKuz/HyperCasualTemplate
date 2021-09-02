@@ -15,15 +15,5 @@ public class GameConstants : MonoBehaviour
     
     private void Start()
     {
-        AnimatorHashes.CacheHashes();
-    }
-}
-
-public class AnimatorHashes
-{
-    public static int Idle;
-    public static void CacheHashes()
-    {
-        Idle = Animator.StringToHash("Idle");
     }
 }

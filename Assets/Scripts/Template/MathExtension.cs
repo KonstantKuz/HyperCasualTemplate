@@ -1,28 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class UsefulMethods : Singleton<UsefulMethods>
+﻿public static class MathExtension
 {
-    public void DelayedCall(float delay, Action action)
+    public static void Remap (this ref float originValue, float value, float from1, float to1, float from2, float to2) 
     {
-        StartCoroutine(DelayedCall());
-        IEnumerator DelayedCall()
-        {
-            yield return new WaitForSeconds(delay);
-            action.Invoke();
-        }
-    }
-    
-    public static float Remap (float value, float from1, float to1, float from2, float to2) 
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+        originValue = (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
     // public void SmoothFloat(ref float valueFrom, float to, float duration)
     // {
-    //     
     //     StartCoroutine(SmoothFloat());
     //     IEnumerator SmoothFloat()
     //     {

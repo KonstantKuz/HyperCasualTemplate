@@ -7,113 +7,164 @@ using Random = UnityEngine.Random;
 
 public enum ScenesLoadType
 {
-    RandomAfterLinear,
     Linear,
     Random,
+    RandomAfterLinear,
 }
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private ScenesLoadType scenesLoadType;
-    [SerializeField] private int firstSceneLevelIndex = 1;
-    [Header("Editor only")]
-    [SerializeField] private int currentSceneIndex;
-    public int CurrentSceneIndex => currentSceneIndex;
+    [SerializeField] private LevelsQueue levelsQueue;
+    public int currentLevelIndexToSet;
+    
+    private PlayableLevel[] PlayableLevels => levelsQueue.levels;
+    private int MaxLevelsCount => PlayableLevels.Length;
 
-    private int maxLevelCount;
+    private const string PrefsCurrentLevelIndex = "CurrentLevelIndex";
 
     private void OnEnable()
     {
-        maxLevelCount = SceneManager.sceneCountInBuildSettings;
-        Observer.Instance.OnLoadNextScene += LoadNextScene;
+        Observer.Instance.OnLoadNextScene += LoadNextLevel;
         Observer.Instance.OnRestartScene += RestartScene;
     }
     
-    private void Start()
+    private void OnDisable()
     {
-        currentSceneIndex = PlayerPrefs.HasKey(GameConstants.PrefsCurrentScene)
-            ? PlayerPrefs.GetInt(GameConstants.PrefsCurrentScene)
-            : firstSceneLevelIndex;
+        Observer.Instance.OnLoadNextScene -= LoadNextLevel;
+        Observer.Instance.OnRestartScene -= RestartScene;
+    }
 
-        if (SceneManager.GetActiveScene().buildIndex != currentSceneIndex)
-        {
-            SceneManager.LoadScene(currentSceneIndex);
-        }
+    public void LoadLastLevel()
+    {
+        int lastLevelIndex = GetCurrentLevelIndex();
+        SceneManager.LoadScene(PlayableLevels[lastLevelIndex].sceneName);
+    }
+
+    public static int GetCurrentLevelIndex()
+    {
+        int currentLevelIndex = PlayerPrefs.HasKey(PrefsCurrentLevelIndex)
+            ? PlayerPrefs.GetInt(PrefsCurrentLevelIndex)
+            : 0;
+        return currentLevelIndex;
+    }
+
+    public void SetCurrentLevelIndex(int index)
+    {
+        PlayerPrefs.SetInt(PrefsCurrentLevelIndex, index);
+    }
+    
+    private void LoadNextLevel()
+    {
+        int nextLevelIndex = UpdateLevelIndex();
+        SceneManager.LoadScene(PlayableLevels[nextLevelIndex].sceneName);
+    }
+
+    private int UpdateLevelIndex()
+    {
+        int currentLevelIndex = GetCurrentLevelIndex();
         
-        // TinySauce.OnGameStarted($"{currentSceneIndex}");
-    }
-
-    private void LoadNextScene()
-    {
-        // TinySauce.OnGameFinished(currentSceneIndex);
-
-        UpdateCurrentScene();
-        SceneManager.LoadScene(currentSceneIndex);
-    }
-
-    private void UpdateCurrentScene()
-    {
-        UpdateSceneIndexAsLinear();
-        TryRandomizeSceneIndex();
-        
-        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
-        Debug.Log($"<color=red> Saved current scene prefs as currentSceneIndex=={currentSceneIndex} </color>");
-    }
-
-    private void UpdateSceneIndexAsLinear()
-    {
-        currentSceneIndex++;
-        if (currentSceneIndex >= maxLevelCount)
+        if (IsRandomSceneSelection())
         {
-            currentSceneIndex = firstSceneLevelIndex;
-            PlayerPrefs.SetInt(GameConstants.PrefsIsLevelCirclePassed, 1);
-        }
-    }
-
-    private void TryRandomizeSceneIndex()
-    {
-        if (scenesLoadType == ScenesLoadType.Random || RandomAfterLinear())
-        {
-            currentSceneIndex = RandomNotThisScene();
-        }
-    }
-
-    private int RandomNotThisScene()
-    {
-        if (maxLevelCount <= 2)
-        {
-            return firstSceneLevelIndex;
-        }
-        
-        currentSceneIndex = Random.Range(firstSceneLevelIndex, maxLevelCount);
-        if (currentSceneIndex == SceneManager.GetActiveScene().buildIndex)
-        {
-            return RandomNotThisScene();
+            currentLevelIndex = RandomNotThisScene(currentLevelIndex);
         }
         else
         {
-            return currentSceneIndex;
+            currentLevelIndex = UpdateSceneIndexAsLinear(currentLevelIndex);
         }
+        
+        SetCurrentLevelIndex(currentLevelIndex);
+        
+        Debug.Log($"<color=red> Saved current level index == {currentLevelIndex} </color>");
+
+        return GetCurrentLevelIndex();
     }
 
-    private bool RandomAfterLinear()
+    private bool IsRandomSceneSelection()
     {
-        return scenesLoadType == ScenesLoadType.RandomAfterLinear && PlayerPrefs.GetInt(GameConstants.PrefsIsLevelCirclePassed) == 1;
+        return scenesLoadType == ScenesLoadType.Random || 
+               scenesLoadType == ScenesLoadType.RandomAfterLinear && PlayerPrefs.GetInt(GameConstants.PrefsIsLevelCirclePassed) == 1;
     }
 
+    private int RandomNotThisScene(int currentIndex)
+    {
+        int rndSceneIndex = Random.Range(0, MaxLevelsCount - 1);
+        if (rndSceneIndex >= currentIndex)
+        {
+            rndSceneIndex++;
+        }
+        return rndSceneIndex;
+    }
+
+    private int UpdateSceneIndexAsLinear(int currentIndex)
+    {
+        currentIndex++;
+        
+        if (currentIndex >= MaxLevelsCount)
+        {
+            currentIndex = 0;
+            PlayerPrefs.SetInt(GameConstants.PrefsIsLevelCirclePassed, 1);
+        }
+
+        if (PlayerPrefs.GetInt(GameConstants.PrefsIsLevelCirclePassed) == 1 
+        && !PlayableLevels[currentIndex].isRepeatable)
+        {
+            return UpdateSceneIndexAsLinear(currentIndex);
+        }
+
+        return currentIndex;
+    }
+    
     private void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    public void CleanPrefs()
+    
+    public int GetClampedNextLevelIndex()
     {
-        PlayerPrefs.DeleteKey(GameConstants.PrefsCurrentScene);
-        PlayerPrefs.DeleteKey(GameConstants.PrefsIsLevelCirclePassed);
+        bool levelCirclePassed = false;
+        int nextLevelIndex = GetCurrentLevelIndex();
+        nextLevelIndex++;
+        
+        if (nextLevelIndex >= MaxLevelsCount)
+        {
+            nextLevelIndex = 0;
+            levelCirclePassed = true;
+        }
+        
+        if (levelCirclePassed)
+        {
+            while (!PlayableLevels[nextLevelIndex].isRepeatable)
+            {
+                nextLevelIndex++;
+            }
+        }
+
+        return nextLevelIndex;
     }
-
-    public void SetCurrentScene()
+    
+    public int GetLevelIndexFromUILevel(int uiLevel)
     {
-        PlayerPrefs.SetInt(GameConstants.PrefsCurrentScene, currentSceneIndex);
+        bool levelCirclePassed = false;
+        int sceneIndex = -1;
+        for (int i = 0; i < uiLevel; i++)
+        {
+            sceneIndex++;
+            if (sceneIndex >= PlayableLevels.Length)
+            {
+                sceneIndex = 0;
+                levelCirclePassed = true;
+            }
+            
+            if (levelCirclePassed)
+            {
+                while (!PlayableLevels[sceneIndex].isRepeatable)
+                {
+                    sceneIndex++;
+                }
+            }
+        }
+        
+        return sceneIndex;
     }
 }

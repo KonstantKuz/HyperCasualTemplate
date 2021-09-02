@@ -16,12 +16,7 @@ public class LevelManagerEditor : Editor
         
         if (GUILayout.Button("Set current scene"))
         {
-            levelManager.SetCurrentScene();
-        }
-
-        if (GUILayout.Button("Reset progress"))
-        {
-            levelManager.CleanPrefs();
+            levelManager.SetCurrentLevelIndex(levelManager.currentLevelIndexToSet);
         }
         
         if (GUI.changed)

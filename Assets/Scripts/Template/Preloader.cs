@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class Preloader : MonoBehaviour
 {
+    [SerializeField] private LevelManager levelManager;
     private void Start()
     {
-        SceneManager.LoadScene(1);
+        levelManager.LoadLastLevel();
     }
 }

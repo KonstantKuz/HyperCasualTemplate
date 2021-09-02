@@ -27,16 +27,6 @@ public class Observer : Singleton<Observer>
             OnWinLevel();
         }
     }
-
-    public void CallOnWinLevel(float delay)
-    {
-        StartCoroutine(DelayedCallFinish());
-        IEnumerator DelayedCallFinish()
-        {
-            yield return new WaitForSecondsRealtime(delay);
-            CallOnWinLevel();
-        }
-    }
     
     public void CallOnLoseLevel()
     {
@@ -44,16 +34,6 @@ public class Observer : Singleton<Observer>
         {
             IsGameLaunched = false;
             OnLoseLevel();
-        }
-    }
-
-    public void CallOnLoseLevel(float delay)
-    {
-        StartCoroutine(DelayedCallLose());
-        IEnumerator DelayedCallLose()
-        {
-            yield return new WaitForSecondsRealtime(delay);
-            CallOnLoseLevel();
         }
     }
 }

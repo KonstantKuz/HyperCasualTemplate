@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.DOTweenEditor.UI;
+using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
@@ -56,6 +57,7 @@ public static class ReorderableListCreator
         ReorderableList list = new ReorderableList(serializedObject, listProperty, true, true,
                                                    true, true);
 
+        list.elementHeight = EditorGUIUtility.singleLineHeight * 2 + 2;
         list.drawElementCallback = delegate(Rect rect, int index, bool active, bool focused)
         {
             if (ReorderableListTools.IndexWasOutOfBounds(list, index))
@@ -63,7 +65,16 @@ public static class ReorderableListCreator
 
             for (int i = 0; i < propertiesNamesToDraw.Length; i++)
             {
-                Rect elementRect = new Rect(rect.x + rect.width / propertiesNamesToDraw.Length * i, rect.y,
+                Rect labelRect = new Rect(rect.x + rect.width / propertiesNamesToDraw.Length * i, rect.y,
+                    rect.width / propertiesNamesToDraw.Length,
+                    EditorGUIUtility.singleLineHeight);
+                
+                GUIStyle labelStyle = new GUIStyle();
+                labelStyle.normal.textColor = Color.white;
+                
+                EditorGUI.LabelField(labelRect, propertiesNamesToDraw[i], labelStyle);
+
+                Rect elementRect = new Rect(rect.x + rect.width / propertiesNamesToDraw.Length * i, rect.y + EditorGUIUtility.singleLineHeight,
                                             rect.width / propertiesNamesToDraw.Length,
                                             EditorGUIUtility.singleLineHeight);
                 var element = list.serializedProperty.GetArrayElementAtIndex(index)

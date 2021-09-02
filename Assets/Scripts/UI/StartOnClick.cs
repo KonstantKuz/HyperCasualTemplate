@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartButton : MonoBehaviour
+public class StartOnClick : MonoBehaviour
 {
     private void Update()
     {

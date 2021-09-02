@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class Finish : MonoBehaviour
 {
-    [SerializeField] private bool callFinish = true;
+    [SerializeField] private bool callWin = true;
     [SerializeField] private float delay = 1;
     
     private void OnTriggerEnter(Collider other)
     {
-        if (!callFinish)
+        if (!callWin)
         {
             return;
         }
         
         if (other.CompareTag(GameConstants.TagPlayer))
         {
-            Observer.Instance.CallOnWinLevel(delay);
+            DelayHandler.DelayedCallAsync(delay, Observer.Instance.CallOnWinLevel);
         }
     }
 }
