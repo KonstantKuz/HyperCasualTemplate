@@ -1,34 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class UpdateManager : MonoBehaviour
+public class UpdateManager : Singleton<UpdateManager>
 {
+    private List<MonoCached> customUpdates = new List<MonoCached>(1000);
+    private List<MonoCached> customFixedUpdates = new List<MonoCached>(1000);
+    private List<MonoCached> customLateUpdates = new List<MonoCached>(1000);
+    
     private void Awake()
     {
        Application.targetFrameRate = 60;
     }
+
+    public void StartUpdate(MonoCached obj)
+    {
+        customUpdates.Add(obj);
+    }
+
+    public void StartFixedUpdate(MonoCached obj)
+    {
+        customFixedUpdates.Add(obj);
+    }
+
+    public void StartLateUpdate(MonoCached obj)
+    {
+        customLateUpdates.Add(obj);
+    }
+    
+    public void StopUpdate(MonoCached obj)
+    {
+        customUpdates.Add(obj);
+    }
+
+    public void StopFixedUpdate(MonoCached obj)
+    {
+        customFixedUpdates.Add(obj);
+    }
+
+    public void StopLateUpdate(MonoCached obj)
+    {
+        customLateUpdates.Add(obj);
+    }
     
     private void Update()
     {
-        for (int i = 0; i < MonoCached.customUpdates.Count; i++)
+        foreach (MonoCached obj in customUpdates)
         {
-            MonoCached.customUpdates[i].CallCustomUpdate();
+            obj.CustomUpdate();
         }
     }
 
     private void FixedUpdate()
     {
-        for (int i = 0; i < MonoCached.customFixedUpdates.Count; i++)
+        foreach (MonoCached obj in customFixedUpdates)
         {
-            MonoCached.customFixedUpdates[i].CallCustomFixedUpdate();
+            obj.CustomFixedUpdate();
         }
     }
 
     private void LateUpdate()
     {
-        for (int i = 0; i < MonoCached.customLateUpdates.Count; i++)
+        foreach (MonoCached obj in customFixedUpdates)
         {
-            MonoCached.customLateUpdates[i].CallCustomLateUpdate();
+            obj.CustomFixedUpdate();
         }
     }
 }

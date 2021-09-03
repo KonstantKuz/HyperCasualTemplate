@@ -15,7 +15,7 @@ public class Finish : MonoBehaviour
             return;
         }
         
-        if (other.CompareTag(GameConstants.TagPlayer))
+        if (other.CompareTag(Tags.Player))
         {
             DelayHandler.DelayedCallAsync(delay, Observer.Instance.CallOnWinLevel);
         }

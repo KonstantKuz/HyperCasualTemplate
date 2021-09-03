@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class GameConstants : MonoBehaviour
+public class Tags
 {
-    public const string TagPlayer = "Player";
-    public const string TagFinishTrigger = "Finish";
-
-    public const int LayerGround = 8;
+    public const string Player = "Player";
+    public const string FinishTrigger = "Finish";
 }

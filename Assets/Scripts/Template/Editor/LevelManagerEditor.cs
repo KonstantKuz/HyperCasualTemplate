@@ -14,7 +14,7 @@ public class LevelManagerEditor : Editor
         
         LevelManager levelManager = (LevelManager) target;
         
-        if (GUILayout.Button("Set current scene"))
+        if (GUILayout.Button("Set current level index"))
         {
             levelManager.SetCurrentLevelIndex(levelManager.currentLevelIndexToSet);
         }
