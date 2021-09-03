@@ -80,7 +80,7 @@ Observer.Instance.CallOnWinLevel();
 Затем добавить префаб GameAnalytics в Preload сцену (Window -> GameAnalytics -> Create GameAnalytics Object).
 В папке Templates -> Analytics раскомментировать код в файле SDKInit и повесить скрипт на созданный объект.
 В папке Templates -> Analytics раскомментировать код в файле AnalyticsEventSender и повесить скрипт в RegularTemplate.
-Заполнить фейсбук апп айди в Facebook -> Edit settings. Заполнить ключи аналитики в Window -> GameAnalytics -> Select Settings. 
+
 
  <a name="Build"></a>
 ### Сборка билда
