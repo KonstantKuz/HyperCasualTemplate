@@ -5,13 +5,19 @@ using System.Collections.Generic;
 
 public class UpdateManager : Singleton<UpdateManager>
 {
+    [SerializeField] private bool lockFrameRate;
+    [SerializeField] private int targetFrameRate;
+    
     private List<Action> customUpdates = new List<Action>(1000);
     private List<Action> customFixedUpdates = new List<Action>(1000);
     private List<Action> customLateUpdates = new List<Action>(1000);
     
     private void Awake()
     {
-       Application.targetFrameRate = 60;
+        if (lockFrameRate)
+        {
+            Application.targetFrameRate = targetFrameRate;
+        }
     }
 
     public void StartUpdate(Action obj)
