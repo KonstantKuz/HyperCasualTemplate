@@ -12,41 +12,31 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
     private InitialData<GlobalLevelProgressBar> initialData;
     private static UpdateData<GlobalLevelProgressBar> updateData;
 
-    private const string PrefsUpdateBarProgress = "UpdateBarProgress";
-    private const string PrefsPassedLevelsCount = "PassedLevelsCount";
-    private const string PrefsFirstBlockLevelNumber = "FirstDisplayLevelNumber";
-
+    private PlayerPrefsProperty<int> updateBarProgress = new PlayerPrefsProperty<int>("UpdateBarProgress", 1);
+    private PlayerPrefsProperty<int> passedLevelsCount = new PlayerPrefsProperty<int>("PassedLevelsCount", 1);
+    private PlayerPrefsProperty<int> firstBlockLevelNumber = new PlayerPrefsProperty<int>("FirstDisplayLevelNumber", 1);
+    
     private float[] progressToInitValue = { 0f, 0.14f, 0.355f, 0.57f, 0.785f, 1f };
     private float[] progressToHalfValue = { 0f, 0.185f, 0.4f, 0.61f, 0.825f, 1f };
     
-    
     private void Start()
     {
-        LevelManager levelManager = LevelManager.Instance;
-
-        int updateBarProgress = PlayerPrefs.GetInt(PrefsUpdateBarProgress, 1);
-        int passedLevelsCount = PlayerPrefs.GetInt(PrefsPassedLevelsCount, 1);
-        int firstBlockLevelNumber = PlayerPrefs.GetInt(PrefsFirstBlockLevelNumber, 1);
-        
-        if (updateBarProgress >= 6)
+        if (updateBarProgress.Value >= 6)
         {
-            // Не сбрасывается до 1 для случая "перескока" через один или более уровней
+            // Не сбрасывается до 1, а сдвигается на 5 для случая "перескока" через один или более уровней
             // Например при отказе проходить бонус уровень
-            PlayerPrefs.SetInt(PrefsUpdateBarProgress, updateBarProgress - 5);
-            PlayerPrefs.SetInt(PrefsPassedLevelsCount, passedLevelsCount + 5);
-            PlayerPrefs.SetInt(PrefsFirstBlockLevelNumber, LevelManager.CurrentLevelIndex);
-
-            updateBarProgress = PlayerPrefs.GetInt(PrefsUpdateBarProgress);
-            firstBlockLevelNumber = PlayerPrefs.GetInt(PrefsFirstBlockLevelNumber);
-            passedLevelsCount = PlayerPrefs.GetInt(PrefsPassedLevelsCount);
+            updateBarProgress.Value -= 5;
+            passedLevelsCount.Value += 5;
+            firstBlockLevelNumber.Value = LevelManager.CurrentDisplayLevelNumber;
         }
 
-        int blockLevelNumber = firstBlockLevelNumber;
+        LevelManager levelManager = LevelManager.Instance;
+        int blockLevelNumber = firstBlockLevelNumber.Value;
         for (int i = 0; i < progressBlocks.Length; i++)
         {
             GlobalLevelProgressBarBlock progressBlock = progressBlocks[i];
             
-            int levelIndex = levelManager.GetLevelIndexFromLevelsCount(passedLevelsCount + i);
+            int levelIndex = levelManager.GetLevelIndexFromLevelsCount(passedLevelsCount.Value + i);
             if (levelManager.IsBossLevel(levelIndex))
             {
                 progressBlock.SwitchDisplayType(BlockDisplayType.DisplayBoss);
@@ -66,11 +56,11 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
             blockLevelNumber++;
         }
 
-        InitializeProgress(updateBarProgress);
+        InitializeProgress(updateBarProgress.Value);
         
         Observer.Instance.OnStartGame += delegate
         {
-            SetHalfProgress(updateBarProgress);
+            SetHalfProgress(updateBarProgress.Value);
         };
         
         Observer.Instance.OnLoseLevel += delegate { gameObject.SetActive(false); };
@@ -93,11 +83,9 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
         UpdateProgress(updateData);
     }
     
-    public static void IncreaseGlobalProgress()
+    public void IncreaseGlobalProgress()
     {
-        int currentProgress = PlayerPrefs.GetInt(PrefsUpdateBarProgress, 1);
-        currentProgress++;
-        PlayerPrefs.SetInt(PrefsUpdateBarProgress, currentProgress);
+        updateBarProgress.Value++;
     }
     
     [Serializable]
