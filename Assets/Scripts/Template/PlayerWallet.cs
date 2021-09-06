@@ -15,23 +15,35 @@ public class PlayerWallet : Singleton<PlayerWallet>
         OnMoneyChanged();
     }
 
-    public static void IncreaseMoney(int value)
+    public void IncreaseMoney(int value)
+    {
+        ChangeMoney(value);
+    }
+
+    public void DecreaseMoney(int value)
+    {
+        ChangeMoney(-value);
+    }
+
+    private void ChangeMoney(int value)
     {
         int currentMoney = GetCurrentMoney();
         currentMoney += value;
+        if (currentMoney <= 0 && value < 0)
+        {
+            Debug.Log("Player has no money.");
+            return;
+        }
         PlayerPrefs.SetInt(PrefsMoney, currentMoney);
         Instance.OnMoneyChanged?.Invoke();
     }
 
-    public static void DecreaseMoney(int value)
+    public bool HasMoney(int amount)
     {
-        int currentMoney = GetCurrentMoney();
-        currentMoney -= value;
-        PlayerPrefs.SetInt(PrefsMoney, currentMoney);
-        Instance.OnMoneyChanged();
+        return GetCurrentMoney() >= amount;
     }
 
-    public static int GetCurrentMoney()
+    public int GetCurrentMoney()
     {
         return PlayerPrefs.GetInt(PrefsMoney, Instance.defaultMoney);
     }

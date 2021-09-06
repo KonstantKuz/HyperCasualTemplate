@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
+using Random = UnityEngine.Random;
 
 public class ObjectPooler : Singleton<ObjectPooler>
 {
-    //[DrawAsReorderable("pools")] 
     [SerializeField] private List<Pool> pools;
     [SerializeField] private List<PoolGroup> poolGroups;
 
@@ -119,22 +121,10 @@ public class ObjectPooler : Singleton<ObjectPooler>
             Debug.LogError($"Threse is no pool with pooltag == {poolTag}");
         }
     }
-    public GameObject SpawnObject(string poolTag, Vector3 position)
-    {
-        GameObject objToReturn;
-
-        objToReturn = SpawnObject(poolTag);
-        objToReturn.transform.position = position;
-
-        return objToReturn;
-    }
     public GameObject SpawnObject(string poolTag, Vector3 position, Quaternion rotation)
     {
-        GameObject objToReturn;
-
-        objToReturn = SpawnObject(poolTag);
-        objToReturn.transform.position = position;
-        objToReturn.transform.rotation = rotation;
+        GameObject objToReturn = SpawnObject(poolTag);
+        objToReturn.transform.SetPositionAndRotation(position, rotation);
 
         return objToReturn;
     }
@@ -144,16 +134,12 @@ public class ObjectPooler : Singleton<ObjectPooler>
     // just using a group tag that points to an array of Concrete object pools tags
     public GameObject SpawnRandomObject(string groupTag)
     {
-        GameObject objToReturn;
-
         TryFindGroupTag(groupTag);
 
         int rndSingleObjectPoolTagIndex = Random.Range(0, groupTagToHisPoolTagsDictionary[groupTag].Count);
         string rndSingleObjectPoolTag = groupTagToHisPoolTagsDictionary[groupTag][rndSingleObjectPoolTagIndex];
 
-        objToReturn = SpawnObject(rndSingleObjectPoolTag);
-
-        return objToReturn;
+        return SpawnObject(rndSingleObjectPoolTag);
     }
     private void TryFindGroupTag(string groupTag)
     {
@@ -162,22 +148,10 @@ public class ObjectPooler : Singleton<ObjectPooler>
             Debug.LogError($"Threse is no poolgroup with grouptag == {groupTag}");
         }
     }
-    public GameObject SpawnRandomObject(string groupTag, Vector3 position)
-    {
-        GameObject objToReturn;
-
-        objToReturn = SpawnRandomObject(groupTag);
-        objToReturn.transform.position = position;
-
-        return objToReturn;
-    }
     public GameObject SpawnRandomObject(string groupTag, Vector3 position, Quaternion rotation)
     {
-        GameObject objToReturn;
-
-        objToReturn = SpawnRandomObject(groupTag);
-        objToReturn.transform.position = position;
-        objToReturn.transform.rotation = rotation;
+        GameObject objToReturn = SpawnRandomObject(groupTag);
+        objToReturn.transform.SetPositionAndRotation(position, rotation);
 
         return objToReturn;
     }
@@ -202,24 +176,11 @@ public class ObjectPooler : Singleton<ObjectPooler>
         Debug.LogError($"Return null with {randomValue} weight. Maybe weight are not assigned.");
         return null;
     }
-
-    public GameObject SpawnWeightedRandomObject(string groupTag, Vector3 position)
-    {
-        GameObject objToReturn;
-
-        objToReturn = SpawnWeightedRandomObject(groupTag);
-        objToReturn.transform.position = position;
-
-        return objToReturn;
-    }
     
     public GameObject SpawnWeightedRandomObject(string groupTag, Vector3 position, Quaternion rotation)
     {
-        GameObject objToReturn;
-
-        objToReturn = SpawnWeightedRandomObject(groupTag);
-        objToReturn.transform.position = position;
-        objToReturn.transform.rotation = rotation;
+        GameObject objToReturn = SpawnWeightedRandomObject(groupTag);
+        objToReturn.transform.SetPositionAndRotation(position, rotation);
 
         return objToReturn;
     }
@@ -237,15 +198,11 @@ public class ObjectPooler : Singleton<ObjectPooler>
             poolsDictionary[poolTag].poolQueue.Enqueue(toReturn);
         }
     }
-    public void DelayedReturnObject(GameObject toReturn, string poolTag, float delay)
+    public async void DelayedReturnObject(GameObject toReturn, string poolTag, float delay)
     {
-        TryFindPoolTag(poolTag);
+        await Task.Delay(TimeSpan.FromSeconds(delay));
 
-        StartCoroutine(DelayedReturn(toReturn, poolTag, delay));
-    }
-    private IEnumerator DelayedReturn(GameObject toReturn, string poolTag, float delay)
-    {
-        yield return new WaitForSeconds(delay);
+        TryFindPoolTag(poolTag);
         ReturnObject(toReturn, poolTag);
     }
     #endregion

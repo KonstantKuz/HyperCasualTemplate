@@ -1,68 +1,70 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
 public class UpdateManager : Singleton<UpdateManager>
 {
-    private List<MonoCached> customUpdates = new List<MonoCached>(1000);
-    private List<MonoCached> customFixedUpdates = new List<MonoCached>(1000);
-    private List<MonoCached> customLateUpdates = new List<MonoCached>(1000);
+    private List<Action> customUpdates = new List<Action>(1000);
+    private List<Action> customFixedUpdates = new List<Action>(1000);
+    private List<Action> customLateUpdates = new List<Action>(1000);
     
     private void Awake()
     {
        Application.targetFrameRate = 60;
     }
 
-    public void StartUpdate(MonoCached obj)
+    public void StartUpdate(Action obj)
     {
         customUpdates.Add(obj);
     }
 
-    public void StartFixedUpdate(MonoCached obj)
+    public void StartFixedUpdate(Action obj)
     {
         customFixedUpdates.Add(obj);
     }
 
-    public void StartLateUpdate(MonoCached obj)
+    public void StartLateUpdate(Action obj)
     {
         customLateUpdates.Add(obj);
     }
     
-    public void StopUpdate(MonoCached obj)
+    public void StopUpdate(Action obj)
     {
-        customUpdates.Add(obj);
+        customUpdates.Remove(obj);
     }
 
-    public void StopFixedUpdate(MonoCached obj)
+    public void StopFixedUpdate(Action obj)
     {
-        customFixedUpdates.Add(obj);
+        customFixedUpdates.Remove(obj);
     }
 
-    public void StopLateUpdate(MonoCached obj)
+    public void StopLateUpdate(Action obj)
     {
-        customLateUpdates.Add(obj);
+        customLateUpdates.Remove(obj);
     }
     
     private void Update()
     {
-        foreach (MonoCached obj in customUpdates)
+        foreach (Action obj in customUpdates)
         {
-            obj.CustomUpdate();
+            obj.Invoke();
         }
     }
 
     private void FixedUpdate()
     {
-        foreach (MonoCached obj in customFixedUpdates)
+        foreach (Action obj in customFixedUpdates)
         {
-            obj.CustomFixedUpdate();
+            obj.Invoke();
         }
     }
 
     private void LateUpdate()
     {
-        foreach (MonoCached obj in customFixedUpdates)
+        foreach (Action obj in customFixedUpdates)
         {
-            obj.CustomFixedUpdate();
+            obj.Invoke();
         }
     }
 }

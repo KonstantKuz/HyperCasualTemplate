@@ -15,6 +15,10 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
     private const string PrefsUpdateBarProgress = "UpdateBarProgress";
     private const string PrefsPassedLevelsCount = "PassedLevelsCount";
     private const string PrefsFirstBlockLevelNumber = "FirstDisplayLevelNumber";
+
+    private float[] progressToInitValue = { 0f, 0.14f, 0.355f, 0.57f, 0.785f, 1f };
+    private float[] progressToHalfValue = { 0f, 0.185f, 0.4f, 0.61f, 0.825f, 1f };
+    
     
     private void Start()
     {
@@ -40,21 +44,23 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
         int blockLevelNumber = firstBlockLevelNumber;
         for (int i = 0; i < progressBlocks.Length; i++)
         {
+            GlobalLevelProgressBarBlock progressBlock = progressBlocks[i];
+            
             int levelIndex = levelManager.GetLevelIndexFromLevelsCount(passedLevelsCount + i);
             if (levelManager.IsBossLevel(levelIndex))
             {
-                progressBlocks[i].SwitchDisplayType(BlockDisplayType.DisplayBoss);
+                progressBlock.SwitchDisplayType(BlockDisplayType.DisplayBoss);
             }
             else if (levelManager.IsBonusLevel(levelIndex))
             {
-                progressBlocks[i].SwitchDisplayType(BlockDisplayType.DisplayBonus);
+                progressBlock.SwitchDisplayType(BlockDisplayType.DisplayBonus);
                 
                 blockLevelNumber--;
             }
             else
             {
-                progressBlocks[i].SwitchDisplayType(BlockDisplayType.DisplayLevel);
-                progressBlocks[i].levelText.SetText(blockLevelNumber.ToString());
+                progressBlock.SwitchDisplayType(BlockDisplayType.DisplayLevel);
+                progressBlock.levelText.SetText(blockLevelNumber.ToString());
             }
 
             blockLevelNumber++;
@@ -75,29 +81,7 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
 
     private void InitializeProgress(int globalProgress)
     {
-        float currentValue = 0f;
-        if (globalProgress == 1)
-        {
-            currentValue = 0.14f;
-        }
-        if (globalProgress == 2)
-        {
-            currentValue = 0.355f;
-        }
-        if (globalProgress == 3)
-        {
-            currentValue = 0.57f;
-        }
-        if (globalProgress == 4)
-        {
-            currentValue = 0.785f;
-        }
-        if (globalProgress == 5)
-        {
-            currentValue = 1f;
-        }
-        
-        initialData.CurrentValue = currentValue;
+        initialData.CurrentValue = progressToInitValue[globalProgress];
         initialData.MinValue = 0;
         initialData.MaxValue = 1f;
         Initialize(initialData);   
@@ -105,29 +89,7 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
 
     private void SetHalfProgress(int globalProgress)
     {
-        float currentValue = 0f;
-        if (globalProgress == 1)
-        {
-            currentValue = 0.185f;
-        }
-        if (globalProgress == 2)
-        {
-            currentValue = 0.4f;
-        }
-        if (globalProgress == 3)
-        {
-            currentValue = 0.61f;
-        }
-        if (globalProgress == 4)
-        {
-            currentValue = 0.825f;
-        }
-        if (globalProgress == 5)
-        {
-            currentValue = 1f;
-        }
-        
-        updateData.CurrentValue = currentValue;
+        updateData.CurrentValue = progressToHalfValue[globalProgress];
         UpdateProgress(updateData);
     }
     
@@ -147,24 +109,9 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
 
         public void SwitchDisplayType(BlockDisplayType displayType)
         {
-            switch (displayType)
-            {
-                case BlockDisplayType.DisplayLevel:
-                    levelText.gameObject.SetActive(true);
-                    bossImage.gameObject.SetActive(false);
-                    bonusImage.gameObject.SetActive(false);
-                    break;
-                case BlockDisplayType.DisplayBoss:
-                    levelText.gameObject.SetActive(false);
-                    bossImage.gameObject.SetActive(true);
-                    bonusImage.gameObject.SetActive(false);
-                    break;
-                case BlockDisplayType.DisplayBonus:
-                    levelText.gameObject.SetActive(false);
-                    bossImage.gameObject.SetActive(false);
-                    bonusImage.gameObject.SetActive(true);
-                    break;
-            }
+            levelText.gameObject.SetActive(displayType == BlockDisplayType.DisplayLevel);
+            bossImage.gameObject.SetActive(displayType == BlockDisplayType.DisplayBoss);
+            bonusImage.gameObject.SetActive(displayType == BlockDisplayType.DisplayBonus);
         }
     }
     
