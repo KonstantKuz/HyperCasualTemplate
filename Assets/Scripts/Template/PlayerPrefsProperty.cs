@@ -21,7 +21,7 @@ public class PlayerPrefsProperty<T>
     private T Load()
     {
         var paramType = typeof(T);
-        if (paramType == typeof(int) || paramType == typeof(Int32))
+        if (paramType == typeof(int))
         {
             return (T)(object)PlayerPrefs.GetInt(_key, (int)(object)_defaultValue);
         }
@@ -37,7 +37,7 @@ public class PlayerPrefsProperty<T>
     private void Save(T value)
     {
         var paramType = typeof(T);
-        if (paramType == typeof(int) || paramType == typeof(Int32))
+        if (paramType == typeof(int))
         {
             PlayerPrefs.SetInt(_key, (int)(object)value);    
         }
