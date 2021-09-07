@@ -31,7 +31,7 @@ public class PlayerWallet : Singleton<PlayerWallet>
         currentMoney += value;
         if (currentMoney <= 0 && value < 0)
         {
-            Debug.Log("Player has no money.");
+            Debug.LogError("Player has no money. Check money with HasMoney(amount).");
             return;
         }
         PlayerPrefs.SetInt(PrefsMoney, currentMoney);
