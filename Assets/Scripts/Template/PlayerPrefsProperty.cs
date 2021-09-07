@@ -21,13 +21,14 @@ public class PlayerPrefsProperty<T>
     private T Load()
     {
         var paramType = typeof(T);
-        if (paramType == typeof(int))
+        if (paramType == typeof(int) || paramType == typeof(Int32))
         {
             return (T)(object)PlayerPrefs.GetInt(_key, (int)(object)_defaultValue);
         }
         if (paramType == typeof(bool))
         {
-            return (T) (object) (PlayerPrefs.GetInt(_key, (int) (object) _defaultValue) == 1);
+            int defaultValue = (bool) (object) _defaultValue ? 1 : 0;
+            return (T) (object) (PlayerPrefs.GetInt(_key, defaultValue) == 1);
         }
 
         throw new Exception($"Not implemented for type {typeof(T)}");
@@ -36,9 +37,14 @@ public class PlayerPrefsProperty<T>
     private void Save(T value)
     {
         var paramType = typeof(T);
-        if (paramType == typeof(int))
+        if (paramType == typeof(int) || paramType == typeof(Int32))
         {
             PlayerPrefs.SetInt(_key, (int)(object)value);    
+        }
+        else if (paramType == typeof(bool))
+        {
+            int saveValue = (bool) (object) value ? 1 : 0;
+            PlayerPrefs.SetInt(_key, saveValue);
         }
         else
         {

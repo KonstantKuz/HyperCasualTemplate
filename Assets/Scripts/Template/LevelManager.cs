@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -22,24 +23,26 @@ public class LevelManager : Singleton<LevelManager>
     [Header("Editor Only")]
     public int currentLevelIndexToSet;
     
-    private const string PrefsIsCircleOfLevelsPassed = "IsLevelCirclePassed";
-    private const string PrefsCurrentLevelIndex = "CurrentLevelIndex";
-    private const string PrefsCurrentDisplayLevelNumber = "CurrentDisplayLevelNumber";
-
+    private PlayerPrefsProperty<int> currentLevelIndexPrefs = new PlayerPrefsProperty<int>("CurrentLevelIndex", 0);
+    private PlayerPrefsProperty<int> currentDisplayLevelNumberPrefs = new PlayerPrefsProperty<int>("CurrentDisplayLevelNumber", 1);
+    private PlayerPrefsProperty<bool> isCircleOfLevelsPassedPrefs = new PlayerPrefsProperty<bool>("IsLevelCirclePassed", false);
+    
     private const string BossLevelsNameContainingPart = "Boss";
     private const string BonusLevelsNameContainingPart = "Bonus";
 
     public PlayableLevel[] PlayableLevels => levelsQueue.levels;
     public int MaxLevelsCount => PlayableLevels.Length;
-    public static int CurrentLevelIndex => PlayerPrefs.GetInt(PrefsCurrentLevelIndex);
-    public static int CurrentDisplayLevelNumber => PlayerPrefs.GetInt(PrefsCurrentDisplayLevelNumber, 1);
+    public int FirstRepeatableLevelIndex => PlayableLevels.TakeWhile(level => !level.isRepeatable).Count();
+
+    public int CurrentLevelIndex => currentLevelIndexPrefs.Value;
+    public int CurrentDisplayLevelNumber => currentDisplayLevelNumberPrefs.Value;
     
     private void OnEnable()
     {
         Observer.Instance.OnLoadNextScene += LoadNextLevel;
         Observer.Instance.OnRestartScene += RestartScene;
     }
-    
+
     private void OnDisable()
     {
         Observer.Instance.OnLoadNextScene -= LoadNextLevel;
@@ -53,22 +56,7 @@ public class LevelManager : Singleton<LevelManager>
     
     public void SetCurrentLevelIndex(int index)
     {
-        PlayerPrefs.SetInt(PrefsCurrentLevelIndex, index);
-    }
-
-    private void SetCurrentDisplayLevelNumber(int currentDisplayNumber)
-    {
-        PlayerPrefs.SetInt(PrefsCurrentDisplayLevelNumber, currentDisplayNumber);
-    }
-
-    private bool IsCircleOfLevelsPassed()
-    {
-        return PlayerPrefs.GetInt(PrefsIsCircleOfLevelsPassed, 0) == 1;
-    }
-
-    private void MarkCircleOfLevelsAsPassed()
-    {
-        PlayerPrefs.SetInt(PrefsIsCircleOfLevelsPassed, 1);
+        currentLevelIndexPrefs.Value = index;
     }
     
     private void LoadNextLevel()
@@ -85,10 +73,8 @@ public class LevelManager : Singleton<LevelManager>
         {
             return;
         }
-        
-        int currentNumber = CurrentDisplayLevelNumber;
-        currentNumber++;
-        SetCurrentDisplayLevelNumber(currentNumber);
+
+        currentDisplayLevelNumberPrefs.Value++;
     }
 
     private int UpdateLevelIndex()
@@ -114,7 +100,7 @@ public class LevelManager : Singleton<LevelManager>
     private bool IsRandomSceneSelection()
     {
         return scenesLoadType == ScenesLoadType.Random || 
-               scenesLoadType == ScenesLoadType.RandomAfterLinear && IsCircleOfLevelsPassed();
+               scenesLoadType == ScenesLoadType.RandomAfterLinear && isCircleOfLevelsPassedPrefs.Value;
     }
 
     private int RandomNotThisLevel(int currentIndex)
@@ -134,10 +120,10 @@ public class LevelManager : Singleton<LevelManager>
         if (currentIndex >= MaxLevelsCount)
         {
             currentIndex = 0;
-            MarkCircleOfLevelsAsPassed();
+            isCircleOfLevelsPassedPrefs.Value = true;
         }
 
-        if ( IsCircleOfLevelsPassed() && !PlayableLevels[currentIndex].isRepeatable)
+        if (isCircleOfLevelsPassedPrefs.Value && !PlayableLevels[currentIndex].isRepeatable)
         {
             return UpdateIndexAsLinear(currentIndex);
         }
@@ -152,50 +138,19 @@ public class LevelManager : Singleton<LevelManager>
     
     public int GetNextLevelIndex()
     {
-        bool levelCirclePassed = false;
-        int nextLevelIndex = CurrentLevelIndex;
-        nextLevelIndex++;
-        
-        if (nextLevelIndex >= MaxLevelsCount)
-        {
-            nextLevelIndex = 0;
-            levelCirclePassed = true;
-        }
-        
-        if (levelCirclePassed)
-        {
-            while (!PlayableLevels[nextLevelIndex].isRepeatable)
-            {
-                nextLevelIndex++;
-            }
-        }
-
-        return nextLevelIndex;
+        int nextLevelIndex = CurrentLevelIndex + 1;
+        return nextLevelIndex < MaxLevelsCount ? nextLevelIndex : FirstRepeatableLevelIndex;
     }
-    
+
     public int GetLevelIndexFromLevelsCount(int levelsCount)
     {
-        bool levelCirclePassed = false;
-        int sceneIndex = -1;
-        for (int i = 0; i < levelsCount; i++)
+        if (levelsCount < PlayableLevels.Length)
         {
-            sceneIndex++;
-            if (sceneIndex >= PlayableLevels.Length)
-            {
-                sceneIndex = 0;
-                levelCirclePassed = true;
-            }
-            
-            if (levelCirclePassed)
-            {
-                while (!PlayableLevels[sceneIndex].isRepeatable)
-                {
-                    sceneIndex++;
-                }
-            }
+            return levelsCount;
         }
         
-        return sceneIndex;
+        levelsCount -= PlayableLevels.Length;
+        return levelsCount % (PlayableLevels.Length - FirstRepeatableLevelIndex);
     }
 
     public bool IsBossLevel(int levelIndex)

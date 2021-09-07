@@ -36,4 +36,14 @@ public class Observer : Singleton<Observer>
             OnLoseLevel();
         }
     }
+    
+    #if UNITY_EDITOR
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CallOnWinLevel();
+        }
+    }
+    #endif
 }

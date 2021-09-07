@@ -27,7 +27,7 @@ public class GlobalLevelProgressBar : SceneLineProgressBar<GlobalLevelProgressBa
             // Например при отказе проходить бонус уровень
             updateBarProgress.Value -= 5;
             passedLevelsCount.Value += 5;
-            firstBlockLevelNumber.Value = LevelManager.CurrentDisplayLevelNumber;
+            firstBlockLevelNumber.Value = LevelManager.Instance.CurrentDisplayLevelNumber;
         }
 
         LevelManager levelManager = LevelManager.Instance;
