@@ -1,33 +1,37 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    private static System.Object _lock = new System.Object();
-
     public static T Instance
     {
         get
         {
-            lock (_lock)
+            if (_instance == null)
             {
-                if (_instance == null)
-                {
-                    T[] instances = FindObjectsOfType<T>();
-                    if (instances.Length > 1)
-                    {
-                        Debug.LogError("В сцене найдено несколько синглтонов.");
-                    }
-
-                    if (instances[0] == null)
-                    {
-                        Debug.LogError("В сцене не найдено синглтона" + typeof(T));
-                    }
-                        
-                    _instance = instances[0];
-                }
-                return _instance;
+                FindInstance();
             }
+            
+            return _instance;
         }
+    }
+
+    private static void FindInstance()
+    {
+        T[] instances = FindObjectsOfType<T>();
+        if (instances.Length > 1)
+        {
+            Debug.LogError("В сцене найдено несколько синглтонов.");
+        }
+
+        if (instances.Length == 0)
+        {
+            throw new Exception("В сцене не найдено синглтона " + typeof(T));
+        }
+        
+        Debug.Log($"Set component {typeof(T)} in {instances[0].gameObject.name} GameObject as {typeof(T)} Singleton.");
+        
+        _instance = instances[0];
     }
 }

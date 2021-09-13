@@ -27,16 +27,6 @@ public class Observer : Singleton<Observer>
             OnWinLevel();
         }
     }
-
-    public void CallOnWinLevel(float delay)
-    {
-        StartCoroutine(DelayedCallFinish());
-        IEnumerator DelayedCallFinish()
-        {
-            yield return new WaitForSecondsRealtime(delay);
-            CallOnWinLevel();
-        }
-    }
     
     public void CallOnLoseLevel()
     {
@@ -46,14 +36,14 @@ public class Observer : Singleton<Observer>
             OnLoseLevel();
         }
     }
-
-    public void CallOnLoseLevel(float delay)
+    
+    #if UNITY_EDITOR
+    private void Update()
     {
-        StartCoroutine(DelayedCallLose());
-        IEnumerator DelayedCallLose()
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            yield return new WaitForSecondsRealtime(delay);
-            CallOnLoseLevel();
+            CallOnWinLevel();
         }
     }
+    #endif
 }

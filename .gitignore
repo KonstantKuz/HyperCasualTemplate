@@ -10,8 +10,6 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
-/[Pp]rojectSettings/ProjectVersion.txt
-
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 
@@ -26,9 +24,6 @@
 .idea/workspace.xml
 .idea/
 .idea
-
-# Collab file
-.collabignore
 
 # Visual Studio cache directory
 .vs/

@@ -32,22 +32,23 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
  - Вызов событий :  
 Observer.Instance.OnWinLevel();  
 Observer.Instance.CallOnWinLevel();  
-Observer.Instance.CallOnLoseLevel(5f);  
 
  - Основа LevelManager :  
 Загрузка сцен производится со стартовой сцены Preload, необходимой для префаба аналитики и других неуничтожаемых объектов при загрузке сцен.  
-Все уровни - все сцены имеющиеся в build settings - сначала грузятся по порядку по мере прохождения, далее после прохождения каждого уровня по 1 разу - уровни грузятся в рандомном порядке.  
+Последовательность уровней прописывается в файле ScriptableData -> LevelsQueue (можно сделать несколько файлов с разными последовательностями уровней. Create -> Levels Queue).
 Чтобы уровни всегда запускались зацикленно по порядку нужно в LevelManager установить LoadType на Linear.  
 Чтобы уровни всегда запускались рандомно нужно в LevelManager установить ScenesLoadType на Random.  
-Чтобы поменять загружаемую при запуске игры сцену (в эдиторе) нужно в RegularTemplate -> LevelManager вписать индекс нужной сцены и нажать Set current scene.  
-Чтобы сбросить прогресс до нулевой сцены нужно нажать Reset progress (сбросит прогресс, не сработает в случае если ScenesLoadType == Random).  
+Чтобы уровни запускались рандомно после одного последовательного прохождения нужно в LevelManager установить ScenesLoadType на RandomAfterLinear. 
+Чтобы поменять загружаемую при запуске игры сцену (в эдиторе) нужно в RegularTemplate -> LevelManager вписать индекс нужной сцены и нажать Set current level index.  
 
- - В сцене висит Canvas с панелью победы\проигрыша и двумя туториал кнопками (рука + восьмерка\тап ту плей).  
-Одну из кнопок необходимо удалить\отключить в зависимости от типа управления в игре.  
-Кнопка-туториал растянута на весь экран и по нажатию отключается и вызывает событие OnGameStarted.  
+ - В папке префабов есть два прогресс бара уровня
+
+ - В сцене висит Canvas с панелью победы\проигрыша и туториал кнопкой (рука + восьмерка\ в папке с префабами есть тап ту плей).  
+
+Кнопка-туториал по нажатию отключается и вызывает событие OnGameStarted.  
 В панели уже настроены кнопки рестарта сцены и загрузки следующей сцены.  
  
- - В файле GameConstants пишутся все константы игры как строковые так и численные (пр-р теги, имена пулов, префсы), а в AnimatorHashes по примеру список всех стейтов\переменных из всех аниматоров.
+ - В файле Tags пишутся все переиспользуемые теги, а в AnimatorHashes по примеру список всех стейтов\переменных из всех аниматоров.
     - быстрый доступ к часто использующимся повторяющимся данным (особенно в случае с аниматором).  
     - доступ к ключевым константам игры без поиска в коде.  
     - быстрая и безболезненная смена повторяющихся строковых\численных значений.  
@@ -71,13 +72,15 @@ Observer.Instance.CallOnLoseLevel(5f);
  <a name="Analytics"></a>
 ### Импорт аналитики и шаблон событий
 
-После импорта пакейджа аналитики в проект нужно решить зависимости.  
+В папке Templates -> Analytics лежат сдк фейсбука и гейм аналитики.
+Установить двойным щелчком по пакейджам. 
+После установки пакейджей в проект нужно решить зависимости.  
 Для iOS Assets->External Dependency Manager->iOS Resolver->Install Cocoapods.  
-Для Android Assets->External Dependency Manager->Android Resolver->Force Resolve.  
-Вписать ключи и апп айди VoodooPackages->Tiny Sauce->Edit settings.  
-Затем добавить префаб аналитики в Preload сцену.  
-В LevelManager в методах Start и LoadNextScene нужно раскомментировать строки вызова методов TinySauce аналитики.  
-Далее открыть файл Templates->Analytics->AnalyticsEventSender, раскомментировать код и добавить скрипт в префаб RegularTemplate.  
+Для Android Assets->External Dependency Manager->Android Resolver->Force Resolve. 
+Затем добавить префаб GameAnalytics в Preload сцену (Window -> GameAnalytics -> Create GameAnalytics Object).
+В папке Templates -> Analytics раскомментировать код в файле SDKInit и повесить скрипт на созданный объект.
+В папке Templates -> Analytics раскомментировать код в файле AnalyticsEventSender и повесить скрипт в RegularTemplate.
+Заполнить фейсбук апп айди в Facebook -> Edit settings. Заполнить ключи аналитики в Window -> GameAnalytics -> Select Settings. 
 
  <a name="Build"></a>
 ### Сборка билда
