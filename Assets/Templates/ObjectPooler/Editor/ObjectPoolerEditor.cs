@@ -16,8 +16,8 @@ public class ObjectPoolerEditor : Editor
 
     private void OnEnable()
     {
-        poolsDrawer = new ReorderableDrawer(ReorderableType.WithRemoveButtons, false);
-        groupsDrawer = new ReorderableDrawer(ReorderableType.WithRemoveButtons, false);
+        poolsDrawer = new ReorderableDrawer(ReorderableType.WithRemoveButtons, true);
+        groupsDrawer = new ReorderableDrawer(ReorderableType.WithRemoveButtons, true);
         
         poolsDrawer.SetUp(serializedObject, poolsPropertyName);
         groupsDrawer.SetUp(serializedObject, poolGroupsPropertyName);

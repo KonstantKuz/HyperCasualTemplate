@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ObjectPoolerSingleton;
 using System.Threading.Tasks;
 using Random = UnityEngine.Random;
 
-public class ObjectPooler : Singleton<ObjectPooler>
+public class ObjectPooler : PoolerSingleton<ObjectPooler>
 {
     [SerializeField] private List<Pool> pools;
     [SerializeField] private List<PoolGroup> poolGroups;
@@ -201,7 +202,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
     public async void DelayedReturnObject(GameObject toReturn, string poolTag, float delay)
     {
         await Task.Delay(TimeSpan.FromSeconds(delay));
-
+        
         if (toReturn == null)
         {
             return;
