@@ -202,6 +202,10 @@ public class ObjectPooler : Singleton<ObjectPooler>
     {
         await Task.Delay(TimeSpan.FromSeconds(delay));
 
+        if (toReturn == null)
+        {
+            return;
+        }
         TryFindPoolTag(poolTag);
         ReturnObject(toReturn, poolTag);
     }
