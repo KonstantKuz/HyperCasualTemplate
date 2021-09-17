@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a739470670f34bf9a5805fe20ef6520a, type: 3}
+  m_Name: ExampleProgression
+  m_EditorClassIdentifier: 
+  progressionName: SkinsProgression
+  itemsQueue:
+  - itemName: Skin1
+    levelsCountToGet: 0
+    cost: 0
+    icon: {fileID: 21300000, guid: bac05f09ee97646e0b3a77af56ddab2b, type: 3}
+  - itemName: Skin2
+    levelsCountToGet: 5
+    cost: 500
+    icon: {fileID: 21300000, guid: 040318382cca44a05ac8aec16097c20b, type: 3}
