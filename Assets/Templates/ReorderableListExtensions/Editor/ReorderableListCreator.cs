@@ -1,5 +1,4 @@
-﻿using DG.DOTweenEditor.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
