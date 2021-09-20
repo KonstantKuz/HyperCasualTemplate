@@ -6,6 +6,7 @@ using System;
 public enum RewardedVideoPlacement
 {
     LevelFinish,
+    Shop_Coins,
 }
 
 public class ADManager : Singleton<ADManager>
@@ -201,7 +202,7 @@ public class ADManager : Singleton<ADManager>
         
         bannerRetryAttempt++;
         float retryDelay = (float)Math.Pow(2, Math.Min(6, bannerRetryAttempt));
-        DelayHandler.Instance.DelayedCall(retryDelay, LoadBanner);
+        DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadBanner);
     }
     
     private void DebugAdError(string additiveMessage)
@@ -273,15 +274,16 @@ public class ADManager : Singleton<ADManager>
             CallInterShownOrFailedAndClearEvents();
         }
     }
+------------------------------------------------------------------------------------ */
 
-    public void ShowRewardedAd(RewardedVideoPlacement placementName)
+    public void ShowRewardedAd(string placementName)
     {
-        #if UNITY_EDITOR
+    #if UNITY_EDITOR
         Debug.Log("SHOW REWARDED VIDEO AD");
-        OnRewardedVideoAdRewardedEvent(new IronSourcePlacement("","",0));
+        // OnRewardedVideoAdRewardedEvent(new IronSourcePlacement("","",0));
         FreezeRewardedShow();
         return;
-        #endif
+    #endif
         
         if (!IsRewardedReady())
         {
@@ -293,7 +295,7 @@ public class ADManager : Singleton<ADManager>
         }
         
         Debug.Log("SHOW REWARDED VIDEO AD");
-        IronSource.Agent.showRewardedVideo(placementName.ToString());
+        // IronSource.Agent.showRewardedVideo(placementName);
     }
 
 #if UNITY_EDITOR
@@ -320,8 +322,6 @@ public class ADManager : Singleton<ADManager>
         onRewardedAdFailedOrDiscarded = null;
         onInterAdShowedOrFailed = null;
     }
-    
------------------------------------------------------------------------------------- */
     
     public bool IsRewardedReady()
     {

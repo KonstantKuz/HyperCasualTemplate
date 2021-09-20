@@ -17,16 +17,12 @@ public class Get1000 : MonoBehaviour
 
     private void TryGet1000ForReward()
     {
-        PlayerWallet.Instance.IncreaseMoney(1000);
-        // CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo, 1f);
-        // PlayerWallet.Instance.IncreaseMoney(1000);
+        ADManager.Instance.onRewardedAdRewarded += delegate
+        {
+            CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo, 1f);
+            PlayerWallet.Instance.IncreaseMoney(1000);
+        };
         
-        // ADManager.Instance.onRewardedAdRewarded += delegate
-        // {
-        //     CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo, 1f);
-        //     PlayerWallet.Instance.IncreaseMoney(1000);
-        // };
-        //
-        // ADManager.Instance.ShowRewardedAd(RewardedVideoPlacement.Shop_Coins);
+        ADManager.Instance.ShowRewardedAd(RewardedVideoPlacement.Shop_Coins.ToString());
     }
 }

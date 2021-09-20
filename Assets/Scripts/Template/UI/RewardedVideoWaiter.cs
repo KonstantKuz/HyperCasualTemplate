@@ -28,7 +28,7 @@ public class RewardedVideoWaiter : MonoBehaviour
     {
         while (true)
         {
-            // UpdateVisual(ADManager.Instance.IsRewardedReady());
+            UpdateVisual(ADManager.Instance.IsRewardedReady());
             yield return updateStep;
         }
     }

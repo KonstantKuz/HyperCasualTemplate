@@ -19,22 +19,13 @@ public class RewardedPanel : MonoBehaviour
     public int Timer => timer;
     private Coroutine counter;
 
-    public bool AlreadyShown()
-    {
-        return counter != null;
-    }
-
-    public void ShowPanel()
+    public void ShowPanel(Action onGetReward, Action onDiscardReward)
     {
         getRewardButton.onClick.RemoveAllListeners();
         noThanksButton.onClick.RemoveAllListeners();
-        
-        gameObject.SetActive(true);
         timerText.text = maxTime.ToString();
-    }
-
-    public void StartCount(Action onGetReward, Action onDiscardReward)
-    {
+        gameObject.SetActive(true);
+        
         getRewardButton.onClick.AddListener(delegate
         {
             StopNHide();
@@ -43,15 +34,15 @@ public class RewardedPanel : MonoBehaviour
         
         if (showNoThanksButton)
         {
-            // DelayHandler.Instance.DelayedCallRealtime(showDelay, delegate
-            // {
-            //     noThanksButton.gameObject.SetActive(true);
-            //     noThanksButton.onClick.AddListener(delegate
-            //     {
-            //         StopNHide();
-            //         onDiscardReward?.Invoke();
-            //     });
-            // });
+            DelayHandler.Instance.DelayedCallCoroutineRealtime(showDelay, delegate
+            {
+                noThanksButton.gameObject.SetActive(true);
+                noThanksButton.onClick.AddListener(delegate
+                {
+                    StopNHide();
+                    onDiscardReward?.Invoke();
+                });
+            });
         }
         
         timer = maxTime + 1;

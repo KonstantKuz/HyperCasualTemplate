@@ -212,7 +212,7 @@ public class UniversalShopTab : ShopTab
             UpdateItemsStatuses();
         };
     
-        // ADManager.Instance.ShowRewardedAd(RewardedVideoPlacement.);
+        ADManager.Instance.ShowRewardedAd($"UnlockItem{itemName}");
     }
     
     private void TryBuyForCoins(string itemName)
