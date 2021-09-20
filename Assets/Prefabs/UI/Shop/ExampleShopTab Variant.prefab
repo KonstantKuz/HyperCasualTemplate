@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &104706478825525510
+--- !u!114 &1839638452880812446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2402712036750516273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41828a2eb26a050419ec69d01021081c, type: 3}
+  m_Script: {fileID: 11500000, guid: e4265ba8e9fed04439c6a2c5bbd6790a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   openTabButton: {fileID: 6563181445947437763}
@@ -24,10 +24,10 @@ MonoBehaviour:
   - {fileID: 7297236320756094036}
   - {fileID: 6263020652700028075}
   - {fileID: 7845321972384520748}
-  _isItemsEquipable: 0
+  _isItemsEquipable: 1
   _equipOnSelect: 0
   _equipButton: {fileID: 1717264854024577419}
-  _itemCostType: 0
+  _itemCostType: 1
   _buyButton: {fileID: 4474738892562697360}
   _itemsProgression: {fileID: 11400000, guid: 2a383f32c4c5ab34dbd8701a105f8c6d, type: 2}
 --- !u!1001 &2314080180692220970

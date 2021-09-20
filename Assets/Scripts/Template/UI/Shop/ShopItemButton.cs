@@ -60,7 +60,7 @@ public class ShopItemButton : MonoBehaviour
         isNewItemImage.SetActive(value);
     }
 
-    public void SetEquiped(bool value)
+    public void SetEquipped(bool value)
     {
         equipedImage.SetActive(value);
     }

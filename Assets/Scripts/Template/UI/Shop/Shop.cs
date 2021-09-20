@@ -23,7 +23,7 @@ public class Shop : MonoBehaviour
         }
 
         UpdateNewItemsIndication();
-        // PlayerWallet.Instance.OnMoneyChanged += UpdateItemsStatuses;
+        PlayerWallet.Instance.OnMoneyChanged += UpdateTabsItems;
     }
 
     private void OpenShop()
@@ -53,7 +53,7 @@ public class Shop : MonoBehaviour
         }
     }
 
-    public void UpdateItemsStatuses()
+    public void UpdateTabsItems()
     {
         for (int i = 0; i < tabs.Length; i++)
         {

@@ -469,7 +469,8 @@ MonoBehaviour:
   open: {fileID: 4335787327086839599}
   close: {fileID: 5439018662983667164}
   newItemIndicator: {fileID: 6617713850492669980}
-  tabs: []
+  tabs:
+  - {fileID: 5186978483917060862}
 --- !u!222 &8251982849141090554
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1841,6 +1842,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 096331950f0e3f347b003273d09750f2, type: 3}
+--- !u!114 &5186978483917060862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1839638452880812446, guid: 096331950f0e3f347b003273d09750f2,
+    type: 3}
+  m_PrefabInstance: {fileID: 6808435613124285280}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4265ba8e9fed04439c6a2c5bbd6790a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &816220282759489125 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6138300858581742853, guid: 096331950f0e3f347b003273d09750f2,

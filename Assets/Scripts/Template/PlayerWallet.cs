@@ -12,7 +12,7 @@ public class PlayerWallet : Singleton<PlayerWallet>
     
     private void Awake()
     {
-        OnMoneyChanged();
+        OnMoneyChanged?.Invoke();
     }
 
     public void IncreaseMoney(int value)
@@ -35,7 +35,7 @@ public class PlayerWallet : Singleton<PlayerWallet>
             return;
         }
         PlayerPrefs.SetInt(PrefsMoney, currentMoney);
-        Instance.OnMoneyChanged?.Invoke();
+        OnMoneyChanged?.Invoke();
     }
 
     public bool HasMoney(int amount)
@@ -45,6 +45,6 @@ public class PlayerWallet : Singleton<PlayerWallet>
 
     public int GetCurrentMoney()
     {
-        return PlayerPrefs.GetInt(PrefsMoney, Instance.defaultMoney);
+        return PlayerPrefs.GetInt(PrefsMoney, defaultMoney);
     }
 }

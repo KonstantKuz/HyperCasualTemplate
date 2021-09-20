@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ItemsProgressHandler : Singleton<ItemsProgressHandler>
 {
-    [SerializeField] private ItemsProgression[] progressions;
+    [SerializeField] private ItemsProgression[] _progressions;
 
-    private Dictionary<string, ItemsProgression> progressionsDictionary;
-    private Dictionary<string, ProgressiveItemData> itemsDictionary;
-    private Dictionary<string, PlayerPrefsProperty<int>> itemProgressDictionary;
-    private Dictionary<string, PlayerPrefsProperty<bool>> itemStatusDictionary;
+    private Dictionary<string, ItemsProgression> _progressionsDictionary;
+    private Dictionary<string, ProgressiveItemData> _itemsDictionary;
+    private Dictionary<string, PlayerPrefsProperty<int>> _itemProgressDictionary;
+    private Dictionary<string, PlayerPrefsProperty<bool>> _itemStatusDictionary;
 
     private const string PrefsPrefixItemProgress = "Progress";
     private const string PrefsPrefixItemShopStatus = "AvailableToShop";
@@ -18,60 +18,102 @@ public class ItemsProgressHandler : Singleton<ItemsProgressHandler>
     private void Awake()
     {
         InitializeItemsDictionary();
+        Observer.Instance.OnLoadNextScene += UpdateItemsProgress;
     }
 
     private void InitializeItemsDictionary()
     {
-        progressionsDictionary= new Dictionary<string, ItemsProgression>();
-        itemsDictionary = new Dictionary<string, ProgressiveItemData>();
-        itemProgressDictionary = new Dictionary<string, PlayerPrefsProperty<int>>();
-        itemStatusDictionary = new Dictionary<string, PlayerPrefsProperty<bool>>();
+        _progressionsDictionary= new Dictionary<string, ItemsProgression>();
+        _itemsDictionary = new Dictionary<string, ProgressiveItemData>();
+        _itemProgressDictionary = new Dictionary<string, PlayerPrefsProperty<int>>();
+        _itemStatusDictionary = new Dictionary<string, PlayerPrefsProperty<bool>>();
         
-        for (int i = 0; i < progressions.Length; i++)
+        for (int i = 0; i < _progressions.Length; i++)
         {
-            progressionsDictionary.Add(progressions[i].progressionName, progressions[i]);
+            _progressionsDictionary.Add(_progressions[i].progressionName, _progressions[i]);
             
-            for (int j = 0; j < progressions[i].itemsQueue.Length; j++)
+            for (int j = 0; j < _progressions[i].itemsQueue.Length; j++)
             {
-                string itemName = progressions[i].itemsQueue[j].itemName;
+                string itemName = _progressions[i].itemsQueue[j]._itemName;
                 
-                itemsDictionary.Add(itemName, progressions[i].itemsQueue[j]);
-                itemProgressDictionary.Add(itemName, new PlayerPrefsProperty<int>(PrefsPrefixItemProgress + itemName, 0));
+                _itemsDictionary.Add(itemName, _progressions[i].itemsQueue[j]);
+                _itemProgressDictionary.Add(itemName, new PlayerPrefsProperty<int>(PrefsPrefixItemProgress + itemName, 0));
 
                 string shopStatusKey = PrefsPrefixItemShopStatus + itemName;
-                itemStatusDictionary.Add(shopStatusKey, new PlayerPrefsProperty<bool>(shopStatusKey, false));
+                _itemStatusDictionary.Add(shopStatusKey, new PlayerPrefsProperty<bool>(shopStatusKey, false));
 
                 string useStatusKey = PrefsPrefixItemUseStatus + itemName;
-                itemStatusDictionary.Add(useStatusKey, new PlayerPrefsProperty<bool>(useStatusKey, false));
+                _itemStatusDictionary.Add(useStatusKey, new PlayerPrefsProperty<bool>(useStatusKey, false));
             }
         }
     }
-    
-    public void UpdateItemProgress(string itemName)
+
+    private void UpdateItemsProgress()
     {
-        itemProgressDictionary[itemName].Value++;
+        foreach (ItemsProgression progression in _progressions)
+        {
+            foreach (ProgressiveItemData itemData in progression.itemsQueue)
+            {
+                string itemName = itemData._itemName;
+                
+                IncreaseItemProgress(itemName);
+                if (IsItemProgressPassed(itemName))
+                {
+                    UnlockItemToShop(itemName);
+                    if (UnlockOnlyForLevels(itemName))
+                    {
+                        UnlockItemToUse(itemName);
+                    }
+                }
+            }
+        }
+    }
+
+    public void IncreaseItemProgress(string itemName)
+    {
+        _itemProgressDictionary[itemName].Value++;
     }
     public bool IsItemProgressPassed(string itemName)
     {
-        return itemProgressDictionary[itemName].Value >= itemsDictionary[itemName].levelsCountToGet;
+        return _itemProgressDictionary[itemName].Value >= _itemsDictionary[itemName]._levelsCountToGet;
+    }
+    public bool UnlockOnlyForLevels(string itemName)
+    {
+        return _itemsDictionary[itemName]._unlockOnlyForLevels;
     }
     
     public void UnlockItemToShop(string itemName)
     {
         string shopStatusKey = PrefsPrefixItemShopStatus + itemName;
-        itemStatusDictionary[shopStatusKey].Value = true;
+        _itemStatusDictionary[shopStatusKey].Value = true;
     }
     public bool IsItemUnlockedToShop(string itemName)
     {
+        if (IsItemUnlockedByDefault(itemName))
+        {
+            return true;
+        }
+        
         string shopStatusKey = PrefsPrefixItemShopStatus + itemName;
-        return itemStatusDictionary[shopStatusKey].Value;
+        return _itemStatusDictionary[shopStatusKey].Value;
     }
+
+    public bool IsItemUnlockedByDefault(string itemName)
+    {
+        ProgressiveItemData itemData = _itemsDictionary[itemName];
+        if (itemData._unlockedByDefault)
+        {
+            return true;
+        }
+        return false;
+    }
+    
     public bool IsAllItemsUnlockedToShop(string progressionName)
     {
-        ItemsProgression progression = progressionsDictionary[progressionName];
+        ItemsProgression progression = _progressionsDictionary[progressionName];
         for (int i = 0; i < progression.itemsQueue.Length; i++)
         {
-            if (!IsItemUnlockedToShop(progression.itemsQueue[i].itemName))
+            if (!IsItemUnlockedToShop(progression.itemsQueue[i]._itemName))
             {
                 return false;
             }
@@ -82,19 +124,24 @@ public class ItemsProgressHandler : Singleton<ItemsProgressHandler>
     public void UnlockItemToUse(string itemName)
     {
         string useStatusKey = PrefsPrefixItemUseStatus + itemName;
-        itemStatusDictionary[useStatusKey].Value = true;
+        _itemStatusDictionary[useStatusKey].Value = true;
     }
     public bool IsItemUnlockedToUse(string itemName)
     {
+        if (IsItemUnlockedByDefault(itemName))
+        {
+            return true;
+        }
+
         string useStatusKey = PrefsPrefixItemUseStatus + itemName;
-        return itemStatusDictionary[useStatusKey].Value;
+        return _itemStatusDictionary[useStatusKey].Value;
     }
     public bool IsAllItemsUnlockedToUse(string progressionName)
     {
-        ItemsProgression progression = progressionsDictionary[progressionName];
+        ItemsProgression progression = _progressionsDictionary[progressionName];
         for (int i = 0; i < progression.itemsQueue.Length; i++)
         {
-            if (!IsItemUnlockedToUse(progression.itemsQueue[i].itemName))
+            if (!IsItemUnlockedToUse(progression.itemsQueue[i]._itemName))
             {
                 return false;
             }
@@ -104,21 +151,21 @@ public class ItemsProgressHandler : Singleton<ItemsProgressHandler>
 
     public int ItemCost(string itemName)
     {
-        return itemsDictionary[itemName].cost;
+        return _itemsDictionary[itemName]._cost;
     }
     
     public int ItemLevelsCountToGet(string itemName)
     {
-        return itemsDictionary[itemName].levelsCountToGet;
+        return _itemsDictionary[itemName]._levelsCountToGet;
     }
     
     public Sprite ItemIcon(string itemName)
     {
-        return itemsDictionary[itemName].icon;
+        return _itemsDictionary[itemName]._icon;
     }
 
     public int ItemCurrentProgress(string itemName)
     {
-        return itemProgressDictionary[itemName].Value;
+        return _itemProgressDictionary[itemName].Value;
     }
 }

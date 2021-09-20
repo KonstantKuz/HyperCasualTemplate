@@ -3,8 +3,10 @@
 [System.Serializable]
 public class ProgressiveItemData
 {
-    public string itemName;
-    public int levelsCountToGet;
-    public int cost;
-    public Sprite icon;
+    public string _itemName;
+    public bool _unlockedByDefault;
+    public int _levelsCountToGet;
+    public bool _unlockOnlyForLevels;
+    public int _cost;
+    public Sprite _icon;
 }
