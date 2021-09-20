@@ -174,7 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b6839bd6069204f9ff23bf472045cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pools: []
+  pools:
+  - {fileID: 11400000, guid: 780e4514cebf28c43a40b2bdbc346906, type: 2}
   poolGroups: []
 --- !u!1 &5961555184057307127
 GameObject:
