@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public enum WaitVisual
@@ -12,7 +14,6 @@ public enum WaitVisual
 
 public class RewardedVideoWaiter : MonoBehaviour
 {
-    
     [SerializeField] private WaitVisual waitVisual;
     [SerializeField] private Image loadImage;
     [SerializeField] private CanvasGroup disableWhileWait;
@@ -21,28 +22,26 @@ public class RewardedVideoWaiter : MonoBehaviour
     private void OnEnable()
     {
         updateStep = new WaitForSecondsRealtime(0.2f);
-        StartCoroutine(WaitForVideo());
-    }
 
-    private IEnumerator WaitForVideo()
-    {
-        while (true)
-        {
-            UpdateVisual(ADManager.Instance.IsRewardedReady());
-            yield return updateStep;
-        }
-    }
-    
-    private void UpdateVisual(bool videoAvailable)
-    {
+        Action waitFunc = null;
         switch (waitVisual)
         {
             case WaitVisual.FadeWhileWait:
-                UpdateFade(videoAvailable);
+                waitFunc = delegate { UpdateFade(AdsManager.Instance.IsRewardedReady()); };
                 break;
             case WaitVisual.RotateLoadImage:
-                UpdateLoadImage(videoAvailable);
+                waitFunc = delegate { UpdateLoadImage(AdsManager.Instance.IsRewardedReady()); };
                 break;
+        }
+        StartCoroutine(WaitForVideo(waitFunc));
+    }
+
+    private IEnumerator WaitForVideo(Action waitFunc)
+    {
+        while (true)
+        {
+            waitFunc?.Invoke();
+            yield return updateStep;
         }
     }
 

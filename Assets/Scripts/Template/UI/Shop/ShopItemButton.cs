@@ -22,6 +22,13 @@ public class ShopItemButton : MonoBehaviour
         button.onClick.AddListener(delegate { OnClicked?.Invoke(this); });
     }
 
+    public void Initialize(ProgressiveItemData itemData)
+    {
+        gameObject.SetActive(true);
+        gameObject.name = itemData._itemName;
+        SetItemSprite(itemData._icon);
+    }
+
     public void SetItemSprite(Sprite itemSprite)
     {
         itemImage.sprite = itemSprite;
@@ -48,14 +55,14 @@ public class ShopItemButton : MonoBehaviour
         // lockedLevelText.text = LocalizationManager.Localize(GameConstants.LK_StoreUnlockAtLevel);
         // lockedLevelText.text = lockedLevelText.text.Replace("[Number]", $"{level}");
     }
-    public void SetItemAvailableForCoins(int cost, bool canBeBought)
+    public void SetItemAvailableForCoins(int cost, int currentMoney)
     {
         costText.gameObject.SetActive(true);
-        costText.color = canBeBought ? Color.white : Color.red;
+        costText.color = currentMoney >= cost ? Color.white : Color.red;
         costText.text = $"{cost}";
     }
     
-    public void SetAsNewUncheckedItem(bool value)
+    public void SetAsNew(bool value)
     {
         isNewItemImage.SetActive(value);
     }

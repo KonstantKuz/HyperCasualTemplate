@@ -6,40 +6,28 @@ using DG.Tweening;
 
 public class CoinAnimator : Singleton<CoinAnimator>
 {
+    [SerializeField] private float _spawnPeriod;
+    [SerializeField] private float _lifeTime;
+    [SerializeField] private int _coinsCount;
+    
     private const string PoolCoinUI = "CoinUI";
     
-    private int defaultCoinsCount = 15;
-    public void SpawnMovingCoins(Transform fromTransform, Transform toTransform, float duration)
+    public void SpawnMovingCoins(Transform moveFrom, Transform moveTo)
     {
-        StartCoroutine(SpawnCoins());
-        IEnumerator SpawnCoins()
-        {
-            for (int i = 0; i < defaultCoinsCount; i++)
-            {
-                Transform coin = ObjectPooler.Instance.SpawnObject(PoolCoinUI).transform;
-                coin.SetParent(transform);
-                coin.transform.position = fromTransform.position;
-                coin.transform.DOMove(toTransform.position, duration / (defaultCoinsCount / 2));
-                ObjectPooler.Instance.DelayedReturnObject(coin.gameObject, coin.gameObject.name, duration / (defaultCoinsCount / 2));
-                yield return new WaitForSeconds(duration / defaultCoinsCount);
-            }
-        }
+        StartCoroutine(SpawnCoins(moveFrom, moveTo));
     }
     
-    public void SpawnMovingCoins(Transform fromTransform, Transform toTransform, int coinsCount, float duration)
+    private IEnumerator SpawnCoins(Transform moveFrom, Transform moveTo)
     {
-        StartCoroutine(SpawnCoins());
-        IEnumerator SpawnCoins()
+        for (int i = 0; i < _coinsCount; i++)
         {
-            for (int i = 0; i < coinsCount; i++)
-            {
-                Transform coin = ObjectPooler.Instance.SpawnObject(PoolCoinUI).transform;
-                coin.SetParent(transform);
-                coin.transform.position = fromTransform.position;
-                coin.transform.DOMove(toTransform.position, duration / (coinsCount / 2));
-                ObjectPooler.Instance.DelayedReturnObject(coin.gameObject, coin.gameObject.name, duration / (coinsCount / 2));
-                yield return new WaitForSeconds(duration / coinsCount);
-            }
+            Transform coin = ObjectPooler.Instance.SpawnObject(PoolCoinUI).transform;
+            coin.SetParent(transform);
+            coin.transform.position = moveFrom.position;
+
+            coin.transform.DOMove(moveTo.position, _lifeTime);
+            ObjectPooler.Instance.DelayedReturnObject(coin.gameObject, coin.gameObject.name, _lifeTime);
+            yield return new WaitForSeconds(_spawnPeriod);
         }
     }
 }

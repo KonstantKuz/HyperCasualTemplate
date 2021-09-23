@@ -9,7 +9,7 @@ public enum RewardedVideoPlacement
     Shop_Coins,
 }
 
-public class ADManager : Singleton<ADManager>
+public class AdsManager : Singleton<AdsManager>
 {
     [SerializeField] private float interFreezeTime;
     [SerializeField] private int minLevelToShowInter;
@@ -31,8 +31,6 @@ public class ADManager : Singleton<ADManager>
     private int bannerRetryAttempt;
 
     private const string PrefsIsAdsEnabled = "IsAdsEnabled";
-    
-/* --------------------------------------------------------------
      
     private void Awake()
     {
@@ -53,7 +51,7 @@ public class ADManager : Singleton<ADManager>
     {
         PlayerPrefs.SetString(PrefsIsAdsEnabled, "ads is disabled");
 
-        IronSource.Agent.destroyBanner();
+        // IronSource.Agent.destroyBanner();
     }
 
     public bool AdsEnabled()
@@ -63,10 +61,10 @@ public class ADManager : Singleton<ADManager>
 
     private void InitializeAdsSDK()
     {
-        IronSource.Agent.shouldTrackNetworkState(true);
-        IronSource.Agent.setAdaptersDebug(true);
-        
-        IronSource.Agent.validateIntegration();
+        // IronSource.Agent.shouldTrackNetworkState(true);
+        // IronSource.Agent.setAdaptersDebug(true);
+        //
+        // IronSource.Agent.validateIntegration();
 
         if (AdsEnabled())
         {
@@ -77,40 +75,37 @@ public class ADManager : Singleton<ADManager>
 
     private void LoadInterstitial()
     {
-        IronSource.Agent.loadInterstitial();
+        // IronSource.Agent.loadInterstitial();
     }
 
     private void LoadBanner()
     {
-        IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
+        // IronSource.Agent.loadBanner(IronSourceBannerSize.BANNER, IronSourceBannerPosition.BOTTOM);
     }
     
     private void SubscribeToHandleInterstitialAd()
     {
-        IronSourceEvents.onInterstitialAdReadyEvent += delegate { interRetryAttempt = 0; };
-        IronSourceEvents.onInterstitialAdLoadFailedEvent += OnInterstitialAdLoadFailedEvent;
-        IronSourceEvents.onInterstitialAdShowFailedEvent += OnInterstitialAdFailedToDisplayEvent;
-        IronSourceEvents.onInterstitialAdClosedEvent += OnInterstitialAdClosedEvent;
-        
-        IronSourceEvents.onInterstitialAdOpenedEvent += delegate { Observer.Instance.PauseGame(); };
-        IronSourceEvents.onInterstitialAdClosedEvent += delegate { Observer.Instance.ResumeGame(); };
+        // IronSourceEvents.onInterstitialAdReadyEvent += delegate { interRetryAttempt = 0; };
+        // IronSourceEvents.onInterstitialAdLoadFailedEvent += OnInterstitialAdLoadFailedEvent;
+        // IronSourceEvents.onInterstitialAdShowFailedEvent += OnInterstitialAdFailedToDisplayEvent;
+        // IronSourceEvents.onInterstitialAdClosedEvent += OnInterstitialAdClosedEvent;
     }
-    private void OnInterstitialAdLoadFailedEvent(IronSourceError ironSourceError)
-    {
-        DebugAdError("Interstitial LOAD failed." +
-                     $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
-    
-        interRetryAttempt++;
-        float retryDelay = (float)Math.Pow(2, Math.Min(6, interRetryAttempt));
-        UsefulMethods.Instance.DelayedCall(retryDelay, LoadInterstitial);
-    }
-    private void OnInterstitialAdFailedToDisplayEvent(IronSourceError ironSourceError)
-    {
-        DebugAdError("Interstitial SHOW failed." +
-                     $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
-        CallInterShownOrFailedAndClearEvents();
-        LoadInterstitial();
-    }
+    // private void OnInterstitialAdLoadFailedEvent(IronSourceError ironSourceError)
+    // {
+    //     DebugAdError("Interstitial LOAD failed." +
+    //                  $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
+    //
+    //     interRetryAttempt++;
+    //     float retryDelay = (float)Math.Pow(2, Math.Min(6, interRetryAttempt));
+    //     DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadInterstitial);
+    // }
+    // private void OnInterstitialAdFailedToDisplayEvent(IronSourceError ironSourceError)
+    // {
+    //     DebugAdError("Interstitial SHOW failed." +
+    //                  $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
+    //     CallInterShownOrFailedAndClearEvents();
+    //     LoadInterstitial();
+    // }
     private void OnInterstitialAdClosedEvent()
     {
         interRetryAttempt = 0;
@@ -127,13 +122,10 @@ public class ADManager : Singleton<ADManager>
 
     private void SubscribeToHandleRewardedAd()
     {
-        IronSourceEvents.onRewardedVideoAvailabilityChangedEvent += OnRewardedVideoAvailabilityChangedEvent;
-        IronSourceEvents.onRewardedVideoAdShowFailedEvent += OnRewardedVideoAdShowFailedEvent;
-        IronSourceEvents.onRewardedVideoAdClosedEvent += OnRewardedVideoAdClosedEvent;
-        IronSourceEvents.onRewardedVideoAdRewardedEvent += OnRewardedVideoAdRewardedEvent;
-        
-        IronSourceEvents.onRewardedVideoAdOpenedEvent += delegate { Observer.Instance.PauseGame(); };
-        IronSourceEvents.onRewardedVideoAdClosedEvent += delegate { Observer.Instance.ResumeGame(); };
+        // IronSourceEvents.onRewardedVideoAvailabilityChangedEvent += OnRewardedVideoAvailabilityChangedEvent;
+        // IronSourceEvents.onRewardedVideoAdShowFailedEvent += OnRewardedVideoAdShowFailedEvent;
+        // IronSourceEvents.onRewardedVideoAdClosedEvent += OnRewardedVideoAdClosedEvent;
+        // IronSourceEvents.onRewardedVideoAdRewardedEvent += OnRewardedVideoAdRewardedEvent;
     }
 
     private void OnRewardedVideoAvailabilityChangedEvent(bool available)
@@ -147,20 +139,20 @@ public class ADManager : Singleton<ADManager>
             DebugAdError("Rewarded ad not available");
         }
     }
-    private void OnRewardedVideoAdShowFailedEvent(IronSourceError ironSourceError)
-    {
-        DebugAdError("Rewarded video SHOW failed." +
-                     $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
-        
-        onRewardedAdFailedOrDiscarded?.Invoke();
-        ClearAdEvents();
-    }
+    // private void OnRewardedVideoAdShowFailedEvent(IronSourceError ironSourceError)
+    // {
+    //     DebugAdError("Rewarded video SHOW failed." +
+    //                  $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
+    //     
+    //     onRewardedAdFailedOrDiscarded?.Invoke();
+    //     ClearAdEvents();
+    // }
     private void OnRewardedVideoAdClosedEvent()
     {
         onRewardedAdFailedOrDiscarded?.Invoke();
         ClearAdEvents();
     }
-    private void OnRewardedVideoAdRewardedEvent(IronSourcePlacement ironSourcePlacement)
+    private void OnRewardedVideoAdRewardedEvent()//IronSourcePlacement ironSourcePlacement)
     {
         DebugAdSuccess("Rewarded ad rewarded.");
         onRewardedAdRewarded?.Invoke();
@@ -187,23 +179,23 @@ public class ADManager : Singleton<ADManager>
     
     private void SubscribeToHandleBannerAd()
     {
-        IronSourceEvents.onBannerAdLoadedEvent += delegate
-        {
-            IronSource.Agent.displayBanner();
-        };
-        IronSourceEvents.onBannerAdLoadFailedEvent += OnBannerAdLoadFailed;
+        // IronSourceEvents.onBannerAdLoadedEvent += delegate
+        // {
+        //     IronSource.Agent.displayBanner();
+        // };
+        // IronSourceEvents.onBannerAdLoadFailedEvent += OnBannerAdLoadFailed;
     }
-    private void OnBannerAdLoadFailed(IronSourceError ironSourceError)
-    {
-        DebugAdError($"Banner LOAD failed." +
-                     $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
-        
-        IronSource.Agent.hideBanner();
-        
-        bannerRetryAttempt++;
-        float retryDelay = (float)Math.Pow(2, Math.Min(6, bannerRetryAttempt));
-        DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadBanner);
-    }
+    // private void OnBannerAdLoadFailed(IronSourceError ironSourceError)
+    // {
+    //     DebugAdError($"Banner LOAD failed." +
+    //                  $"Description = {ironSourceError.getDescription()}. ErrorCode = {ironSourceError.getErrorCode()}. Code = {ironSourceError.getCode()} ");
+    //     
+    //     IronSource.Agent.hideBanner();
+    //     
+    //     bannerRetryAttempt++;
+    //     float retryDelay = (float)Math.Pow(2, Math.Min(6, bannerRetryAttempt));
+    //     DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadBanner);
+    // }
     
     private void DebugAdError(string additiveMessage)
     {
@@ -239,7 +231,7 @@ public class ADManager : Singleton<ADManager>
         return;
         #endif
         
-        if(!IronSource.Agent.isInterstitialReady())
+        // if(!IronSource.Agent.isInterstitialReady())
         {
             Debug.Log("INTERSTITIAL AD NOT READY");
             CallInterShownOrFailedAndClearEvents();
@@ -247,7 +239,7 @@ public class ADManager : Singleton<ADManager>
             return;
         }
 
-        if (LevelManager.CurrentDisplayLevelNumber < minLevelToShowInter)
+        if (LevelManager.Instance.CurrentDisplayLevelNumber < minLevelToShowInter)
         {
             Debug.Log("CAN NOT SHOW INTERSTITIAL AD");
             CallInterShownOrFailedAndClearEvents();
@@ -258,7 +250,7 @@ public class ADManager : Singleton<ADManager>
         if (AdsEnabled() && !isInterFreezed)
         {
             Debug.Log("SHOW INTERSTITIAL AD");
-            IronSource.Agent.showInterstitial();
+            // IronSource.Agent.showInterstitial();
         }
         else
         {
@@ -274,13 +266,13 @@ public class ADManager : Singleton<ADManager>
             CallInterShownOrFailedAndClearEvents();
         }
     }
------------------------------------------------------------------------------------- */
 
     public void ShowRewardedAd(string placementName)
     {
     #if UNITY_EDITOR
         Debug.Log("SHOW REWARDED VIDEO AD");
         // OnRewardedVideoAdRewardedEvent(new IronSourcePlacement("","",0));
+        OnRewardedVideoAdRewardedEvent();
         FreezeRewardedShow();
         return;
     #endif
@@ -328,6 +320,7 @@ public class ADManager : Singleton<ADManager>
         #if UNITY_EDITOR
         return rewardedAvailable;
         #endif
+        return true;
         // return IronSource.Agent.isRewardedVideoAvailable();
     }
 }

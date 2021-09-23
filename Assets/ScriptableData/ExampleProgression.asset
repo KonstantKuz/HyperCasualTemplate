@@ -12,17 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a739470670f34bf9a5805fe20ef6520a, type: 3}
   m_Name: ExampleProgression
   m_EditorClassIdentifier: 
-  progressionName: ExampleProgression
-  itemsQueue:
-  - _itemName: Star1
+  _manualUpdate: 0
+  _parallelUpdate: 0
+  _progressionName: ItemsProgression
+  _itemsQueue:
+  - _itemName: Item1
     _unlockedByDefault: 1
-    _levelsCountToGet: 0
-    _unlockOnlyForLevels: 0
+    _unlockCompletely: 0
+    _progressToUnlock: 0
     _cost: 0
     _icon: {fileID: 21300000, guid: bac05f09ee97646e0b3a77af56ddab2b, type: 3}
-  - _itemName: Star2
+  - _itemName: Item2
     _unlockedByDefault: 0
-    _levelsCountToGet: 5
-    _unlockOnlyForLevels: 1
-    _cost: 500
+    _unlockCompletely: 0
+    _progressToUnlock: 2
+    _cost: 300
     _icon: {fileID: 21300000, guid: 040318382cca44a05ac8aec16097c20b, type: 3}
+  - _itemName: Item3
+    _unlockedByDefault: 0
+    _unlockCompletely: 0
+    _progressToUnlock: 5
+    _cost: 500
+    _icon: {fileID: 21300000, guid: 069b842126ef63f4b876ce2be9908be7, type: 3}

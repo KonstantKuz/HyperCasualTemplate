@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,16 +11,16 @@ public class Shop : MonoBehaviour
     [SerializeField] private Button open;
     [SerializeField] private Button close;
     [SerializeField] private GameObject newItemIndicator;
-    [SerializeField] private ShopTab[] tabs;
+    [SerializeField] private List<ShopTab> tabs;
 
     private void Start()
     {
         open.onClick.AddListener(OpenShop);
         close.onClick.AddListener(CloseShop);
 
-        for (int i = 0; i < tabs.Length; i++)
+        foreach (var tab in tabs)
         {
-            tabs[i].OpenTabButton.OnClickedOpenTab += SwitchTabs;
+            tab.OpenTabButton.OnClickedOpenTab += SwitchTabs;
         }
 
         UpdateNewItemsIndication();
@@ -37,9 +38,9 @@ public class Shop : MonoBehaviour
         open.gameObject.SetActive(true);
         container.SetActive(false);
         
-        for (int i = 0; i < tabs.Length; i++)
+        foreach (var tab in tabs)
         {
-            tabs[i].OnShopClosed();
+            tab.OnShopClosed();
         }
         
         UpdateNewItemsIndication();
@@ -47,33 +48,19 @@ public class Shop : MonoBehaviour
 
     public void SwitchTabs(ShopTab clickedTab)
     {
-        foreach (ShopTab shopTab in tabs)
-        {
-            shopTab.OnSwitchTabs(clickedTab);
-        }
+        tabs.ForEach(tab => tab.SetSelected(tab == clickedTab));
     }
 
     public void UpdateTabsItems()
     {
-        for (int i = 0; i < tabs.Length; i++)
+        foreach (var tab in tabs)
         {
-            tabs[i].UpdateItemsStatuses();
+            tab.UpdateItemsStatuses();
         }
     }
 
     private void UpdateNewItemsIndication()
     {
-        bool hasNewUncheckedItems = false;
-        
-        for (int i = 0; i < tabs.Length; i++)
-        {
-            if (tabs[i].HasNewUncheckedItem())
-            {
-                hasNewUncheckedItems = true;
-                break;
-            }
-        }
-        
-        newItemIndicator.SetActive(hasNewUncheckedItems);
+        newItemIndicator.SetActive(tabs.Any(tab => tab.HasNewNotViewedInShopItems()));
     }
 }

@@ -13,20 +13,30 @@ public class BuyButton : MonoBehaviour
     [SerializeField] private GameObject videoCost;
     [SerializeField] private CanvasGroup buttonGroup;
 
-    public void ShowButtonWithVideoCost(Action onClicked)
+    public void SubscribeOnClick(Action onClicked)
+    {
+        button.onClick.AddListener(onClicked.Invoke);
+    }
+
+    public void UnsubscribeFromClick(Action onClicked)
+    {
+        button.onClick.RemoveListener(onClicked.Invoke);
+    }
+
+    public void ShowButtonWithVideoCost()
     {
         gameObject.SetActive(true);
         videoCost.SetActive(true);
 
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(delegate
-        {
-            onClicked();
-            gameObject.SetActive(false);
-        });
+        // button.onClick.RemoveAllListeners();
+        // button.onClick.AddListener(delegate
+        // {
+        //     OnButtonClick(onClicked);
+        //     gameObject.SetActive(false);
+        // });
     }
 
-    public void ShowButtonWithCoinsCost(Action onClicked, int cost, bool canBeBought)
+    public void ShowButtonWithCoinsCost(int cost, bool canBeBought)
     {
         gameObject.SetActive(true);
         coinsCost.SetActive(true);
@@ -35,11 +45,10 @@ public class BuyButton : MonoBehaviour
         buttonGroup.alpha = canBeBought ? 1f : 0.5f;
         buttonGroup.interactable = canBeBought;
         
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(delegate
-        {
-            onClicked();
-            gameObject.SetActive(false);
-        });
+        // button.onClick.RemoveAllListeners();
+        // button.onClick.AddListener(delegate
+        // {
+        //     gameObject.SetActive(false);
+        // });
     }
 }

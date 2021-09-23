@@ -10,13 +10,13 @@ public class ShopTab : MonoBehaviour
     public TabButton OpenTabButton => openTabButton;
     
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] protected ShopItemButton[] itemButtons;
+    [SerializeField] protected List<ShopItemButton> itemButtons;
 
     public virtual void OnEnable()
     {
-        for (int i = 0; i < itemButtons.Length; i++)
+        for (int i = 0; i < itemButtons.Count; i++)
         {
-            itemButtons[i].OnClicked += UpdateItemsSelection;
+            itemButtons[i].OnClicked += UpdateItemButtonsSelection;
         }
     }
 
@@ -25,29 +25,17 @@ public class ShopTab : MonoBehaviour
         
     }
 
-    private void UpdateItemsSelection(ShopItemButton selectedItem)
+    private void UpdateItemButtonsSelection(ShopItemButton selectedItem)
     {
-        selectedItem.SetSelected(true);
-        
-        for (int i = 0; i < itemButtons.Length; i++)
-        {
-            if (itemButtons[i] != selectedItem)
-            {
-                itemButtons[i].SetSelected(false);
-            }
-        }
+        itemButtons.ForEach(button => button.SetSelected(button == selectedItem));
     }
 
-    public void OnSwitchTabs(ShopTab switchedTab)
+    public void SetSelected(bool value)
     {
-        if (this == switchedTab)
+        openTabButton.SetSelected(value);
+        if (value)
         {
-            openTabButton.SetSelected(true);
             rectTransform.SetAsLastSibling();
-        }
-        else
-        {
-            openTabButton.SetSelected(false);
         }
     }
 
@@ -55,7 +43,7 @@ public class ShopTab : MonoBehaviour
     {
     }
 
-    public virtual bool HasNewUncheckedItem()
+    public virtual bool HasNewNotViewedInShopItems()
     {
         return false;
     }

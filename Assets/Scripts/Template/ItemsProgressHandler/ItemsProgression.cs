@@ -3,6 +3,10 @@
 [CreateAssetMenu(fileName = "ItemsProgression")]
 public class ItemsProgression : ScriptableObject
 {
-    public string progressionName;
-    public ProgressiveItemData[] itemsQueue;
+    [Header("Обновлять ли прогресс айтемов вручную")]
+    public bool _manualUpdate;
+    [Header("Обновлять ли прогресс айтемов параллельно (если нет - разблокировка айтемов будет происходить последовательно)")]
+    public bool _parallelUpdate;
+    public string _progressionName;
+    public ProgressiveItemData[] _itemsQueue;
 }

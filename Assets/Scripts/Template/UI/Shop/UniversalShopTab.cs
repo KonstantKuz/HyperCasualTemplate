@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -29,12 +30,9 @@ public class UniversalShopTab : ShopTab
             button.gameObject.SetActive(false);
         }
         
-        for (int i = 0; i < _itemsProgression.itemsQueue.Length; i++)
+        for (int i = 0; i < _itemsProgression._itemsQueue.Length; i++)
         {
-            itemButtons[i].gameObject.SetActive(true);
-            itemButtons[i].gameObject.name = _itemsProgression.itemsQueue[i]._itemName;
-            
-            itemButtons[i].SetItemSprite(_itemsProgression.itemsQueue[i]._icon);
+            itemButtons[i].Initialize(_itemsProgression._itemsQueue[i]);
             itemButtons[i].OnClicked += UpdateBuyOrEquipButtonStatusFor;
         }
         
@@ -47,64 +45,58 @@ public class UniversalShopTab : ShopTab
         {
             UpdateBuyOrEquipButtonStatusFor(_lastClickedButton);
         }
+
+        Dictionary<string, ProgressiveItemContainer> itemsDictionary = ItemsProgressHandler.Instance.ItemsDictionary;
         
         int givenAtLevel = 0;
-
-        for (int i = 0; i < _itemsProgression.itemsQueue.Length; i++)
+        for (int i = 0; i < _itemsProgression._itemsQueue.Length; i++)
         {
+            string itemName = _itemsProgression._itemsQueue[i]._itemName;
+            ProgressiveItemContainer item = itemsDictionary[itemName];
             ShopItemButton itemButton = itemButtons[i];
-            string itemName = _itemsProgression.itemsQueue[i]._itemName;
-            givenAtLevel += ItemsProgressHandler.Instance.ItemLevelsCountToGet(itemName);
 
-            if (!_itemsProgression.itemsQueue[i]._unlockedByDefault)
+            if (ItemsProgressHandler.Instance.ProgressionsDictionary[_itemsProgression._progressionName]._parallelUpdate)
             {
-                bool isItemNewUnchecked = IsItemNewUnchecked(itemName);
-                itemButton.SetAsNewUncheckedItem(isItemNewUnchecked);
+                givenAtLevel = item.ProgressToUnlock() - 1;
+            }
+            else
+            {
+                // TODO : нужно обработать ситуацию когда прогресс повышен вне зависимости от прохождения уровней
+                // например если прогресс повышен за просмотр ревард видео 
+                givenAtLevel += item.ProgressToUnlock();  
             }
             
             if (_isItemsEquipable)
             {
-                bool isItemEquipped = IsItemEquipped(itemName);
-                itemButton.SetEquipped(isItemEquipped);
+                itemButton.SetEquipped(IsItemEquipped(itemName));
             }
             
-            if (ItemsProgressHandler.Instance.IsItemUnlockedToUse(itemName))
+            if (!item.IsUnlockedByDefault())
+            {
+                itemButton.SetAsNew(item.IsNewNotViewedInShop());
+            }
+
+            if (item.IsUnlockedToUse())
             {
                 itemButton.SetItemAvailable();
                 continue;
             }
-            if (ItemsProgressHandler.Instance.IsItemUnlockedToShop(itemName))
+            
+            if (item.IsUnlockedToShop())
             {
-                SetItemAvailable(itemButton);
+                switch (_itemCostType)
+                {
+                    case ItemCostType.Video:
+                        itemButton.SetItemAvailableForVideo();
+                        break;
+                    case ItemCostType.Coins:
+                        itemButton.SetItemAvailableForCoins(item.Cost(), PlayerWallet.Instance.GetCurrentMoney());
+                        break;
+                }
                 continue;
             }
+
             itemButton.SetItemAvailableForLevel(givenAtLevel + 1);
-        }
-    }
-
-    private bool IsItemNewUnchecked(string itemName)
-    {
-        return ItemsProgressHandler.Instance.IsItemUnlockedToShop(itemName) &&
-               !ShopItemFreshnessCheck.IsItemCheckedInShop(itemName);
-    }
-
-    public virtual bool IsItemEquipped(string itemName)
-    {
-        throw new NotImplementedException();
-    }
-    
-    private void SetItemAvailable(ShopItemButton itemButton)
-    {
-        switch (_itemCostType)
-        {
-            case ItemCostType.Video:
-                itemButton.SetItemAvailableForVideo();
-                break;
-            case ItemCostType.Coins:
-                int itemCost = ItemsProgressHandler.Instance.ItemCost(itemButton.name);
-                bool canBeBought = PlayerWallet.Instance.HasMoney(itemCost);
-                itemButton.SetItemAvailableForCoins(itemCost, canBeBought);
-                break;
         }
     }
 
@@ -117,13 +109,12 @@ public class UniversalShopTab : ShopTab
 
         OnItemSelected(itemButton.name);
         
-        if (ItemsProgressHandler.Instance.IsItemUnlockedToShop(itemButton.name))
+        if (ItemsProgressHandler.Instance.ItemsDictionary[itemButton.name].IsUnlockedToShop())
         {
-            SetItemAsChecked(itemButton);
+            SetItemAsViewed(itemButton);
             
-            if (ItemsProgressHandler.Instance.IsItemUnlockedToUse(itemButton.name))
+            if (ItemsProgressHandler.Instance.ItemsDictionary[itemButton.name].IsUnlockedToUse())
             {
-                SetItemAsChecked(itemButton);
                 ShowEquipButtonOrEquip(itemButton.name);
             }
             else
@@ -131,6 +122,11 @@ public class UniversalShopTab : ShopTab
                 ShowBuyButton(itemButton.name);
             }
         }
+    }
+
+    public virtual bool IsItemEquipped(string itemName)
+    {
+        throw new NotImplementedException();
     }
 
     public virtual void OnItemSelected(string itemName)
@@ -158,14 +154,25 @@ public class UniversalShopTab : ShopTab
 
     private void ShowEquipButton(string itemName)
     {
-        _equipButton.onClick.RemoveAllListeners();
+        _equipButton.gameObject.SetActive(true);
+
+        // _equipButton.onClick.RemoveAllListeners();
         _equipButton.onClick.AddListener(delegate
         {
-            _equipButton.gameObject.SetActive(false);
-            OnEquipItem(itemName);
-            UpdateItemsStatuses();
+            OnEquipButtonClicked(itemName);
         });
-        _equipButton.gameObject.SetActive(true);
+    }
+
+    private void OnEquipButtonClicked(string itemName)
+    {
+        _equipButton.gameObject.SetActive(false);
+        OnEquipItem(itemName);
+        UpdateItemsStatuses();      
+        
+        _equipButton.onClick.RemoveListener(delegate
+        {
+            OnEquipButtonClicked(itemName);
+        });
     }
 
     public virtual void OnEquipItem(string itemName)
@@ -176,21 +183,26 @@ public class UniversalShopTab : ShopTab
 
     private void ShowBuyButton(string clickedItem)
     {
+        int itemCost = ItemsProgressHandler.Instance.ItemsDictionary[clickedItem].Cost();
+        bool canBeBought = PlayerWallet.Instance.HasMoney(itemCost);
+
         switch (_itemCostType)
         {
             case ItemCostType.Video:
-                _buyButton.ShowButtonWithVideoCost(delegate { TryBuyItem(clickedItem); });
+                _buyButton.ShowButtonWithVideoCost();
                 break;
             case ItemCostType.Coins:
-                int itemCost = ItemsProgressHandler.Instance.ItemCost(clickedItem);
-                bool canBeBought = PlayerWallet.Instance.HasMoney(itemCost);
-                _buyButton.ShowButtonWithCoinsCost(delegate { TryBuyItem(clickedItem); }, itemCost, canBeBought);
+                _buyButton.ShowButtonWithCoinsCost(itemCost, canBeBought);
                 break;
         }
+
+        _buyButton.SubscribeOnClick(delegate { TryBuyItem(clickedItem); });
     }
 
     private void TryBuyItem(string itemName)
     {
+        _buyButton.UnsubscribeFromClick(delegate { TryBuyItem(itemName); });
+        
         switch (_itemCostType)
         {
             case ItemCostType.Video:
@@ -204,28 +216,30 @@ public class UniversalShopTab : ShopTab
 
     private void TryBuyForVideo(string itemName)
     {
-        ADManager.Instance.onRewardedAdRewarded += delegate
+        AdsManager.Instance.onRewardedAdRewarded += delegate
         {
-            ItemsProgressHandler.Instance.UnlockItemToUse(itemName);
+            ItemsProgressHandler.Instance.ItemsDictionary[itemName].UnlockToUse();
 
             OnBuyItem(itemName);
             UpdateItemsStatuses();
         };
     
-        ADManager.Instance.ShowRewardedAd($"UnlockItem{itemName}");
+        AdsManager.Instance.ShowRewardedAd($"UnlockItem{itemName}");
     }
     
     private void TryBuyForCoins(string itemName)
     {
-        int itemCost = ItemsProgressHandler.Instance.ItemCost(itemName);
-        if (PlayerWallet.Instance.HasMoney(itemCost))
+        int itemCost = ItemsProgressHandler.Instance.ItemsDictionary[itemName].Cost();
+        if (!PlayerWallet.Instance.HasMoney(itemCost))
         {
-            PlayerWallet.Instance.DecreaseMoney(itemCost);
-            ItemsProgressHandler.Instance.UnlockItemToUse(itemName);
-            
-            OnBuyItem(itemName);
-            UpdateItemsStatuses();
+            return;
         }
+        
+        PlayerWallet.Instance.DecreaseMoney(itemCost);
+        ItemsProgressHandler.Instance.ItemsDictionary[itemName].UnlockToUse();
+            
+        OnBuyItem(itemName);
+        UpdateItemsStatuses();
     }
 
     public virtual void OnBuyItem(string itemName)
@@ -234,24 +248,15 @@ public class UniversalShopTab : ShopTab
         throw new NotImplementedException();
     }
 
-    private void SetItemAsChecked(ShopItemButton itemButton)
+    private void SetItemAsViewed(ShopItemButton itemButton)
     {
-        itemButton.SetAsNewUncheckedItem(false);
-        ShopItemFreshnessCheck.SetItemCheckedInShop(itemButton.name);
+        itemButton.SetAsNew(false);
+        ItemsProgressHandler.Instance.ItemsDictionary[itemButton.name].SetAsViewedInShop();
     }
     
-    public override bool HasNewUncheckedItem()
+    public override bool HasNewNotViewedInShopItems()
     {
-        for (int i = 1; i < _itemsProgression.itemsQueue.Length; i++)
-        {
-            string itemName = _itemsProgression.itemsQueue[i]._itemName;
-            
-            if (IsItemNewUnchecked(itemName))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return _itemsProgression._itemsQueue.Any(itemData => 
+            ItemsProgressHandler.Instance.ItemsDictionary[itemData._itemName].IsNewNotViewedInShop());
     }
 }

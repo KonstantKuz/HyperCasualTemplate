@@ -659,6 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb73416547a968d4c8841419d18b88d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moneyAmount: 1000
   button: {fileID: 3932994255256046224}
   coinsMoveFrom: {fileID: 5966619929776446906}
   coinsMoveTo: {fileID: 0}
