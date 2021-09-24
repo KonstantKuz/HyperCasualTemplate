@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4926415713962384352}
   - component: {fileID: 5695227912590889896}
   m_Layer: 0
-  m_Name: ItemsProgressHandler
+  m_Name: ProgressiveItemsHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

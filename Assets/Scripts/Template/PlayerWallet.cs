@@ -29,7 +29,7 @@ public class PlayerWallet : Singleton<PlayerWallet>
     {
         int currentMoney = GetCurrentMoney();
         currentMoney += value;
-        if (currentMoney <= 0 && value < 0)
+        if (currentMoney < 0 && value < 0)
         {
             Debug.LogError("Player has no money. Check money with HasMoney(amount).");
             return;

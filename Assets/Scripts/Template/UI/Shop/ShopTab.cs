@@ -20,11 +20,6 @@ public class ShopTab : MonoBehaviour
         }
     }
 
-    public virtual void UpdateItemsStatuses()
-    {
-        
-    }
-
     private void UpdateItemButtonsSelection(ShopItemButton selectedItem)
     {
         itemButtons.ForEach(button => button.SetSelected(button == selectedItem));
@@ -37,6 +32,11 @@ public class ShopTab : MonoBehaviour
         {
             rectTransform.SetAsLastSibling();
         }
+    }
+
+    public virtual void UpdateItemsStatuses()
+    {
+        
     }
 
     public virtual void OnShopClosed()

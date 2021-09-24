@@ -33,12 +33,8 @@ public class RewardedPanel : MonoBehaviour
         _onDiscardReward = onDiscardReward;
         
         getRewardButton.onClick.AddListener(OnGetRewardButtonClicked);
-        
-        if (showNoThanksButton)
-        {
-            DelayHandler.Instance.DelayedCallCoroutineRealtime(showDelay, ShowNoThanksButton);
-        }
 
+        TryShowNoThanksButton();
         StartCountTime();
     }
 
@@ -48,6 +44,16 @@ public class RewardedPanel : MonoBehaviour
         _onGetReward?.Invoke();
         
         getRewardButton.onClick.RemoveListener(OnGetRewardButtonClicked);
+    }
+
+    private void TryShowNoThanksButton()
+    {
+        if (!showNoThanksButton)
+        {
+            return;
+        }
+        
+        DelayHandler.Instance.DelayedCallCoroutineRealtime(showDelay, ShowNoThanksButton);
     }
 
     private void ShowNoThanksButton()

@@ -24,24 +24,23 @@ public class Shop : MonoBehaviour
         }
 
         UpdateNewItemsIndication();
-        PlayerWallet.Instance.OnMoneyChanged += UpdateTabsItems;
+        PlayerWallet.Instance.OnMoneyChanged += UpdateTabsItemsStatuses;
+        PlayerWallet.Instance.OnMoneyChanged += UpdateNewItemsIndication;
     }
 
     private void OpenShop()
     {
         open.gameObject.SetActive(false);
         container.SetActive(true);
+
+        UpdateTabsItemsStatuses();
     }
 
     private void CloseShop()
     {
         open.gameObject.SetActive(true);
         container.SetActive(false);
-        
-        foreach (var tab in tabs)
-        {
-            tab.OnShopClosed();
-        }
+        tabs.ForEach(tab => tab.OnShopClosed());
         
         UpdateNewItemsIndication();
     }
@@ -51,12 +50,9 @@ public class Shop : MonoBehaviour
         tabs.ForEach(tab => tab.SetSelected(tab == clickedTab));
     }
 
-    public void UpdateTabsItems()
+    public void UpdateTabsItemsStatuses()
     {
-        foreach (var tab in tabs)
-        {
-            tab.UpdateItemsStatuses();
-        }
+        tabs.ForEach(tab => tab.UpdateItemsStatuses());
     }
 
     private void UpdateNewItemsIndication()

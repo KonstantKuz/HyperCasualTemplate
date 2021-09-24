@@ -15,7 +15,7 @@ public class LevelProgressBar : SceneLineProgressBar<LevelProgressBar>
     
     private void Awake()
     {
-        levelNumber.SetText(LevelManager.Instance.CurrentLevelIndex.ToString());
+        levelNumber.SetText(LevelManager.Instance.CurrentDisplayLevelNumber.ToString());
         
         Observer.Instance.OnLoseLevel += delegate { gameObject.SetActive(false); };
         Observer.Instance.OnWinLevel += delegate { gameObject.SetActive(false); };
