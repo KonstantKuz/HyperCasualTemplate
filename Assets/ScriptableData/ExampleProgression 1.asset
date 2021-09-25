@@ -10,49 +10,49 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a739470670f34bf9a5805fe20ef6520a, type: 3}
-  m_Name: ExampleProgression
+  m_Name: ExampleProgression 1
   m_EditorClassIdentifier: 
   manualUpdate: 0
   parallelUpdate: 0
-  progressionName: ItemsProgression1
+  progressionName: ItemsProgression2
   itemsQueue:
-  - itemName: Item1
-    icon: {fileID: 21300000, guid: 3238e8603fb74364fb047e830bb4f6b3, type: 3}
+  - itemName: Item11
+    icon: {fileID: 21300000, guid: 558706a9211698c419d5decd49f82b90, type: 3}
     unlockedToShopByDefault: 1
     unlockedToUseByDefault: 1
     progressToUnlock: 0
     unlockCompletelyOnProgressPassed: 0
     priceType: 0
     price: 0
-  - itemName: Item2
-    icon: {fileID: 21300000, guid: eaca8e66a69c3524a98edb9d57ee34e8, type: 3}
+  - itemName: Item22
+    icon: {fileID: 21300000, guid: ecd081cd9348e5a41ba7f2917bf646b9, type: 3}
     unlockedToShopByDefault: 1
-    unlockedToUseByDefault: 0
+    unlockedToUseByDefault: 1
     progressToUnlock: 0
     unlockCompletelyOnProgressPassed: 0
     priceType: 0
     price: 300
-  - itemName: Item3
-    icon: {fileID: 21300000, guid: 9d8ab565278b7b5478be2818a4632d35, type: 3}
+  - itemName: Item33
+    icon: {fileID: 21300000, guid: 5a800b187b27037469bee2bd900ad793, type: 3}
     unlockedToShopByDefault: 1
-    unlockedToUseByDefault: 0
+    unlockedToUseByDefault: 1
     progressToUnlock: 0
     unlockCompletelyOnProgressPassed: 0
     priceType: 1
     price: 0
-  - itemName: Item4
-    icon: {fileID: 21300000, guid: bac05f09ee97646e0b3a77af56ddab2b, type: 3}
-    unlockedToShopByDefault: 0
-    unlockedToUseByDefault: 0
+  - itemName: Item44
+    icon: {fileID: 21300000, guid: 773f4119c304dce4f8a5293c6ef5a7c7, type: 3}
+    unlockedToShopByDefault: 1
+    unlockedToUseByDefault: 1
     progressToUnlock: 4
     unlockCompletelyOnProgressPassed: 0
     priceType: 0
-    price: 1000
-  - itemName: Item5
-    icon: {fileID: 21300000, guid: 040318382cca44a05ac8aec16097c20b, type: 3}
-    unlockedToShopByDefault: 0
-    unlockedToUseByDefault: 0
+    price: 5000
+  - itemName: Item55
+    icon: {fileID: 21300000, guid: 4efe8159644144c4483e04c344de2c53, type: 3}
+    unlockedToShopByDefault: 1
+    unlockedToUseByDefault: 1
     progressToUnlock: 5
     unlockCompletelyOnProgressPassed: 0
     priceType: 0
-    price: 1000
+    price: 5000

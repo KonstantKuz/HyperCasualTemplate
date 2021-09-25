@@ -47,6 +47,10 @@ public class Shop : MonoBehaviour
 
     public void SwitchTabs(ShopTab clickedTab)
     {
+        if (clickedTab == null)
+        {
+            throw new NullReferenceException("Reference to shop tab in tab button is null.");
+        }
         tabs.ForEach(tab => tab.SetSelected(tab == clickedTab));
     }
 

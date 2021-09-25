@@ -27,9 +27,9 @@ MonoBehaviour:
   _isItemsEquipable: 1
   _equipOnSelect: 0
   _equipButton: {fileID: 1717264854024577419}
-  _itemCostType: 1
   _buyButton: {fileID: 4474738892562697360}
   _itemsProgression: {fileID: 11400000, guid: 2a383f32c4c5ab34dbd8701a105f8c6d, type: 2}
+  _itemView: {fileID: 0}
 --- !u!1001 &2314080180692220970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -392,6 +392,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8865434176498683625, guid: ebd2afa4b4d20a846b33cfab42f0b44a,
+        type: 3}
+      propertyPath: tabToOpen
+      value: 
+      objectReference: {fileID: 1839638452880812446}
     - target: {fileID: 8903799145399272934, guid: ebd2afa4b4d20a846b33cfab42f0b44a,
         type: 3}
       propertyPath: m_AnchorMax.y

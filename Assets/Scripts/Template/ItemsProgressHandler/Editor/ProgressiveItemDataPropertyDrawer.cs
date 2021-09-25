@@ -78,7 +78,7 @@ public class ProgressiveItemDataPropertyDrawer : PropertyDrawer
             EditorGUI.PropertyField(priceTypeRect, _priceType);
         }
 
-        if (_priceType.enumValueIndex == 0 && !_unlockCompletelyOnProgressPassed.boolValue)
+        if (_priceType.enumValueIndex == 0 && !_unlockCompletelyOnProgressPassed.boolValue && !_unlockedToUseByDefault.boolValue)
         {
             EditorGUI.PropertyField(priceRect, _price);
         }
