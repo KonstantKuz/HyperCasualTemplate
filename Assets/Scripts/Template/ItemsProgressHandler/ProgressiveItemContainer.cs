@@ -47,7 +47,6 @@ public class ProgressiveItemContainer
     public void IncreaseProgress()
     {
         _itemProgress.Value++;
-        Debug.Log($"{_itemData.itemName} progress == {_itemProgress.Value}. progress to unlock == {_itemData.progressToUnlock}. forced progress == {ForcedProgress()}");
     }
     public void IncreaseForcedProgress()
     {
