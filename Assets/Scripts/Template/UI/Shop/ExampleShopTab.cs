@@ -1,37 +1,39 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Template.ProgressiveItemsHandler;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExampleShopTab : UniversalShopTab
+namespace Template.UI.Shop
 {
-    [SerializeField] private Image _itemView;
-
-    public override void Awake()
+    public class ExampleShopTab : UniversalShopTab
     {
-        base.Awake();
+        [SerializeField] private Image _itemView;
 
-        List<ProgressiveItemContainer> itemContainers = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary.Values.ToList();
-        itemContainers[0].SetAsEquipped();
-    }
+        public override void Awake()
+        {
+            base.Awake();
+
+            List<ProgressiveItemContainer> itemContainers = ProgressiveItemsHandler.ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary.Values.ToList();
+            itemContainers[0].SetAsEquipped();
+        }
     
-    public override void OnItemSelected(string itemName)
-    {
-        _itemView.gameObject.SetActive(true);
-        _itemView.sprite = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].Icon();
-        print($"OnItemSelected {itemName}");
-    }
+        public override void OnItemSelected(string itemName)
+        {
+            _itemView.gameObject.SetActive(true);
+            _itemView.sprite = ProgressiveItemsHandler.ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].Icon();
+            print($"OnItemSelected {itemName}");
+        }
 
-    public override void OnEquipItem(string itemName)
-    {
-        ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].SetAsEquipped();
-        print($"OnEquipItem {itemName}");
-    }
+        public override void OnEquipItem(string itemName)
+        {
+            ProgressiveItemsHandler.ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].SetAsEquipped();
+            print($"OnEquipItem {itemName}");
+        }
 
-    public override void OnBuyItem(string itemName)
-    {
-        print($"OnBuyItem {itemName}");
+        public override void OnBuyItem(string itemName)
+        {
+            print($"OnBuyItem {itemName}");
+        }
     }
 }

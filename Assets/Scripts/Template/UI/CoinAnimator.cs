@@ -1,33 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
-// using DG.Tweening;
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 
-public class CoinAnimator : Singleton<CoinAnimator>
+namespace Template.UI
 {
-    [SerializeField] private float _spawnPeriod;
-    [SerializeField] private float _lifeTime;
-    [SerializeField] private int _coinsCount;
-    
-    private const string PoolCoinUI = "CoinUI";
-    
-    public void SpawnMovingCoins(Transform moveFrom, Transform moveTo)
+    public class CoinAnimator : Singleton<CoinAnimator>
     {
-        StartCoroutine(SpawnCoins(moveFrom, moveTo));
-    }
+        [SerializeField] private float _spawnPeriod;
+        [SerializeField] private float _lifeTime;
+        [SerializeField] private int _coinsCount;
     
-    private IEnumerator SpawnCoins(Transform moveFrom, Transform moveTo)
-    {
-        for (int i = 0; i < _coinsCount; i++)
+        private const string PoolCoinUI = "CoinUI";
+    
+        public void SpawnMovingCoins(Transform moveFrom, Transform moveTo)
         {
-            Transform coin = ObjectPooler.Instance.SpawnObject(PoolCoinUI).transform;
-            coin.SetParent(transform);
-            coin.transform.position = moveFrom.position;
+            StartCoroutine(SpawnCoins(moveFrom, moveTo));
+        }
+    
+        private IEnumerator SpawnCoins(Transform moveFrom, Transform moveTo)
+        {
+            for (int i = 0; i < _coinsCount; i++)
+            {
+                Transform coin = ObjectPooler.Instance.SpawnObject(PoolCoinUI).transform;
+                coin.SetParent(transform);
+                coin.transform.position = moveFrom.position;
 
-            coin.transform.DOMove(moveTo.position, _lifeTime);
-            ObjectPooler.Instance.DelayedReturnObject(coin.gameObject, coin.gameObject.name, _lifeTime);
-            yield return new WaitForSeconds(_spawnPeriod);
+                coin.transform.DOMove(moveTo.position, _lifeTime);
+                ObjectPooler.Instance.DelayedReturnObject(coin.gameObject, coin.gameObject.name, _lifeTime);
+                yield return new WaitForSeconds(_spawnPeriod);
+            }
         }
     }
 }

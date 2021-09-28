@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Finish : MonoBehaviour
+namespace Template
 {
-    [SerializeField] private bool callWin = true;
-    [SerializeField] private float delay = 1;
-    
-    private void OnTriggerEnter(Collider other)
+    public class Finish : MonoBehaviour
     {
-        if (!callWin)
+        [SerializeField] private bool callWin = true;
+        [SerializeField] private float delay = 1;
+    
+        private void OnTriggerEnter(Collider other)
         {
-            return;
-        }
+            if (!callWin)
+            {
+                return;
+            }
         
-        if (other.CompareTag(Tags.Player))
-        {
-            DelayHandler.Instance.DelayedCallAsync(delay, Observer.Instance.CallOnWinLevel);
+            if (other.CompareTag(Tags.Player))
+            {
+                DelayHandler.Instance.DelayedCallAsync(delay, Observer.Instance.CallOnWinLevel);
+            }
         }
     }
 }

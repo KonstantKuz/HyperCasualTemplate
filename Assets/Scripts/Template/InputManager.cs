@@ -1,48 +1,51 @@
 ﻿using UnityEngine;
 
-public class InputManager : Singleton<InputManager>
+namespace Template
 {
-    [SerializeField] private bool invertVertical;
-    public Vector2 InputDelta { get; private set; }
-    public Vector2 InputDeltaNormalized { get; private set; }
-
-    private Vector2 lastMousePosition = Vector2.zero;
-
-    private void Start()
+    public class InputManager : Singleton<InputManager>
     {
-        InputDelta = Vector2.zero;
-        InputDeltaNormalized = Vector2.zero;
-    }
+        [SerializeField] private bool invertVertical;
+        public Vector2 InputDelta { get; private set; }
+        public Vector2 InputDeltaNormalized { get; private set; }
 
-    private void Update()
-    {
-        HandleInput();
-    }
-    
-    private void HandleInput()
-    {
-        InputDelta = Vector2.zero;
-        InputDeltaNormalized = Vector2.zero;
-        Vector2 deltaMove = Vector2.zero;
-        
-        if (Input.GetMouseButtonDown(0))
+        private Vector2 lastMousePosition = Vector2.zero;
+
+        private void Start()
         {
-            lastMousePosition = Input.mousePosition;
+            InputDelta = Vector2.zero;
+            InputDeltaNormalized = Vector2.zero;
         }
 
-        if (Input.GetMouseButton(0))
+        private void Update()
         {
-            deltaMove = (Vector2)Input.mousePosition - lastMousePosition;
-
-            if (invertVertical)
+            HandleInput();
+        }
+    
+        private void HandleInput()
+        {
+            InputDelta = Vector2.zero;
+            InputDeltaNormalized = Vector2.zero;
+            Vector2 deltaMove = Vector2.zero;
+        
+            if (Input.GetMouseButtonDown(0))
             {
-                deltaMove.y = -deltaMove.y;
+                lastMousePosition = Input.mousePosition;
             }
 
-            InputDelta = deltaMove;
-            InputDeltaNormalized = deltaMove.normalized;
+            if (Input.GetMouseButton(0))
+            {
+                deltaMove = (Vector2)Input.mousePosition - lastMousePosition;
+
+                if (invertVertical)
+                {
+                    deltaMove.y = -deltaMove.y;
+                }
+
+                InputDelta = deltaMove;
+                InputDeltaNormalized = deltaMove.normalized;
             
-            lastMousePosition = Input.mousePosition;
+                lastMousePosition = Input.mousePosition;
+            }
         }
     }
 }

@@ -3,31 +3,34 @@ using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class DelayHandler : Singleton<DelayHandler>
+namespace Template
 {
-    public void DelayedCallCoroutine(float delay, Action action)
+    public class DelayHandler : Singleton<DelayHandler>
     {
-        StartCoroutine(DelayedCall());
-        IEnumerator DelayedCall()
+        public void DelayedCallCoroutine(float delay, Action action)
         {
-            yield return new WaitForSeconds(delay);
-            action?.Invoke();
+            StartCoroutine(DelayedCall());
+            IEnumerator DelayedCall()
+            {
+                yield return new WaitForSeconds(delay);
+                action?.Invoke();
+            }
         }
-    }
     
-    public void DelayedCallCoroutineRealtime(float delay, Action action)
-    {
-        StartCoroutine(DelayedCall());
-        IEnumerator DelayedCall()
+        public void DelayedCallCoroutineRealtime(float delay, Action action)
         {
-            yield return new WaitForSecondsRealtime(delay);
-            action?.Invoke();
+            StartCoroutine(DelayedCall());
+            IEnumerator DelayedCall()
+            {
+                yield return new WaitForSecondsRealtime(delay);
+                action?.Invoke();
+            }
         }
-    }
     
-    public async void DelayedCallAsync(float delay, Action action)
-    {
-        await Task.Delay(TimeSpan.FromSeconds(delay));
-        action.Invoke();
+        public async void DelayedCallAsync(float delay, Action action)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(delay));
+            action.Invoke();
+        }
     }
 }

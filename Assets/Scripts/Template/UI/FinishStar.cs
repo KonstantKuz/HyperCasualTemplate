@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class FinishStar : MonoBehaviour
+namespace Template.UI
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private GameObject starToActivate;
-
-    public void SetVisible(bool value)
+    public class FinishStar : MonoBehaviour
     {
-        animator.SetBool(AnimatorHashes.FinishStarPopup, value);
-        starToActivate.SetActive(value);
+        [SerializeField] private Animator animator;
+        [SerializeField] private GameObject starToActivate;
+
+        public void SetVisible(bool value)
+        {
+            animator.SetBool(AnimatorHashes.FinishStarPopup, value);
+            starToActivate.SetActive(value);
+        }
     }
 }

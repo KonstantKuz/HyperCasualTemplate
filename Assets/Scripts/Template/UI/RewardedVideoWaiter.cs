@@ -1,55 +1,57 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using Template.Ads;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
-public enum WaitVisual
+namespace Template.UI
 {
-    FadeWhileWait,
-    RotateLoadImage,
-}
-
-public class RewardedVideoWaiter : MonoBehaviour
-{
-    [SerializeField] private WaitVisual waitVisual;
-    [SerializeField] private Image loadImage;
-    [SerializeField] private CanvasGroup disableWhileWait;
-    private WaitForSecondsRealtime updateStep;
-
-    private void OnEnable()
+    public enum WaitVisual
     {
-        updateStep = new WaitForSecondsRealtime(0.2f);
-
-        Action<bool> waitFunc = waitVisual switch 
-        {
-            WaitVisual.FadeWhileWait => UpdateFade,
-            WaitVisual.RotateLoadImage => UpdateLoadImage
-        };
-        StartCoroutine(WaitForVideo(waitFunc));
+        FadeWhileWait,
+        RotateLoadImage,
     }
 
-    private IEnumerator WaitForVideo(Action<bool> waitFunc)
+    public class RewardedVideoWaiter : MonoBehaviour
     {
-        while (true)
+        [SerializeField] private WaitVisual waitVisual;
+        [SerializeField] private Image loadImage;
+        [SerializeField] private CanvasGroup disableWhileWait;
+        private WaitForSecondsRealtime updateStep;
+
+        private void OnEnable()
         {
-            waitFunc?.Invoke(AdsManager.Instance.IsRewardedReady());
-            yield return updateStep;
+            updateStep = new WaitForSecondsRealtime(0.2f);
+
+            Action<bool> waitFunc = waitVisual switch 
+            {
+                WaitVisual.FadeWhileWait => UpdateFade,
+                WaitVisual.RotateLoadImage => UpdateLoadImage
+            };
+            StartCoroutine(WaitForVideo(waitFunc));
         }
-    }
 
-    private void UpdateFade(bool videoAvailable)
-    {
-        disableWhileWait.alpha = videoAvailable ? 1f : 0.5f;
-        disableWhileWait.interactable = videoAvailable;
-    }
+        private IEnumerator WaitForVideo(Action<bool> waitFunc)
+        {
+            while (true)
+            {
+                waitFunc?.Invoke(AdsManager.Instance.IsRewardedReady());
+                yield return updateStep;
+            }
+        }
 
-    private void UpdateLoadImage(bool videoAvailable)
-    {
-        disableWhileWait.gameObject.SetActive(videoAvailable);
-        loadImage.gameObject.SetActive(!videoAvailable);
+        private void UpdateFade(bool videoAvailable)
+        {
+            disableWhileWait.alpha = videoAvailable ? 1f : 0.5f;
+            disableWhileWait.interactable = videoAvailable;
+        }
+
+        private void UpdateLoadImage(bool videoAvailable)
+        {
+            disableWhileWait.gameObject.SetActive(videoAvailable);
+            loadImage.gameObject.SetActive(!videoAvailable);
         
-        loadImage.transform.rotation *= Quaternion.Euler(0,0,-20);
+            loadImage.transform.rotation *= Quaternion.Euler(0,0,-20);
+        }
     }
 }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
-public class Preloader : MonoBehaviour
+namespace Template
 {
-    [SerializeField] private LevelManager levelManager;
-    private void Start()
+    public class Preloader : MonoBehaviour
     {
-        levelManager.LoadLastLevel();
+        [SerializeField] private LevelManager.LevelManager levelManager;
+        private void Start()
+        {
+            levelManager.LoadLastLevel();
+        }
     }
 }

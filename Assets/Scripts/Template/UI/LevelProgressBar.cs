@@ -1,38 +1,38 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public class LevelProgressBar : SceneLineProgressBar<LevelProgressBar>
+namespace Template.UI
 {
-    [SerializeField] private TextMeshProUGUI levelNumber;
-    
-    // Для использования смотреть примеры в папке Templates -> Progress Bars Templates
-
-    private InitialData<LevelProgressBar> initialData;
-    private UpdateData<LevelProgressBar> updateData;
-    
-    private void Awake()
+    public class LevelProgressBar : SceneLineProgressBar<LevelProgressBar>
     {
-        levelNumber.SetText(LevelManager.Instance.CurrentDisplayLevelNumber.ToString());
+        [SerializeField] private TextMeshProUGUI levelNumber;
+    
+        // Для использования смотреть примеры в папке Templates -> Progress Bars Templates
+
+        private InitialData<LevelProgressBar> initialData;
+        private UpdateData<LevelProgressBar> updateData;
+    
+        private void Awake()
+        {
+            levelNumber.SetText(LevelManager.LevelManager.Instance.CurrentDisplayLevelNumber.ToString());
         
-        Observer.Instance.OnLoseLevel += delegate { gameObject.SetActive(false); };
-        Observer.Instance.OnWinLevel += delegate { gameObject.SetActive(false); };
-    }
+            Observer.Instance.OnLoseLevel += delegate { gameObject.SetActive(false); };
+            Observer.Instance.OnWinLevel += delegate { gameObject.SetActive(false); };
+        }
 
-    public void InitializeProgress(float minValue, float maxValue, float currentValue)
-    {
-        initialData.MinValue = minValue;
-        initialData.MaxValue = maxValue;
-        initialData.CurrentValue = currentValue;
+        public void InitializeProgress(float minValue, float maxValue, float currentValue)
+        {
+            initialData.MinValue = minValue;
+            initialData.MaxValue = maxValue;
+            initialData.CurrentValue = currentValue;
 
-        Initialize(initialData);
-    }
+            Initialize(initialData);
+        }
 
-    public void UpdateProgress(float currentValue)
-    {
-        updateData.CurrentValue = currentValue;
-        UpdateCurrentProgress(updateData);
+        public void UpdateProgress(float currentValue)
+        {
+            updateData.CurrentValue = currentValue;
+            UpdateCurrentProgress(updateData);
+        }
     }
 }

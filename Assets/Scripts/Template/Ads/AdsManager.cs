@@ -8,6 +8,8 @@ public enum RewardedVideoPlacement
     Shop_Coins,
 }
 
+namespace Template.Ads
+{
 public class AdsManager : Singleton<AdsManager>
 {
     [SerializeField] private float interFreezeTime;
@@ -244,7 +246,7 @@ public class AdsManager : Singleton<AdsManager>
             return;
         }
 
-        if (LevelManager.Instance.CurrentDisplayLevelNumber < minLevelToShowInter)
+        if (LevelManager.LevelManager.Instance.CurrentDisplayLevelNumber < minLevelToShowInter)
         {
             Debug.Log("CAN NOT SHOW INTERSTITIAL AD");
             CallInterShownOrFailedAndClearEvents();
@@ -327,4 +329,5 @@ public class AdsManager : Singleton<AdsManager>
 #endif
         return _impl.IsRewardedVideoAvailable();
     }
+}
 }

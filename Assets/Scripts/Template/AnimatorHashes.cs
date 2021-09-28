@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 
-public static class AnimatorHashes
+namespace Template
 {
-    public static int Idle;
-    
-    public static int FinishStarPopup;
-    
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    public static void CacheHashes()
+    public static class AnimatorHashes
     {
-        Idle = Animator.StringToHash("Idle");
-        FinishStarPopup = Animator.StringToHash("FinishStarPopup");
+        public static int Idle;
+    
+        public static int FinishStarPopup;
+    
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        public static void CacheHashes()
+        {
+            Idle = Animator.StringToHash("Idle");
+            FinishStarPopup = Animator.StringToHash("FinishStarPopup");
+        }
     }
 }

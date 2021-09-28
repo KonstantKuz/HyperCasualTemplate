@@ -1,6 +1,9 @@
 
-public class Tags
+namespace Template
 {
-    public const string Player = "Player";
-    public const string FinishTrigger = "Finish";
+    public class Tags
+    {
+        public const string Player = "Player";
+        public const string FinishTrigger = "Finish";
+    }
 }

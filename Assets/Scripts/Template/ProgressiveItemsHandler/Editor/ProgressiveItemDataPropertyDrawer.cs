@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Codice.Client.Common;
+using Template.ProgressiveItemsHandler;
 using UnityEditor;
 using UnityEngine;
 

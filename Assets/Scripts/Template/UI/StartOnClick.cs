@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class StartOnClick : MonoBehaviour
+namespace Template.UI
 {
-    private void Update()
+    public class StartOnClick : MonoBehaviour
     {
-        if (Input.GetMouseButtonDown(0))
+        private void Update()
         {
-            Observer.Instance.OnStartGame();
-            gameObject.SetActive(false);
+            if (Input.GetMouseButtonDown(0))
+            {
+                Observer.Instance.OnStartGame();
+                gameObject.SetActive(false);
+            }
         }
     }
 }

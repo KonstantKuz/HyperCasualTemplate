@@ -1,29 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using Template.Ads;
 
-public class GetMoneyForVideo : MonoBehaviour
+namespace Template.UI.Shop
 {
-    [SerializeField] private int _moneyAmount;
-    [SerializeField] private Button button;
-    [SerializeField] private Transform coinsMoveFrom;
-    [SerializeField] private Transform coinsMoveTo;
-
-    private void Awake()
+    public class GetMoneyForVideo : MonoBehaviour
     {
-        button.onClick.AddListener(TryGetMoneyForVideo);
-    }
+        [SerializeField] private int _moneyAmount;
+        [SerializeField] private Button button;
+        [SerializeField] private Transform coinsMoveFrom;
+        [SerializeField] private Transform coinsMoveTo;
 
-    private void TryGetMoneyForVideo()
-    {
-        AdsManager.Instance.onRewardedAdRewarded += delegate
+        private void Awake()
         {
-            CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo);
-            PlayerWallet.Instance.IncreaseMoney(_moneyAmount);
-        };
+            button.onClick.AddListener(TryGetMoneyForVideo);
+        }
+
+        private void TryGetMoneyForVideo()
+        {
+            AdsManager.Instance.onRewardedAdRewarded += delegate
+            {
+                CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo);
+                PlayerWallet.Instance.IncreaseMoney(_moneyAmount);
+            };
         
-        AdsManager.Instance.ShowRewardedAd(RewardedVideoPlacement.Shop_Coins.ToString());
+            AdsManager.Instance.ShowRewardedAd(RewardedVideoPlacement.Shop_Coins.ToString());
+        }
     }
 }

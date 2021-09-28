@@ -1,4 +1,5 @@
 ﻿using System;
+using Template;
 using UnityEngine;
 
 public class SwipeDetector : Singleton<SwipeDetector>

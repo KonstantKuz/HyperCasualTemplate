@@ -1,5 +1,8 @@
 
-public class Layers
+namespace Template
 {
-    public const int Ground = 3;
+    public class Layers
+    {
+        public const int Ground = 3;
+    }
 }

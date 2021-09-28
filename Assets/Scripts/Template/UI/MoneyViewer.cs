@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public class MoneyViewer : MonoBehaviour
+namespace Template.UI
 {
-    [SerializeField] private TextMeshProUGUI moneyText;
-
-    private void Awake()
+    public class MoneyViewer : MonoBehaviour
     {
-        PlayerWallet.Instance.OnMoneyChanged += UpdateMoneyTextInstantly;
-        UpdateMoneyTextInstantly();
-    }
+        [SerializeField] private TextMeshProUGUI moneyText;
 
-    public void UpdateMoneyTextInstantly()
-    {
-        moneyText.SetText(PlayerWallet.Instance.GetCurrentMoney().ToString());
+        private void Awake()
+        {
+            PlayerWallet.Instance.OnMoneyChanged += UpdateMoneyTextInstantly;
+            UpdateMoneyTextInstantly();
+        }
+
+        public void UpdateMoneyTextInstantly()
+        {
+            moneyText.SetText(PlayerWallet.Instance.GetCurrentMoney().ToString());
+        }
     }
 }

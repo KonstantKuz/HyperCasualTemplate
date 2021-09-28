@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Template;
+using Template.LevelManager;
 using UnityEditor;
 using UnityEngine;
 
