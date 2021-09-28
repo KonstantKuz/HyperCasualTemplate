@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Template;
 
 public enum RewardedVideoPlacement
 {
@@ -23,8 +21,9 @@ public class AdsManager : Singleton<AdsManager>
 #endif
 
     public Action onInterAdShowedOrFailed = delegate { Debug.Log("onInterAdShowedOrFailed"); };
-    public Action onRewardedAdRewarded = delegate { Debug.Log("onRewardedAdRewarded"); };
+
     public Action onRewardedAdFailedOrDiscarded = delegate { Debug.Log("onRewardedAdFailedOrDiscarded"); };
+    public Action onRewardedAdRewarded = delegate { Debug.Log("onRewardedAdRewarded"); };
 
     private bool isInterFreezed = false;
     private Coroutine freezeInterShow;
@@ -48,7 +47,12 @@ public class AdsManager : Singleton<AdsManager>
             SubscribeToHandleInterstitialAd();
         }
 
-        InitializeAdsSDK();
+        InitializeAds();
+    }
+
+    public bool AdsEnabled()
+    {
+        return !PlayerPrefs.HasKey(PrefsIsAdsEnabled);
     }
 
     public void DisableInterAndBannerAds()
@@ -57,14 +61,9 @@ public class AdsManager : Singleton<AdsManager>
         _impl.DestroyBanner();
     }
 
-    public bool AdsEnabled()
+    private void InitializeAds()
     {
-        return !PlayerPrefs.HasKey(PrefsIsAdsEnabled);
-    }
-
-    private void InitializeAdsSDK()
-    {
-        _impl.Init();
+        _impl.Initialize();
 
         if (AdsEnabled())
         {
@@ -73,14 +72,14 @@ public class AdsManager : Singleton<AdsManager>
         }
     }
 
-    private void LoadInterstitial()
-    {
-        _impl.LoadInterstitial();
-    }
-
     private void LoadBanner()
     {
         _impl.LoadBanner();
+    }
+
+    private void LoadInterstitial()
+    {
+        _impl.LoadInterstitial();
     }
 
     private void SubscribeToHandleInterstitialAd()
@@ -97,7 +96,7 @@ public class AdsManager : Singleton<AdsManager>
                      $"Description = {error} ");
 
         interRetryAttempt++;
-        float retryDelay = (float)Math.Pow(2, Math.Min(6, interRetryAttempt));
+        float retryDelay = (float) Math.Pow(2, Math.Min(6, interRetryAttempt));
         DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadInterstitial);
     }
 
@@ -188,7 +187,7 @@ public class AdsManager : Singleton<AdsManager>
 
     private void SubscribeToHandleBannerAd()
     {
-        _impl.SubscribeToHandleBannerAd();
+        _impl.SubscribeToHandleBannerAd(OnBannerAdLoadFailed);
     }
 
     private void OnBannerAdLoadFailed(string error)
@@ -196,21 +195,19 @@ public class AdsManager : Singleton<AdsManager>
         DebugAdError($"Banner LOAD failed." +
                      $"Description = {error} ");
 
-        _impl.HideBanner();
-
         bannerRetryAttempt++;
-        float retryDelay = (float)Math.Pow(2, Math.Min(6, bannerRetryAttempt));
+        float retryDelay = (float) Math.Pow(2, Math.Min(6, bannerRetryAttempt));
         DelayHandler.Instance.DelayedCallAsync(retryDelay, LoadBanner);
     }
 
-    private void DebugAdError(string additiveMessage)
+    private void DebugAdError(string message)
     {
-        Debug.Log($"{additiveMessage}");
+        Debug.Log($"{message}");
     }
 
-    private void DebugAdSuccess(string additiveMessage)
+    private void DebugAdSuccess(string message)
     {
-        Debug.Log($"{additiveMessage}");
+        Debug.Log($"{message}");
     }
 
     public void ShowInterstitialAd()
@@ -239,9 +236,9 @@ public class AdsManager : Singleton<AdsManager>
         return;
 #endif
 
-        if (!_impl.IsInterstitialReady())
+        if (!_impl.IsInterstitialAvailable())
         {
-            Debug.Log("INTERSTITIAL AD NOT READY");
+            Debug.Log("INTERSTITIAL AD NOT AVAILABLE");
             CallInterShownOrFailedAndClearEvents();
             LoadInterstitial();
             return;
@@ -288,7 +285,6 @@ public class AdsManager : Singleton<AdsManager>
         if (!IsRewardedReady())
         {
             Debug.Log("REWARDED VIDEO AD NOT READY");
-
             onRewardedAdFailedOrDiscarded?.Invoke();
             ClearAdEvents();
             return;
@@ -329,6 +325,6 @@ public class AdsManager : Singleton<AdsManager>
 #if UNITY_EDITOR
         return rewardedAvailable;
 #endif
-        return _impl.IsRewardedVideoAvailable;
+        return _impl.IsRewardedVideoAvailable();
     }
 }

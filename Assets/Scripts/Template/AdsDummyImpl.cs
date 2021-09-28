@@ -1,57 +1,61 @@
 ﻿using System;
 
-namespace Template
+public class AdsDummyImpl: IAdsImpl
 {
-    public class AdsDummyImpl: IAdsImpl
+    public void Initialize()
     {
-        public void DestroyBanner()
-        {
-        }
+    }
 
-        public void Init()
-        {
-        }
+    public void LoadInterstitial()
+    {
+    }
 
-        public void LoadInterstitial()
-        {
-        }
+    public void LoadBanner()
+    {
+    }
 
-        public void LoadBanner()
-        {
-        }
+    public void ShowBanner()
+    {
+    }
 
-        public void SubscribeToHandleInterstitialAd(Action action, Action<string> onInterstitialAdLoadFailedEvent,
-            Action<string> onInterstitialAdFailedToDisplayEvent, Action onInterstitialAdClosedEvent)
-        {
-        }
+    public void HideBanner()
+    {
+    }
 
-        public void SubscribeToHandleRewardedAd(Action<bool> onRewardedVideoAvailabilityChangedEvent,
-            Action<string> onRewardedVideoAdShowFailedEvent, Action onRewardedVideoAdClosedEvent,
-            Action onRewardedVideoAdRewardedEvent)
-        {
-        }
+    public void DestroyBanner()
+    {
+    }
 
-        public void SubscribeToHandleBannerAd()
-        {
-        }
+    public void SubscribeToHandleInterstitialAd(Action onInterstitialAdReadyEvent, Action<string> onInterstitialAdLoadFailedEvent,
+        Action<string> onInterstitialAdFailedToDisplayEvent, Action onInterstitialAdClosedEvent)
+    {
+    }
 
-        public void HideBanner()
-        {
-        }
+    public void SubscribeToHandleRewardedAd(Action<bool> onRewardedVideoAvailabilityChangedEvent,
+        Action<string> onRewardedVideoAdShowFailedEvent, Action onRewardedVideoAdClosedEvent,
+        Action onRewardedVideoAdRewardedEvent)
+    {
+    }
 
-        public bool IsInterstitialReady()
-        {
-            return true;
-        }
+    public void SubscribeToHandleBannerAd(Action<string> onBannerLoadFailedEvent)
+    {
+    }
 
-        public void ShowInterstitial()
-        {
-        }
+    public bool IsInterstitialAvailable()
+    {
+        return true;
+    }
 
-        public void ShowRewardedVideo(string placementName)
-        {
-        }
+    public void ShowInterstitial()
+    {
+    }
 
-        public bool IsRewardedVideoAvailable { get; set; }
+    public bool IsRewardedVideoAvailable()
+    {
+        return true;
+    }
+
+    public void ShowRewardedVideo(string placementName)
+    {
     }
 }

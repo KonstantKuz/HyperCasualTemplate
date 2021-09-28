@@ -2,26 +2,29 @@
 
 public interface IAdsImpl
 {
-    void DestroyBanner();
-    void Init();
+    void Initialize();
 
     void LoadInterstitial();
-    void LoadBanner();
 
-    void SubscribeToHandleInterstitialAd(Action action, 
+    void LoadBanner();
+    void ShowBanner();
+    void HideBanner();
+    void DestroyBanner();
+
+    void SubscribeToHandleInterstitialAd(Action onInterstitialAdReadyEvent,
         Action<string> onInterstitialAdLoadFailedEvent,
-        Action<string> onInterstitialAdFailedToDisplayEvent, 
+        Action<string> onInterstitialAdFailedToDisplayEvent,
         Action onInterstitialAdClosedEvent);
 
     void SubscribeToHandleRewardedAd(Action<bool> onRewardedVideoAvailabilityChangedEvent,
-        Action<string> onRewardedVideoAdShowFailedEvent, 
+        Action<string> onRewardedVideoAdShowFailedEvent,
         Action onRewardedVideoAdClosedEvent,
         Action onRewardedVideoAdRewardedEvent);
 
-    void SubscribeToHandleBannerAd();
-    void HideBanner();
-    bool IsInterstitialReady();
+    void SubscribeToHandleBannerAd(Action<string> onBannerLoadFailedEvent);
+
+    bool IsInterstitialAvailable();
     void ShowInterstitial();
+    bool IsRewardedVideoAvailable();
     void ShowRewardedVideo(string placementName);
-    bool IsRewardedVideoAvailable { get; set; }
 }
