@@ -26,8 +26,8 @@ public class UniversalShopTab : ShopTab
         
         for (int i = 0; i < _itemsProgression.itemsQueue.Count; i++)
         {
-            itemButtons[i].Initialize(_itemsProgression.itemsQueue[i]);
-            itemButtons[i].OnClicked += UpdateBuyOrEquipButtonStatusFor;
+            ProgressiveItemData itemData = _itemsProgression.itemsQueue[i];
+            itemButtons[i].Initialize(ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemData.itemName], OnItemClicked);
         }
         
         _buyButton.OnClicked += TryBuyItem;
@@ -38,40 +38,39 @@ public class UniversalShopTab : ShopTab
     {
         if (_lastClickedButton != null)
         {
-            UpdateBuyOrEquipButtonStatusFor(_lastClickedButton);
+            OnItemClicked(_lastClickedButton);
         }
         
         for (int i = 0; i < _itemsProgression.itemsQueue.Count; i++)
         {
             ShopItemButton itemButton = itemButtons[i];
-            ProgressiveItemContainer item = ProgressiveItemsHandler.Instance.ItemsDictionary[itemButton.name];
 
             string progressionName = _itemsProgression.progressionName;
-            int unlocksAtLevel = ItemUnlocksAtLevel(item, progressionName, i);
+            int unlockLevel = ItemUnlockLevel(itemButton.Item, progressionName, i);
             
-            UpdateItemButtonStatus(itemButton, item, unlocksAtLevel);
+            itemButton.UpdateStatus(_isItemsEquipable, unlockLevel);
         }
     }
 
-    private int ItemUnlocksAtLevel(ProgressiveItemContainer item, string progressionName, int itemIndex)
+    private int ItemUnlockLevel(ProgressiveItemContainer item, string progressionName, int itemIndex)
     {
-        int unlocksAtLevel = 0;
-        bool isProgressionUpdatesParallel = ProgressiveItemsHandler.Instance.ProgressionsDictionary[progressionName].parallelUpdate;
+        int unlockLevel = 0;
+        bool isProgressionUpdatesParallel = ProgressiveItemsHandler.Instance.ProgressionsReadOnlyDictionary[progressionName].parallelUpdate;
         if (isProgressionUpdatesParallel)
         {
             int progressCorrection = item.CurrentUnlockProgress() - LevelManager.Instance.CurrentDisplayLevelNumber;
-            unlocksAtLevel = item.ProgressToUnlock() - progressCorrection;
+            unlockLevel = item.ProgressToUnlock() - progressCorrection;
         }
         else
         {
-            unlocksAtLevel = 1 + _itemsProgression.itemsQueue.Take(itemIndex + 1).
-                                 Sum(itemData => (itemData.progressToUnlock - ProgressiveItemsHandler.Instance.ItemsDictionary[itemData.itemName].ForcedProgress()));
+            unlockLevel = 1 + _itemsProgression.itemsQueue.Take(itemIndex + 1).
+                                 Sum(itemData => (itemData.progressToUnlock - ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemData.itemName].ForcedProgress()));
         }
 
-        return unlocksAtLevel;
+        return unlockLevel;
     }
 
-    private void UpdateBuyOrEquipButtonStatusFor(ShopItemButton itemButton)
+    private void OnItemClicked(ShopItemButton itemButton)
     {
         _lastClickedButton = itemButton;
         
@@ -80,11 +79,11 @@ public class UniversalShopTab : ShopTab
 
         OnItemSelected(itemButton.name);
         
-        if (ProgressiveItemsHandler.Instance.ItemsDictionary[itemButton.name].IsUnlockedToShop())
+        if (itemButton.Item.IsUnlockedToShop())
         {
             SetItemAsViewed(itemButton);
             
-            if (ProgressiveItemsHandler.Instance.ItemsDictionary[itemButton.name].IsUnlockedToUse())
+            if (itemButton.Item.IsUnlockedToUse())
             {
                 ShowEquipButtonOrEquip(itemButton.name);
             }
@@ -95,24 +94,9 @@ public class UniversalShopTab : ShopTab
         }
     }
 
-    private void UpdateItemButtonStatus(ShopItemButton itemButton, ProgressiveItemContainer item, int unlocksAtLevel)
-    {
-        if (_isItemsEquipable)
-        {
-            itemButton.SetEquipped(IsItemEquipped(itemButton.name));
-        }
-
-        if (!item.IsUnlockedToUseByDefault())
-        {
-            itemButton.SetAsNew(item.IsNewNotViewedInShop());
-        }
-
-        itemButton.UpdateItemAvailableStatus(item, unlocksAtLevel);
-    }
-
     private bool IsItemEquipped(string itemName)
     {
-        return ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].IsEquipped();
+        return ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].IsEquipped();
     }
 
     public virtual void OnItemSelected(string itemName)
@@ -151,9 +135,9 @@ public class UniversalShopTab : ShopTab
         throw new NotImplementedException();
     }
 
-    private void ShowBuyButton(string clickedItem)
+    private void ShowBuyButton(string itemName)
     {
-        ProgressiveItemContainer item = ProgressiveItemsHandler.Instance.ItemsDictionary[clickedItem];
+        ProgressiveItemContainer item = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName];
 
         switch (item.PriceType())
         {
@@ -168,9 +152,7 @@ public class UniversalShopTab : ShopTab
 
     private void TryBuyItem()
     {
-        ProgressiveItemContainer item = ProgressiveItemsHandler.Instance.ItemsDictionary[_lastClickedButton.name];
-        
-        switch (item.PriceType())
+        switch (_lastClickedButton.Item.PriceType())
         {
             case ItemPriceType.Video:
                 TryBuyForVideo(_lastClickedButton.name);
@@ -185,7 +167,7 @@ public class UniversalShopTab : ShopTab
     {
         AdsManager.Instance.onRewardedAdRewarded += delegate
         {
-            ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].UnlockToUse();
+            ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].UnlockToUse();
 
             OnBuyItem(itemName);
             UpdateItemsStatuses();
@@ -196,14 +178,14 @@ public class UniversalShopTab : ShopTab
     
     private void TryBuyForCoins(string itemName)
     {
-        int itemPrice = ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].Price();
+        int itemPrice = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].Price();
         if (!PlayerWallet.Instance.HasMoney(itemPrice))
         {
             return;
         }
         
         PlayerWallet.Instance.DecreaseMoney(itemPrice);
-        ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].UnlockToUse();
+        ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].UnlockToUse();
             
         OnBuyItem(itemName);
         UpdateItemsStatuses();
@@ -218,7 +200,7 @@ public class UniversalShopTab : ShopTab
     private void SetItemAsViewed(ShopItemButton itemButton)
     {
         itemButton.SetAsNew(false);
-        ProgressiveItemsHandler.Instance.ItemsDictionary[itemButton.name].SetAsViewedInShop();
+        itemButton.Item.SetAsViewedInShop();
     }
 
     public override void OnShopClosed()
@@ -229,6 +211,6 @@ public class UniversalShopTab : ShopTab
     public override bool HasNewNotViewedInShopItems()
     {
         return _itemsProgression.itemsQueue.Any(itemData => 
-            ProgressiveItemsHandler.Instance.ItemsDictionary[itemData.itemName].IsNewNotViewedInShop());
+            ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemData.itemName].IsNewNotViewedInShop());
     }
 }

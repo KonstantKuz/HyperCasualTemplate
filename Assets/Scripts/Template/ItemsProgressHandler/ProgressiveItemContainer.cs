@@ -18,8 +18,6 @@ public class ProgressiveItemContainer
     private string _progressionName;
 
     private ProgressiveItemData _itemData;
-    public ProgressiveItemData ItemData => _itemData;
-    
     private PlayerPrefsProperty<int> _itemProgress;
     private PlayerPrefsProperty<int> _itemForcedProgress;
     private PlayerPrefsProperty<bool> _unlockedToShopStatus;
@@ -29,9 +27,9 @@ public class ProgressiveItemContainer
 
     private EquippedItemData _equippedItemData;
     
-    public Action<EquippedItemData> OnEquipped;
+    private Action<EquippedItemData> _onEquipped;
     
-    public ProgressiveItemContainer(ProgressiveItemData itemData, string progressionName)
+    public ProgressiveItemContainer(string progressionName, ProgressiveItemData itemData, Action<EquippedItemData> onEquipped)
     {
         _progressionName = progressionName;
         _itemData = itemData;
@@ -42,52 +40,20 @@ public class ProgressiveItemContainer
         _viewedInShopStatus = new PlayerPrefsProperty<bool>($"{itemData.itemName}IsViewedInShop", false);
         _equipStatus = new PlayerPrefsProperty<bool>($"{itemData.itemName}IsEquipped", false);
         _equippedItemData = new EquippedItemData(_progressionName, _itemData.itemName);
+        _onEquipped = onEquipped;
     }
 
-    public void IncreaseProgress()
-    {
-        _itemProgress.Value++;
-    }
-    public void IncreaseForcedProgress()
-    {
-        _itemForcedProgress.Value++;
-    }
+    public string Name() => _itemData.itemName;
+    public void IncreaseProgress() => _itemProgress.Value++;
+    public void IncreaseForcedProgress() => _itemForcedProgress.Value++;
     
-    public void UnlockToShop()
-    {
-        _unlockedToShopStatus.Value = true;
-    }
-    public bool IsUnlockedToShop()
-    {
-        if (IsUnlockedToShopByDefault() || IsUnlockedToUseByDefault())
-        {
-            return true;
-        }
-
-        return _unlockedToShopStatus.Value;
-    }
-    public bool IsUnlockedToShopByDefault()
-    {
-        return _itemData.unlockedToShopByDefault;
-    }
+    public void UnlockToShop() => _unlockedToShopStatus.Value = true;
+    public bool IsUnlockedToShop() => IsUnlockedToShopByDefault() || IsUnlockedToUseByDefault() || _unlockedToShopStatus.Value;
+    public bool IsUnlockedToShopByDefault() => _itemData.unlockedToShopByDefault;
     
-    public void UnlockToUse()
-    {
-        _unlockedToUseStatus.Value = true;
-    }
-    public bool IsUnlockedToUse()
-    {
-        if (IsUnlockedToUseByDefault())
-        {
-            return true;
-        }
-
-        return _unlockedToUseStatus.Value;
-    }
-    public bool IsUnlockedToUseByDefault()
-    {
-        return _itemData.unlockedToUseByDefault;
-    }
+    public void UnlockToUse() => _unlockedToUseStatus.Value = true;
+    public bool IsUnlockedToUse() => IsUnlockedToUseByDefault() || _unlockedToUseStatus.Value;
+    public bool IsUnlockedToUseByDefault() => _itemData.unlockedToUseByDefault;
 
     public void TryUnlock()
     {
@@ -98,63 +64,22 @@ public class ProgressiveItemContainer
         
         UnlockToShop();
         
-        if (!IsUnlockCompletely())
+        if (!IsUnlockCompletelyOnProgressPassed())
         {
             return;
         }
         
         UnlockToUse();
     }
+
+    public bool IsProgressPassed() => CurrentUnlockProgress() >= ProgressToUnlock();
+    public bool IsUnlockCompletelyOnProgressPassed() => _itemData.unlockCompletelyOnProgressPassed;
     
-    public bool IsProgressPassed()
-    {
-        return _itemProgress.Value >= _itemData.progressToUnlock;
-    }
-    
-    public bool IsUnlockCompletely()
-    {
-        return _itemData.unlockCompletelyOnProgressPassed;
-    }
-    
-    public int ProgressToUnlock()
-    {
-        return _itemData.progressToUnlock;
-    }
+    public int ProgressToUnlock() => _itemData.progressToUnlock;
+    public int CurrentUnlockProgress() => _itemProgress.Value;
+    public int ForcedProgress() => _itemForcedProgress.Value;
 
-    public int CurrentUnlockProgress()
-    {
-        return _itemProgress.Value;
-    }
-    public int ForcedProgress()
-    {
-        return _itemForcedProgress.Value;
-    }
-
-    public ItemPriceType PriceType()
-    {
-        return _itemData.priceType;
-    }
-
-    public int Price()
-    {
-        return _itemData.price;
-    }
-    
-    public Sprite Icon()
-    {
-        return _itemData.icon;
-    }
-
-    public bool IsViewedInShop()
-    {
-        return _viewedInShopStatus.Value;
-    }
-
-    public void SetAsViewedInShop()
-    {
-        _viewedInShopStatus.Value = true;
-    }
-
+    public void SetAsViewedInShop() => _viewedInShopStatus.Value = true;
     public bool IsNewNotViewedInShop()
     {
         if (IsUnlockedToShopByDefault() || IsUnlockedToUseByDefault())
@@ -164,20 +89,17 @@ public class ProgressiveItemContainer
         
         return IsUnlockedToShop() && !IsViewedInShop();
     }
+    public bool IsViewedInShop() => _viewedInShopStatus.Value;
 
     public void SetAsEquipped()
     {
         _equipStatus.Value = true;
-        OnEquipped?.Invoke(_equippedItemData);
+        _onEquipped.Invoke(_equippedItemData);
     }
-
-    public void ResetEquipStatus()
-    {
-        _equipStatus.Value = false;
-    }
+    public void ResetEquipStatus() => _equipStatus.Value = false;
+    public bool IsEquipped() => _equipStatus.Value;
     
-    public bool IsEquipped()
-    {
-        return _equipStatus.Value;
-    }
+    public ItemPriceType PriceType() => _itemData.priceType;
+    public int Price() => _itemData.price;
+    public Sprite Icon() => _itemData.icon;
 }

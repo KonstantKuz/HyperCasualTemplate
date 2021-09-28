@@ -13,20 +13,20 @@ public class ExampleShopTab : UniversalShopTab
     {
         base.Awake();
 
-        List<ProgressiveItemContainer> itemContainers = ProgressiveItemsHandler.Instance.ItemsDictionary.Values.ToList();
+        List<ProgressiveItemContainer> itemContainers = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary.Values.ToList();
         itemContainers[0].SetAsEquipped();
     }
     
     public override void OnItemSelected(string itemName)
     {
         _itemView.gameObject.SetActive(true);
-        _itemView.sprite = ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].Icon();
+        _itemView.sprite = ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].Icon();
         print($"OnItemSelected {itemName}");
     }
 
     public override void OnEquipItem(string itemName)
     {
-        ProgressiveItemsHandler.Instance.ItemsDictionary[itemName].SetAsEquipped();
+        ProgressiveItemsHandler.Instance.ItemsReadOnlyDictionary[itemName].SetAsEquipped();
         print($"OnEquipItem {itemName}");
     }
 

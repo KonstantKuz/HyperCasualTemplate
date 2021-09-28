@@ -25,8 +25,6 @@ public class RewardedPanel : MonoBehaviour
 
     public void ShowPanel(Action onGetReward, Action onDiscardReward)
     {
-        // getRewardButton.onClick.RemoveAllListeners();
-        // noThanksButton.onClick.RemoveAllListeners();
         gameObject.SetActive(true);
 
         _onGetReward = onGetReward;
@@ -40,7 +38,7 @@ public class RewardedPanel : MonoBehaviour
 
     private void OnGetRewardButtonClicked()
     {
-        StopNHide();
+        Close();
         _onGetReward?.Invoke();
         
         getRewardButton.onClick.RemoveListener(OnGetRewardButtonClicked);
@@ -64,7 +62,7 @@ public class RewardedPanel : MonoBehaviour
     
     private void OnNoThanksButtonClicked()
     {
-        StopNHide();
+        Close();
         _onDiscardReward?.Invoke();
         
         noThanksButton.onClick.RemoveListener(OnNoThanksButtonClicked);
@@ -92,7 +90,7 @@ public class RewardedPanel : MonoBehaviour
         }
     }
     
-    private void StopNHide()
+    private void Close()
     {
         StopCounter();
         HidePanel();

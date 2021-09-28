@@ -11,8 +11,8 @@ public class ProgressiveItemsHandler : Singleton<ProgressiveItemsHandler>
     private Dictionary<string, ItemsProgression> _progressionsDictionary;
     private Dictionary<string, ProgressiveItemContainer> _itemsDictionary;
 
-    public Dictionary<string, ProgressiveItemContainer> ItemsDictionary => _itemsDictionary;
-    public Dictionary<string, ItemsProgression> ProgressionsDictionary => _progressionsDictionary;
+    public Dictionary<string, ProgressiveItemContainer> ItemsReadOnlyDictionary => _itemsDictionary;
+    public Dictionary<string, ItemsProgression> ProgressionsReadOnlyDictionary => _progressionsDictionary;
 
     private void Awake()
     {
@@ -30,10 +30,8 @@ public class ProgressiveItemsHandler : Singleton<ProgressiveItemsHandler>
             _progressionsDictionary.Add(progression.progressionName, progression);
             foreach (ProgressiveItemData itemData in progression.itemsQueue)
             {
-                ProgressiveItemContainer progressiveItemContainer = new ProgressiveItemContainer(itemData, progression.progressionName);
+                ProgressiveItemContainer progressiveItemContainer = new ProgressiveItemContainer(progression.progressionName, itemData, ResetProgressionsEquipStatus);
                 _itemsDictionary.Add(itemData.itemName, progressiveItemContainer);
-
-                progressiveItemContainer.OnEquipped += ResetProgressionsEquipStatus;
             }
         }
     }
@@ -53,7 +51,7 @@ public class ProgressiveItemsHandler : Singleton<ProgressiveItemsHandler>
         {
             if (progression.manualUpdate)
             {
-                return;
+                continue;
             }
 
             IncreaseItemsProgress(progression, progression.parallelUpdate, false);
@@ -88,12 +86,12 @@ public class ProgressiveItemsHandler : Singleton<ProgressiveItemsHandler>
     public bool IsAllItemsUnlockedToShop(string progressionName)
     {
         List<ProgressiveItemData> progression = _progressionsDictionary[progressionName].itemsQueue;
-        return progression.All(itemData => ItemsDictionary[itemData.itemName].IsUnlockedToShop());
+        return progression.All(itemData => ItemsReadOnlyDictionary[itemData.itemName].IsUnlockedToShop());
     }
 
     public bool IsAllItemsUnlockedToUse(string progressionName)
     {
         List<ProgressiveItemData> progression = _progressionsDictionary[progressionName].itemsQueue;
-        return progression.All(itemData => ItemsDictionary[itemData.itemName].IsUnlockedToUse());
+        return progression.All(itemData => ItemsReadOnlyDictionary[itemData.itemName].IsUnlockedToUse());
     }
 }

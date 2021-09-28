@@ -34,8 +34,11 @@ public class BuyButton : MonoBehaviour
     public void ShowButtonWithCoinsCost(int price)
     {
         UpdatePriceStatus(PriceStatus.Coins);
-        
-        bool canBeBought = PlayerWallet.Instance.GetCurrentMoney() >= price;
+        SetAvailableStatusForCoins(price, PlayerWallet.Instance.GetCurrentMoney() >= price);
+    }
+
+    public void SetAvailableStatusForCoins(int price, bool canBeBought)
+    {
         costText.color = canBeBought ? Color.white : Color.red;
         costText.SetText($"{price}");
         buttonGroup.alpha = canBeBought ? 1f : 0.5f;

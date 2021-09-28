@@ -25,36 +25,55 @@ public class ShopItemButton : MonoBehaviour
     
     public Action<ShopItemButton> OnClicked;
 
-    private int _unlocksAtLevel;
-    private int _price;
+    private ProgressiveItemContainer _item;
+    public ProgressiveItemContainer Item => _item;
+    
+    private int _unlockLevel;
 
     private void Awake()
     {
-        button.onClick.AddListener(delegate { OnClicked?.Invoke(this); });
+        button.onClick.AddListener(delegate { OnClicked.Invoke(this); });
     }
 
-    public void Initialize(ProgressiveItemData itemData)
+    public void Initialize(ProgressiveItemContainer item, Action<ShopItemButton> onClicked)
     {
-        gameObject.SetActive(true);
-        gameObject.name = itemData.itemName;
-
-        itemImage.sprite = itemData.icon;
-    }
-
-    public void UpdateItemAvailableStatus(ProgressiveItemContainer item, int unlocksAtLevel)
-    {
-        _price = item.Price();
-        _unlocksAtLevel = unlocksAtLevel;
+        _item = item;
         
-        if (item.IsUnlockedToShop() && item.IsUnlockedToUse())
+        gameObject.SetActive(true);
+        gameObject.name = _item.Name();
+        itemImage.sprite = _item.Icon();
+
+        OnClicked += onClicked;
+    }
+
+    public void UpdateStatus(bool updateEquipStatus, int unlockLevel)
+    {
+        if (updateEquipStatus)
+        {
+            SetEquipped(_item.IsEquipped());
+        }
+        
+        if (!_item.IsUnlockedToUseByDefault())
+        {
+            SetAsNew(_item.IsNewNotViewedInShop());
+        }
+
+        UpdateItemAvailableStatus(unlockLevel);
+    }
+    
+    public void UpdateItemAvailableStatus(int unlockLevel)
+    {
+        _unlockLevel = unlockLevel;
+        
+        if (_item.IsUnlockedToShop() && _item.IsUnlockedToUse())
         {
             SetAvailableStatus(AvailableStatus.AvailableToUse);
         }
-        else if (item.IsUnlockedToShop() && !item.IsUnlockedToUse())
+        else if (_item.IsUnlockedToShop() && !_item.IsUnlockedToUse())
         {
-            SetAvailableByCostType(item.PriceType());
+            SetAvailableByCostType(_item.PriceType());
         }
-        else if (!item.IsUnlockedToShop())
+        else if (!_item.IsUnlockedToShop())
         {
             SetAvailableStatus(AvailableStatus.UnlocksAtLevel);
         }
@@ -81,11 +100,11 @@ public class ShopItemButton : MonoBehaviour
         
         lockedImage.SetActive(status == AvailableStatus.UnlocksAtLevel);
         lockedLevelText.gameObject.SetActive(status == AvailableStatus.UnlocksAtLevel);
-        lockedLevelText.text = $"UNLOCK AT LEVEL {_unlocksAtLevel}";
+        lockedLevelText.text = $"UNLOCK AT LEVEL {_unlockLevel}";
         
         costText.gameObject.SetActive(status == AvailableStatus.UnlocksForCoins);
-        costText.color = PlayerWallet.Instance.GetCurrentMoney() >= _price ? Color.white : Color.red;
-        costText.text = $"{_price}";
+        costText.color = PlayerWallet.Instance.GetCurrentMoney() >= _item.Price() ? Color.white : Color.red;
+        costText.text = $"{_item.Price()}";
     }
     
     public void SetAsNew(bool value)

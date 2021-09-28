@@ -23,24 +23,19 @@ public class RewardedVideoWaiter : MonoBehaviour
     {
         updateStep = new WaitForSecondsRealtime(0.2f);
 
-        Action waitFunc = null;
-        switch (waitVisual)
+        Action<bool> waitFunc = waitVisual switch 
         {
-            case WaitVisual.FadeWhileWait:
-                waitFunc = delegate { UpdateFade(AdsManager.Instance.IsRewardedReady()); };
-                break;
-            case WaitVisual.RotateLoadImage:
-                waitFunc = delegate { UpdateLoadImage(AdsManager.Instance.IsRewardedReady()); };
-                break;
-        }
+            WaitVisual.FadeWhileWait => UpdateFade,
+            WaitVisual.RotateLoadImage => UpdateLoadImage
+        };
         StartCoroutine(WaitForVideo(waitFunc));
     }
 
-    private IEnumerator WaitForVideo(Action waitFunc)
+    private IEnumerator WaitForVideo(Action<bool> waitFunc)
     {
         while (true)
         {
-            waitFunc?.Invoke();
+            waitFunc?.Invoke(AdsManager.Instance.IsRewardedReady());
             yield return updateStep;
         }
     }
