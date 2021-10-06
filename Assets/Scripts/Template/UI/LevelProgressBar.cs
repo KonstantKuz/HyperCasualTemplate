@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using Template.LevelManagement;
 
 namespace Template.UI
 {
@@ -14,7 +15,7 @@ namespace Template.UI
     
         private void Awake()
         {
-            levelNumber.SetText(LevelManager.LevelManager.Instance.CurrentDisplayLevelNumber.ToString());
+            levelNumber.SetText(LevelManager.Instance.CurrentDisplayLevelNumber.ToString());
         
             Observer.Instance.OnLoseLevel += delegate { gameObject.SetActive(false); };
             Observer.Instance.OnWinLevel += delegate { gameObject.SetActive(false); };

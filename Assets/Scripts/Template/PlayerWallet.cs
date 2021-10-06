@@ -1,51 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Template
 {
     public class PlayerWallet : Singleton<PlayerWallet>
     {
-        [SerializeField] private int defaultMoney;
-        public Action OnMoneyChanged;
+        [SerializeField] private int defaultCoins;
+        public Action OnCurrencyChanged;
     
-        private const string PrefsMoney = "Money";
+        private List<Currency> _currencies;
     
         private void Awake()
         {
-            OnMoneyChanged?.Invoke();
-        }
-
-        public void IncreaseMoney(int value)
-        {
-            ChangeMoney(value);
-        }
-
-        public void DecreaseMoney(int value)
-        {
-            ChangeMoney(-value);
-        }
-
-        private void ChangeMoney(int value)
-        {
-            int currentMoney = GetCurrentMoney();
-            currentMoney += value;
-            if (currentMoney < 0 && value < 0)
+            _currencies = new List<Currency>
             {
-                Debug.LogError("Player has no money. Check money with HasMoney(amount).");
-                return;
+                new Currency(CurrencyType.Coin.ToString(), defaultCoins),
+            };
+            
+            OnCurrencyChanged?.Invoke();
+        }
+
+        public void IncreaseCurrency(string type, int value)
+        {
+            ChangeCurrency(type, value);
+        }
+
+        public void DecreaseCurrency(string type, int value)
+        {
+            ChangeCurrency(type, -value);
+        }
+
+        private void ChangeCurrency(string type, int value)
+        {
+            int currencyValue = GetCurrencyCurrentValue(type);
+            currencyValue += value;
+            if (currencyValue < 0 && value < 0)
+            {
+                throw new Exception($"Player has no {type} currency. Check currency with HasCurrency(type, amount).");
             }
-            PlayerPrefs.SetInt(PrefsMoney, currentMoney);
-            OnMoneyChanged?.Invoke();
+
+            GetCurrency(type).Current.Value += value;
+
+            OnCurrencyChanged?.Invoke();
         }
 
-        public bool HasMoney(int amount)
+        public bool HasCurrency(string type, int amount)
         {
-            return GetCurrentMoney() >= amount;
+            if (type == CurrencyType.Video.ToString())
+            {
+                return true;
+            }
+
+            return GetCurrencyCurrentValue(type) >= amount;
         }
 
-        public int GetCurrentMoney()
+        public int GetCurrencyCurrentValue(string type)
         {
-            return PlayerPrefs.GetInt(PrefsMoney, defaultMoney);
+            return GetCurrency(type).Current.Value;
+        }
+        
+        private Currency GetCurrency(string type)
+        {
+            return _currencies.First(currency => currency.Type == type);
         }
     }
 }

@@ -27,13 +27,19 @@ namespace Template.Tools
             {
                 return (T)(object)PlayerPrefs.GetInt(_key, (int)(object)_defaultValue);
             }
-            if (paramType == typeof(bool))
+            else if (paramType == typeof(bool))
             {
                 int defaultValue = (bool) (object) _defaultValue ? 1 : 0;
                 return (T) (object) (PlayerPrefs.GetInt(_key, defaultValue) == 1);
             }
-
-            throw new Exception($"Not implemented for type {typeof(T)}");
+            else if(paramType == typeof(string))
+            {
+                return (T)(object)PlayerPrefs.GetString(_key, (string)(object)_defaultValue);
+            }
+            else
+            {
+                throw new Exception($"Not implemented for type {typeof(T)}");
+            }
         }
 
         private void Save(T value)
@@ -47,6 +53,10 @@ namespace Template.Tools
             {
                 int saveValue = (bool) (object) value ? 1 : 0;
                 PlayerPrefs.SetInt(_key, saveValue);
+            }
+            else if (paramType == typeof(string))
+            {
+                PlayerPrefs.SetString(_key, (string)(object)value);    
             }
             else
             {

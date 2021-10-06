@@ -15,6 +15,7 @@ public class SceneLineProgressBar<T> : MonoBehaviour, SceneProgressBar<T> where 
              "Simple horizontal SceneLineProgressBar with Reverted fill direction and increasing progress" +
              "will be filled from right corner of ProgressBarImage rect to its left corner.")]
     [SerializeField] private FillDirection fillDirection;
+    [SerializeField] private Image.FillMethod fillMethod;
     [Tooltip("Represents how and how long will be smoothed progress in this progress bar.")]
     [SerializeField] private SmoothType smoothType = SmoothType.None;
     [SerializeField] private float smoothDuration = 0;
@@ -79,7 +80,7 @@ public class SceneLineProgressBar<T> : MonoBehaviour, SceneProgressBar<T> where 
     public void InitializeVisual()
     {
         progressBarImage.type = Image.Type.Filled;
-        progressBarImage.fillMethod = Image.FillMethod.Horizontal;
+        progressBarImage.fillMethod = fillMethod;
         if (fillDirection == FillDirection.Original)
         {
             progressBarImage.fillOrigin = 0;

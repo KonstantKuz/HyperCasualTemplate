@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Template.Constants;
+using UnityEngine;
 
 namespace Template
 {

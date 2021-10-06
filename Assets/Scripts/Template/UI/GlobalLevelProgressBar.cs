@@ -3,6 +3,7 @@ using Template.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Template.LevelManagement;
 
 namespace Template.UI
 {
@@ -28,10 +29,10 @@ namespace Template.UI
                 // Например при отказе проходить бонус уровень
                 updateBarProgress.Value -= 5;
                 passedLevelsCount.Value += 5;
-                firstBlockLevelNumber.Value = LevelManager.LevelManager.Instance.CurrentDisplayLevelNumber;
+                firstBlockLevelNumber.Value = LevelManager.Instance.CurrentDisplayLevelNumber;
             }
 
-            LevelManager.LevelManager levelManager = LevelManager.LevelManager.Instance;
+            LevelManager levelManager = LevelManager.Instance;
             int blockLevelNumber = firstBlockLevelNumber.Value;
             for (int i = 0; i < progressBlocks.Length; i++)
             {
