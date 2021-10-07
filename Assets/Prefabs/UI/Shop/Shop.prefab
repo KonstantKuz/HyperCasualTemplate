@@ -682,7 +682,6 @@ MonoBehaviour:
   _moneyAmount: 1000
   button: {fileID: 3932994255256046224}
   coinsMoveFrom: {fileID: 5966619929776446906}
-  coinsMoveTo: {fileID: 0}
 --- !u!222 &5790303197872030558
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1464,6 +1463,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7430791275542189429, guid: 6233b89b93e6ff248b9fc8568fc5742e,
+        type: 3}
+      propertyPath: fadeWhileWait
+      value: 
+      objectReference: {fileID: 2201612077353000820}
     - target: {fileID: 7430791275542189429, guid: 6233b89b93e6ff248b9fc8568fc5742e,
         type: 3}
       propertyPath: disableWhileWait

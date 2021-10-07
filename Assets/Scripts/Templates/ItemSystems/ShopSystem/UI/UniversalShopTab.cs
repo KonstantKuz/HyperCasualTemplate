@@ -17,8 +17,10 @@ namespace Templates.ItemSystems.ShopSystem.UI
 
         private ShopItemButton _lastClickedButton;
     
-        public virtual void Awake()
+        public override void Initialize()
         {
+            base.Initialize();
+
             foreach (ShopItemButton button in itemButtons)
             {
                 button.gameObject.SetActive(false);

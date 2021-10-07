@@ -9,6 +9,7 @@ public class MultiplierIndicator_Slider : MonoBehaviour
     [SerializeField] private Slider _angleSlider;
     
     private bool _isActive;
+    private bool _increaseValue;
     private int _finalMultiplier = 1;
 
     public Action<int> OnMultiplierValueChanged;
@@ -29,8 +30,17 @@ public class MultiplierIndicator_Slider : MonoBehaviour
         {
             return;
         }
+
+        if (_angleSlider.value >= _maxAngle)
+        {
+            _increaseValue = false;
+        }
+        if (_angleSlider.value <= -_maxAngle)
+        {
+            _increaseValue = true;
+        }
         
-        _angleSlider.value += _angleSlider.value >= _maxAngle ? _angleStep : -_angleStep;
+        _angleSlider.value += _increaseValue ? _angleStep : -_angleStep;
 
         CheckMultiplier();
     }

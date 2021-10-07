@@ -16,7 +16,7 @@ namespace Templates.UI
     {
         [SerializeField] private WaitVisual waitVisual;
         [SerializeField] private Image loadImage;
-        [SerializeField] private CanvasGroup disableWhileWait;
+        [SerializeField] private CanvasGroup fadeWhileWait;
         private WaitForSecondsRealtime updateStep;
 
         private void OnEnable()
@@ -42,13 +42,13 @@ namespace Templates.UI
 
         private void UpdateFade(bool videoAvailable)
         {
-            disableWhileWait.alpha = videoAvailable ? 1f : 0.5f;
-            disableWhileWait.interactable = videoAvailable;
+            fadeWhileWait.alpha = videoAvailable ? 1f : 0.5f;
+            fadeWhileWait.interactable = videoAvailable;
         }
 
         private void UpdateLoadImage(bool videoAvailable)
         {
-            disableWhileWait.gameObject.SetActive(videoAvailable);
+            fadeWhileWait.gameObject.SetActive(videoAvailable);
             loadImage.gameObject.SetActive(!videoAvailable);
         
             loadImage.transform.rotation *= Quaternion.Euler(0,0,-20);

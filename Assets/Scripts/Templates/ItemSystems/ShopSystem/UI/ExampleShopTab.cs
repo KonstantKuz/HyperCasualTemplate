@@ -8,14 +8,6 @@ namespace Templates.ItemSystems.ShopSystem.UI
     {
         [SerializeField] private Image _itemView;
 
-        public override void Awake()
-        {
-            base.Awake();
-
-            // List<InventoryItem> itemContainers = Inventory.Instance.GetItem();
-            // itemContainers[0].SetAsEquipped();
-        }
-    
         public override void OnItemSelected(string itemName)
         {
             _itemView.gameObject.SetActive(true);

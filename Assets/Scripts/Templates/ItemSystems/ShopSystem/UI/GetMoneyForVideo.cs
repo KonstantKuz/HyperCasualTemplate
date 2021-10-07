@@ -10,7 +10,6 @@ namespace Templates.ItemSystems.ShopSystem.UI
         [SerializeField] private int _moneyAmount;
         [SerializeField] private Button button;
         [SerializeField] private Transform coinsMoveFrom;
-        [SerializeField] private Transform coinsMoveTo;
 
         private void Awake()
         {
@@ -21,7 +20,7 @@ namespace Templates.ItemSystems.ShopSystem.UI
         {
             AdsManager.Instance.onRewardedAdRewarded += delegate
             {
-                CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, coinsMoveTo);
+                CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, CurrencyViewer.Instance.CoinImage);
                 PlayerWallet.Instance.IncreaseCurrency(CurrencyType.Coin.ToString(), _moneyAmount);
             };
         

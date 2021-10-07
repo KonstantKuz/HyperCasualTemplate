@@ -50,7 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd66413faeff524d9981d36d041bc3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinsText: {fileID: 8530997050645244147}
+  _coinsText: {fileID: 8530997050645244147}
+  _coinImage: {fileID: 4861774067508467449}
 --- !u!1 &8619675263305829589
 GameObject:
   m_ObjectHideFlags: 0

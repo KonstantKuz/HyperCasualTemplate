@@ -10,23 +10,27 @@ namespace Templates.UI.RewardMultiplier
     {
         [SerializeField] private RewardedMultiplierIndicator multiplierIndicator;
 
+        [SerializeField] private Transform coinsMoveFrom;
         [SerializeField] private TextMeshProUGUI coinsText;
         [SerializeField] private Button getRewardButton;
+        [SerializeField] private CanvasGroup getRewardButtonCanvas;
         [SerializeField] private float showNoThanksDelay;
         [SerializeField] private Button noThanksButton;
+     
+        private Action _onPanelClosed;
 
         private int _rewardForCurrentLevel;
         private int _currentMultiplierValue;
-        private Action _onRewardMultiplied;
-        private Action _onRewardDiscarded;
+
+        private float ShowCoinsDelay = 2f;
     
-        public void StartCount(int rewardForCurrentLevel, Action onRewardMultiplied, Action onRewardDiscarded)
+        public void ShowPanel(int rewardForCurrentLevel, Action onPanelClosed)
         {
+            _onPanelClosed = onPanelClosed;
+
             multiplierIndicator.gameObject.SetActive(true);
             
             _rewardForCurrentLevel = rewardForCurrentLevel;
-            _onRewardMultiplied = onRewardMultiplied;
-            _onRewardDiscarded = onRewardDiscarded;
         
             multiplierIndicator.StartCount(UpdateMultiplierValue);
             
@@ -47,7 +51,9 @@ namespace Templates.UI.RewardMultiplier
         
         private void TryMultiplyReward()
         {
-            getRewardButton.gameObject.SetActive(false);
+            getRewardButtonCanvas.alpha = 0.5f;
+            getRewardButtonCanvas.interactable = false;
+            
             multiplierIndicator.StopCount();
             
             AdsManager.Instance.onRewardedAdRewarded += GetMultipliedReward;
@@ -59,20 +65,20 @@ namespace Templates.UI.RewardMultiplier
         private void GetNormalReward()
         {
             PlayerWallet.Instance.IncreaseCurrency(CurrencyType.Coin.ToString(), _rewardForCurrentLevel);
-            _onRewardDiscarded?.Invoke();
             Close();
         }
 
         private void GetMultipliedReward()
         {
             PlayerWallet.Instance.IncreaseCurrency(CurrencyType.Coin.ToString(), _rewardForCurrentLevel * _currentMultiplierValue);
-            _onRewardMultiplied?.Invoke();
-            Close();
+            CoinAnimator.Instance.SpawnMovingCoins(coinsMoveFrom, CurrencyViewer.Instance.CoinImage);
+            DelayHandler.Instance.DelayedCallCoroutine(ShowCoinsDelay, Close);
         }
 
         private void Close()
         {
             multiplierIndicator.gameObject.SetActive(false);
+            _onPanelClosed?.Invoke();
         }
     }
 }

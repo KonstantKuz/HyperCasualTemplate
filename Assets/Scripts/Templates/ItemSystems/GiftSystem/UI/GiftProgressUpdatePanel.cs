@@ -17,6 +17,8 @@ namespace Templates.ItemSystems.GiftSystem.UI
         [SerializeField] private RewardedPanel _boostPanel;
         [SerializeField] private RewardedPanel _unlockPanel;
 
+        private Action _onPanelClosed;
+
         private GiftGiver _giftGiver;
         private GiftItem _nextGift;
 
@@ -40,8 +42,10 @@ namespace Templates.ItemSystems.GiftSystem.UI
             _nextGiftProgress.Initialize(_nextGift.ReceiveProgress);
         }
 
-        public void ShowPanel()
+        public void ShowPanel(Action onPanelClosed)
         {
+            _onPanelClosed = onPanelClosed;
+            
             _panelContainer.SetActive(true);
             
             if (_giftGiver.AllGiftsReceived())
@@ -112,6 +116,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
         private void Close()
         {
             _panelContainer.SetActive(false);
+            _onPanelClosed?.Invoke();
         }
 
         private GiftStatus CurrentGiftStatus()

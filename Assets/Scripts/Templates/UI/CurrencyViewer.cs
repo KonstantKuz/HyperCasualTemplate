@@ -3,10 +3,12 @@ using UnityEngine;
 
 namespace Templates.UI
 {
-    public class CurrencyViewer : MonoBehaviour
+    public class CurrencyViewer : Singleton<CurrencyViewer>
     {
-        [SerializeField] private TextMeshProUGUI coinsText;
-
+        [SerializeField] private TextMeshProUGUI _coinsText;
+        [SerializeField] private Transform _coinImage;
+        public Transform CoinImage => _coinImage;
+        
         private void Start()
         {
             PlayerWallet.Instance.OnCurrencyChanged += UpdateCoinsTextInstantly;
@@ -16,7 +18,7 @@ namespace Templates.UI
         public void UpdateCoinsTextInstantly()
         {
             string currentCoins = PlayerWallet.Instance.GetCurrencyCurrentValue(CurrencyType.Coin.ToString()).ToString();
-            coinsText.SetText(currentCoins);
+            _coinsText.SetText(currentCoins);
         }
     }
 }

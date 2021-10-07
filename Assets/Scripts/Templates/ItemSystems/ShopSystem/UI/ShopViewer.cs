@@ -21,6 +21,7 @@ namespace Templates.ItemSystems.ShopSystem.UI
 
             foreach (var tab in tabs)
             {
+                tab.Initialize();
                 tab.OpenTabButton.OnClickedOpenTab += SwitchTabs;
             }
 

@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 1315996892582303137}
   - component: {fileID: 5635007045492028147}
   m_Layer: 5
-  m_Name: RewardIndicator
+  m_Name: MultiplierIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -838,10 +838,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1315996894412892942}
-  - component: {fileID: 1315996894412892943}
   - component: {fileID: 5765719358604137043}
+  - component: {fileID: 1315996894412892943}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Indicatior Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,6 +869,21 @@ RectTransform:
   m_AnchoredPosition: {x: -537, y: 0}
   m_SizeDelta: {x: 20, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5765719358604137043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315996894412892941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279c820691ee88446bb60f5bca83ce6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxAngle: 180
+  _angleStep: 1
+  _angleSlider: {fileID: 1315996894412892943}
 --- !u!114 &1315996894412892943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -920,21 +935,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5765719358604137043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1315996894412892941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 279c820691ee88446bb60f5bca83ce6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxAngle: 0
-  _angleStep: 0
-  _angleSlider: {fileID: 0}
 --- !u!1 &1436888058841642108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,8 +1199,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplierIndicator: {fileID: 5635007045492028147}
+  coinsMoveFrom: {fileID: 3002730899769827886}
   coinsText: {fileID: 5310833208227115887}
   getRewardButton: {fileID: 8438106975932582569}
+  getRewardButtonCanvas: {fileID: 5849456699872431762}
   showNoThanksDelay: 1
   noThanksButton: {fileID: 2964040209093752825}
 --- !u!222 &6110513423214329944
@@ -2779,6 +2781,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7430791275542189429, guid: 6233b89b93e6ff248b9fc8568fc5742e,
+        type: 3}
+      propertyPath: waitVisual
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7430791275542189429, guid: 6233b89b93e6ff248b9fc8568fc5742e,
+        type: 3}
+      propertyPath: fadeWhileWait
+      value: 
+      objectReference: {fileID: 5849456699872431762}
     - target: {fileID: 7430791275542189429, guid: 6233b89b93e6ff248b9fc8568fc5742e,
         type: 3}
       propertyPath: disableWhileWait

@@ -11,11 +11,11 @@ namespace Templates.ItemSystems.ShopSystem.UI
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] protected List<ShopItemButton> itemButtons;
 
-        public virtual void OnEnable()
+        public virtual void Initialize()
         {
-            for (int i = 0; i < itemButtons.Count; i++)
+            foreach (ShopItemButton itemButton in itemButtons)
             {
-                itemButtons[i].OnClicked += UpdateItemButtonsSelection;
+                itemButton.OnClicked += UpdateItemButtonsSelection;
             }
         }
 
