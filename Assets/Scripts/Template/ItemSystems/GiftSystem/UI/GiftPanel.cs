@@ -22,7 +22,7 @@ namespace Template.ItemSystems.GiftSystem.UI
         {
             if (!GiftGiver.Instance.AllGiftsReceived())
             {
-                _lastLockedGift = GiftGiver.Instance.LastLockedGift();
+                _lastLockedGift = GiftGiver.Instance.NextGift();
                 _giftImage.sprite = _lastLockedGift.Icon;
                 _giftShadowImage.sprite = _lastLockedGift.Icon;
 
@@ -40,7 +40,7 @@ namespace Template.ItemSystems.GiftSystem.UI
         
             DelayHandler.Instance.DelayedCallCoroutine(0.1f, delegate
             {
-                _nextGiftProgress.UpdateProgress();
+                _nextGiftProgress.IncreaseVisualProgress();
             });
         }
 
@@ -69,8 +69,8 @@ namespace Template.ItemSystems.GiftSystem.UI
 
         private void BoostProgress()
         {
-            _lastLockedGift.DecreaseReceiveLevel();
-            _nextGiftProgress.UpdateProgress();
+            _lastLockedGift.IncreaseReceiveLevelOffset();
+            _nextGiftProgress.UpdateVisualProgress();
         
             if (_lastLockedGift.WillBeReceivedOnNextLevel() && _lastLockedGift.UnlockType == UnlockType.UnlockToShop)
             {

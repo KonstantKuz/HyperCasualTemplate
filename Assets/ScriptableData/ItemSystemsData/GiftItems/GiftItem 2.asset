@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: GiftItem 2
   m_EditorClassIdentifier: 
   InventoryData: {fileID: 11400000, guid: 6978a1812addecf40bb4eb6992ba6773, type: 2}
-  ConditionToReceive: 0
-  ValueToReceive: 5
+  ReceiveLevel: 10
   UnlockType: 0

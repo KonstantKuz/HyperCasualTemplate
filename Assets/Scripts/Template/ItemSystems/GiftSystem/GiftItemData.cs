@@ -3,12 +3,6 @@ using UnityEngine;
 
 namespace Template.ItemSystems.GiftSystem
 {
-    public enum ConditionToReceive
-    {
-        LevelReached,
-        //CustomProgressReached,
-    }
-
     public enum UnlockType
     {
         UnlockToShop,
@@ -19,8 +13,7 @@ namespace Template.ItemSystems.GiftSystem
     public class GiftItemData : ScriptableObject
     {
         public InventoryItemData InventoryData;
-        public ConditionToReceive ConditionToReceive;
-        public int ValueToReceive;
+        public int ReceiveLevel;
         public UnlockType UnlockType;
     }
 }

@@ -40,15 +40,16 @@ namespace Template.ItemSystems.GiftSystem
 
         private void Awake()
         {
-            TryGiveGifts();
+            TryGiveLastLockedGift();
         }
 
-        private void TryGiveGifts()
+        private void TryGiveLastLockedGift()
         {
-            foreach (GiftItem gift in Gifts.Where(gift => gift.IsReadyToReceive()))
+            GiftItem nextGift = NextGift();
+            if (nextGift.IsReceiveLevelReached())
             {
-                gift.Receive();
-                _lastReceivedGiftName.Value = gift.Name;
+                nextGift.Receive();
+                _lastReceivedGiftName.Value = nextGift.Name;
             }
         }
         
@@ -62,21 +63,9 @@ namespace Template.ItemSystems.GiftSystem
             return _lastReceivedGiftName.Value == "" ? null : GetItem(_lastReceivedGiftName.Value);
         }
 
-        public GiftItem LastLockedGift()
+        public GiftItem NextGift()
         {
             return Gifts.First(gift => !gift.IsReceived);
-        }
-
-        public int LevelsCountToReceiveLastLockedGift()
-        {
-            return LastReceivedGift() == null ? LastLockedGift().ReceiveLevel() - 1: 
-                LastLockedGift().ReceiveLevel() - LastReceivedGift().ReceiveLevel();
-        }
-
-        public int LevelsReachedToReceiveLastLockedGift()
-        {
-            return LastReceivedGift() == null ? LevelManager.Instance.CurrentDisplayLevelNumber - 1 : 
-                LevelManager.Instance.CurrentDisplayLevelNumber - LastReceivedGift().ReceiveLevel();
         }
 
         public bool AllGiftsReceived()

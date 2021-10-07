@@ -10,25 +10,24 @@ namespace Template.ItemSystems.GiftSystem
     public class GiftItem
     {
         private GiftItemData _giftData;
-        private PlayerPrefsProperty<int> _receiveLevel;
+        private PlayerPrefsProperty<int> _receiveLevelOffset;
         private PlayerPrefsProperty<bool> _isReceived;
 
         public GiftItem(GiftItemData giftData)
         {
             _giftData = giftData;
-            _receiveLevel = new PlayerPrefsProperty<int>($"{Name}ReceiveLevel", _giftData.ValueToReceive);
+            _receiveLevelOffset = new PlayerPrefsProperty<int>($"{Name}ReceiveLevel", 0);
             _isReceived = new PlayerPrefsProperty<bool>($"{Name}IsReceived", false);
         }
 
         public string Name => _giftData.InventoryData.Name;
         public Sprite Icon => _giftData.InventoryData.Icon;
-        public ConditionToReceive ConditionToReceive => _giftData.ConditionToReceive;
         public UnlockType UnlockType => _giftData.UnlockType;
-
+        public int DefaultReceiveLevel => _giftData.ReceiveLevel;
         public bool IsReceived => _isReceived.Value;
- 
-        public int ReceiveLevel() => _receiveLevel.Value;
-        public void DecreaseReceiveLevel() => _receiveLevel.Value--;
+        public int ReceiveLevelOffset => _receiveLevelOffset.Value;
+        public void IncreaseReceiveLevelOffset() => _receiveLevelOffset.Value++;
+        public int ActualReceiveLevel => DefaultReceiveLevel - ReceiveLevelOffset;
         
         public void Receive()
         {
@@ -45,21 +44,14 @@ namespace Template.ItemSystems.GiftSystem
             }
         }
         
-        public bool IsReadyToReceive()
+        public bool IsReceiveLevelReached()
         {
-            switch (ConditionToReceive)
-            {
-                case ConditionToReceive.LevelReached:
-                    return IsLevelReached();
-            }
-            
-            throw new Exception($"ConditionToReceive type mismatch in {_giftData.name} gift item data.");
+            return LevelManager.Instance.CurrentDisplayLevelNumber >= ActualReceiveLevel;
         }
 
         public bool WillBeReceivedOnNextLevel()
         {
-            return LevelManager.Instance.CurrentDisplayLevelNumber + 1 >= ReceiveLevel();
+            return LevelManager.Instance.CurrentDisplayLevelNumber + 1 >= ActualReceiveLevel;
         }
-        private bool IsLevelReached() => LevelManager.Instance.CurrentDisplayLevelNumber >= ReceiveLevel();
     }
 }
