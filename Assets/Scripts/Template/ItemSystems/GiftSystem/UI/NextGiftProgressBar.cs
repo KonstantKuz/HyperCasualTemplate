@@ -13,17 +13,12 @@ namespace Template.ItemSystems.GiftSystem.UI
         private InitialData<NextGiftProgressBar> _initialData;
         private UpdateData<NextGiftProgressBar> _updateData;
 
-        private GiftItem _nextGift;
         private float _lastProgress;
+        private float _currentProgress;
 
-        public void Initialize()
+        public void Initialize(float giftReceiveProgress)
         {
-            _nextGift = GiftGiver.Instance.NextGift();
-            
-            float receiveProgress = _nextGift.ReceiveProgress;
-            float progressToReceive = _nextGift.ProgressToReceive;
-
-            _lastProgress = receiveProgress / progressToReceive;
+            _lastProgress = giftReceiveProgress / 100;
             
             progressText.SetText($"{_lastProgress * 100}%");
 
@@ -34,21 +29,18 @@ namespace Template.ItemSystems.GiftSystem.UI
             Initialize(_initialData);
         }
 
-        public void UpdateVisualProgress()
+        public void UpdateVisualProgress(float giftReceiveProgress)
         {
-            float receiveProgress = _nextGift.ReceiveProgress;
-            float progressToReceive = _nextGift.ProgressToReceive;
-
-            float currentProgress = receiveProgress / progressToReceive;
-            currentProgress = Mathf.Clamp(currentProgress, 0, 1);
+            _currentProgress = giftReceiveProgress / 100;
+            _currentProgress = Mathf.Clamp(_currentProgress, 0, 1);
          
-            AnimateProgressText(currentProgress);
+            AnimateProgressText();
 
-            _updateData.CurrentValue = currentProgress;
+            _updateData.CurrentValue = _currentProgress;
             UpdateCurrentProgress(_updateData);
         }
         
-        private void AnimateProgressText(float currentProgress)
+        private void AnimateProgressText()
         {
             StartCoroutine(AnimateStats());
             IEnumerator AnimateStats()
@@ -58,11 +50,11 @@ namespace Template.ItemSystems.GiftSystem.UI
                 while (timer < animationTime)
                 {
                     timer += Time.fixedDeltaTime;
-                    progressText.SetText($"{(int)Mathf.Lerp(_lastProgress * 100, currentProgress * 100, timer/animationTime)}%");
+                    progressText.SetText($"{(int)Mathf.Lerp(_lastProgress * 100, _currentProgress * 100, timer/animationTime)}%");
                     yield return new WaitForFixedUpdate();
                 }
 
-                _lastProgress = currentProgress;
+                _lastProgress = _currentProgress;
             }
         }
     }

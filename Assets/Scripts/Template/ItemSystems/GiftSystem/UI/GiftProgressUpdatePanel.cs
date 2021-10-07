@@ -37,7 +37,7 @@ namespace Template.ItemSystems.GiftSystem.UI
             _giftImage.sprite = _nextGift.Icon;
             _giftShadowImage.sprite = _nextGift.Icon;
 
-            _nextGiftProgress.Initialize();
+            _nextGiftProgress.Initialize(_nextGift.ReceiveProgress);
         }
 
         public void ShowPanel()
@@ -51,7 +51,7 @@ namespace Template.ItemSystems.GiftSystem.UI
             }
             
             _giftGiver.IncreaseNextGiftProgress();
-            _nextGiftProgress.UpdateVisualProgress();
+            _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
 
             switch (CurrentGiftStatus())
             {
@@ -80,7 +80,7 @@ namespace Template.ItemSystems.GiftSystem.UI
         private void BoostProgress()
         {
             _giftGiver.BoostNextGiftProgress();
-            _nextGiftProgress.UpdateVisualProgress();
+            _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
         
             if (CurrentGiftStatus() == GiftStatus.UnlockedToShopForOneVideo)
             {
@@ -120,14 +120,10 @@ namespace Template.ItemSystems.GiftSystem.UI
             {
                 return GiftStatus.UnlockedToUse;
             }
-            else if(_nextGift.IsReceived && _nextGift.UnlockType == UnlockType.UnlockToShop)
+            else if (_nextGift.IsReceived && _nextGift.UnlockType == UnlockType.UnlockToShop)
             {
-                return GiftStatus.UnlockedToShop;
-            }
-            else if (_nextGift.IsReceived && _nextGift.UnlockType == UnlockType.UnlockToShop && 
-                     Shop.Instance.GetItem(_nextGift.Name).IsPriceEqualsOneVideo)
-            {
-                return GiftStatus.UnlockedToShopForOneVideo;
+                return Shop.Instance.GetItem(_nextGift.Name).IsPriceEqualsOneVideo ? 
+                    GiftStatus.UnlockedToShopForOneVideo : GiftStatus.UnlockedToShop;
             }
             else if (!_nextGift.IsReceived && _nextGift.CanBeBoosted)
             {

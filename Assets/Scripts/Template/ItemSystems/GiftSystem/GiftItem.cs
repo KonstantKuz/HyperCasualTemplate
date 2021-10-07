@@ -23,7 +23,6 @@ namespace Template.ItemSystems.GiftSystem
         public string Name => _giftData.InventoryData.Name;
         public Sprite Icon => _giftData.InventoryData.Icon;
         public UnlockType UnlockType => _giftData.UnlockType;
-        public int ProgressToReceive => _giftData.ProgressToReceive;
         public int RegularIncreaseValue => _giftData.RegularIncreaseValue;
         public bool CanBeBoosted => _giftData.CanBeBoosted;
         public int BoostIncreaseValue => _giftData.BoostIncreaseValue;
@@ -49,7 +48,7 @@ namespace Template.ItemSystems.GiftSystem
         
         public bool IsReceiveProgressReached()
         {
-            return ReceiveProgress >= ProgressToReceive;
+            return ReceiveProgress >= 100;
         }
     }
 }

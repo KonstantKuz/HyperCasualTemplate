@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InventoryData: {fileID: 11400000, guid: 4b5b3bd7a60840241b5e278ac77f9a58, type: 2}
   UnlockType: 0
-  ProgressToReceive: 2
-  RegularIncreaseValue: 1
+  RegularIncreaseValue: 50
   CanBeBoosted: 0
   BoostIncreaseValue: 0

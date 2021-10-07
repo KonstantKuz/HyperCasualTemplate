@@ -15,7 +15,6 @@ namespace Template.ItemSystems.GiftSystem
         public InventoryItemData InventoryData;
         public UnlockType UnlockType;
 
-        public int ProgressToReceive;
         public int RegularIncreaseValue;
         public bool CanBeBoosted;
         public int BoostIncreaseValue;
