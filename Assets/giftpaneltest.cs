@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Template.ItemSystems.GiftSystem.UI;
+using Templates.ItemSystems.GiftSystem.UI;
 using UnityEngine;
 
 public class giftpaneltest : MonoBehaviour

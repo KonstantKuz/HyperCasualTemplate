@@ -1,8 +1,0 @@
-
-namespace Template.Constants
-{
-    public class Layers
-    {
-        public const int Ground = 3;
-    }
-}
