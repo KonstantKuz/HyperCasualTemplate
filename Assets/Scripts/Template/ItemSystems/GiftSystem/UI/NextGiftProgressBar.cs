@@ -14,30 +14,16 @@ namespace Template.ItemSystems.GiftSystem.UI
         private UpdateData<NextGiftProgressBar> _updateData;
 
         private GiftItem _nextGift;
-        private int _currentLevelNumber;
-
-        private PlayerPrefsProperty<string> _nextGiftName = new PlayerPrefsProperty<string>("NextGiftName", "");
-        private PlayerPrefsProperty<int> _nextGiftLevelsCountToReceive = new PlayerPrefsProperty<int>("NextGiftLevelsCountToReceive", 0);
-        private PlayerPrefsProperty<int> _nextGiftProgressStartLevel= new PlayerPrefsProperty<int>("NextGiftProgressStartLevel", 0);
-        
         private float _lastProgress;
 
         public void Initialize()
         {
             _nextGift = GiftGiver.Instance.NextGift();
-            _currentLevelNumber = LevelManager.Instance.CurrentDisplayLevelNumber;
             
-            if (_nextGiftName.Value != _nextGift.Name)
-            {
-                _nextGiftName.Value = _nextGift.Name;
-                _nextGiftLevelsCountToReceive.Value = _nextGift.DefaultReceiveLevel - _currentLevelNumber;
-                _nextGiftProgressStartLevel.Value = _currentLevelNumber;
-            }
-            
-            float levelsCountToReceive = _nextGiftLevelsCountToReceive.Value;
-            float levelsCountReached = _currentLevelNumber + _nextGift.ReceiveLevelOffset - _nextGiftProgressStartLevel.Value;
+            float receiveProgress = _nextGift.ReceiveProgress;
+            float progressToReceive = _nextGift.ProgressToReceive;
 
-            _lastProgress = Mathf.Abs(levelsCountReached) / levelsCountToReceive;
+            _lastProgress = receiveProgress / progressToReceive;
             
             progressText.SetText($"{_lastProgress * 100}%");
 
@@ -48,19 +34,12 @@ namespace Template.ItemSystems.GiftSystem.UI
             Initialize(_initialData);
         }
 
-        public void IncreaseVisualProgress()
-        {
-            _currentLevelNumber++;
-            UpdateVisualProgress();
-        }
-        
         public void UpdateVisualProgress()
         {
-            float levelsCountToReceive = _nextGiftLevelsCountToReceive.Value;
-            float levelsCountReached = _currentLevelNumber + _nextGift.ReceiveLevelOffset - _nextGiftProgressStartLevel.Value;
-            
-            float currentProgress = Mathf.Abs(levelsCountReached) / levelsCountToReceive;
-            
+            float receiveProgress = _nextGift.ReceiveProgress;
+            float progressToReceive = _nextGift.ProgressToReceive;
+
+            float currentProgress = receiveProgress / progressToReceive;
             currentProgress = Mathf.Clamp(currentProgress, 0, 1);
          
             AnimateProgressText(currentProgress);
@@ -68,7 +47,7 @@ namespace Template.ItemSystems.GiftSystem.UI
             _updateData.CurrentValue = currentProgress;
             UpdateCurrentProgress(_updateData);
         }
-    
+        
         private void AnimateProgressText(float currentProgress)
         {
             StartCoroutine(AnimateStats());
@@ -82,6 +61,8 @@ namespace Template.ItemSystems.GiftSystem.UI
                     progressText.SetText($"{(int)Mathf.Lerp(_lastProgress * 100, currentProgress * 100, timer/animationTime)}%");
                     yield return new WaitForFixedUpdate();
                 }
+
+                _lastProgress = currentProgress;
             }
         }
     }

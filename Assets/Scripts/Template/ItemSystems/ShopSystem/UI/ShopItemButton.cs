@@ -34,8 +34,8 @@ namespace Template.ItemSystems.ShopSystem.UI
         private ShopItem _shopItem;
         private InventoryItem _inventoryItem;
 
-        public bool IsUnlockedToShop => _shopItem.IsUnlockedToShop();
-        public bool IsUnlockedToUse => _inventoryItem.IsUnlockedToUse();
+        public bool IsUnlockedToShop => _shopItem.IsUnlockedToShop;
+        public bool IsUnlockedToUse => _inventoryItem.IsUnlockedToUse;
         
         private void Awake()
         {
@@ -59,28 +59,28 @@ namespace Template.ItemSystems.ShopSystem.UI
         {
             if (updateEquipStatus)
             {
-                SetEquipped(_inventoryItem.IsEquipped());
+                SetEquipped(_inventoryItem.IsEquipped);
             }
         
-            if (!_shopItem.IsUnlockedToShopByDefault() && !_inventoryItem.IsUnlockedToUseByDefault())
+            if (!_shopItem.IsUnlockedToShopByDefault && !_inventoryItem.IsUnlockedToUseByDefault)
             {
-                SetViewedInShop(_shopItem.IsFreshInShop());
+                SetViewedInShop(_shopItem.IsFreshInShop);
             }
 
             UpdateItemAvailableStatus();
         }
-    
-        public void UpdateItemAvailableStatus()
+
+        private void UpdateItemAvailableStatus()
         {
-            if (_inventoryItem.IsUnlockedToUse())
+            if (_inventoryItem.IsUnlockedToUse)
             {
                 SetAvailableStatus(AvailableStatus.AvailableToUse);
             }
-            else if (_shopItem.IsUnlockedToShop() && !_inventoryItem.IsUnlockedToUse())
+            else if (_shopItem.IsUnlockedToShop && !_inventoryItem.IsUnlockedToUse)
             {
                 SetAvailableStatus(AvailableStatus.AvailableToShopForCurrency);
             }
-            else if (!_shopItem.IsUnlockedToShop())
+            else if (!_shopItem.IsUnlockedToShop)
             {
                 SetAvailableStatus(AvailableStatus.Locked);
             }
@@ -97,24 +97,9 @@ namespace Template.ItemSystems.ShopSystem.UI
             _priceAmountText.SetText($"{_shopItem.PriceAmount}");
             _currencyImage.sprite = Shop.Instance.GetCurrencySprite(_shopItem.CurrencyType);
             
-            HandleVideoPrice();
+            _priceAmountText.gameObject.SetActive(!_shopItem.IsPriceEqualsOneVideo);
         }
 
-        private void HandleVideoPrice()
-        {
-            bool priceIsOneVideo = _shopItem.PriceAmount == 1;
-            _priceAmountText.gameObject.SetActive(!priceIsOneVideo);
-
-            // if (priceIsOneVideo)
-            // {
-            //     return;
-            // }
-            
-            // int leftVideoCount = _shopItem.PriceAmount -
-            //                      PlayerWallet.Instance.GetCurrencyCurrentValue(_shopItem.Name + CurrencyType.Video);
-            // _priceAmountText.SetText(leftVideoCount.ToString());
-        }
-    
         public void SetViewedInShop(bool value)
         {
             isNewItemImage.gameObject.SetActive(value);

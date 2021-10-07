@@ -479,7 +479,7 @@ GameObject:
   - component: {fileID: 654875419307940133}
   - component: {fileID: 272087219659246892}
   m_Layer: 5
-  m_Name: GiftPanel
+  m_Name: GiftProgressUpdatePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

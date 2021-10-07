@@ -7,7 +7,7 @@ namespace Template.ItemSystems.InventorySystem
     public class InventoryItem
     {
         private InventoryItemData _itemData;
-        private PlayerPrefsProperty<bool> _unlockedToUseStatus;
+        private PlayerPrefsProperty<bool> _isUnlockedToUse;
         private PlayerPrefsProperty<bool> _equipStatus;
 
         private EquippedItemData _equippedItemData;
@@ -17,7 +17,7 @@ namespace Template.ItemSystems.InventorySystem
         public InventoryItem(string groupName, InventoryItemData itemData, Action<EquippedItemData> onEquipped)
         {
             _itemData = itemData;
-            _unlockedToUseStatus = new PlayerPrefsProperty<bool>($"{Name}IsAvailableToUse", false);
+            _isUnlockedToUse = new PlayerPrefsProperty<bool>($"{Name}IsUnlockedToUse", false);
             _equipStatus = new PlayerPrefsProperty<bool>($"{Name}IsEquipped", false);
             _equippedItemData = new EquippedItemData(groupName, Name);
             _onEquipped = onEquipped;
@@ -26,9 +26,9 @@ namespace Template.ItemSystems.InventorySystem
         public string Name => _itemData.Name;
         public Sprite Icon => _itemData.Icon;
     
-        public void UnlockToUse() => _unlockedToUseStatus.Value = true;
-        public bool IsUnlockedToUse() => IsUnlockedToUseByDefault() || _unlockedToUseStatus.Value;
-        public bool IsUnlockedToUseByDefault() => _itemData.UnlockedToUseByDefault;
+        public void UnlockToUse() => _isUnlockedToUse.Value = true;
+        public bool IsUnlockedToUse => IsUnlockedToUseByDefault || _isUnlockedToUse.Value;
+        public bool IsUnlockedToUseByDefault => _itemData.UnlockedToUseByDefault;
 
         public void SetAsEquipped()
         {
@@ -36,6 +36,6 @@ namespace Template.ItemSystems.InventorySystem
             _onEquipped.Invoke(_equippedItemData);
         }
         public void ResetEquipStatus() => _equipStatus.Value = false;
-        public bool IsEquipped() => _equipStatus.Value;
+        public bool IsEquipped => _equipStatus.Value;
     }
 }

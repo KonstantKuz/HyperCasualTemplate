@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b5b9a882a2be645aa7eca65d3cd903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _giftPanel: {fileID: 6551621092729619821}
+  giftProgressUpdatePanel: {fileID: 6551621092729619821}
 --- !u!1 &5386162829068967871
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +811,7 @@ PrefabInstance:
     - target: {fileID: 6252443964988304867, guid: 7f38028023028fa4da1cea76d848a4ad,
         type: 3}
       propertyPath: m_Name
-      value: GiftPanel
+      value: GiftProgressUpdatePanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f38028023028fa4da1cea76d848a4ad, type: 3}

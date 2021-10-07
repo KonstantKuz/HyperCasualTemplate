@@ -59,7 +59,7 @@ namespace Template.ItemSystems.InventorySystem
         public bool IsAllItemsUnlockedToUse(string groupName)
         {
             InventoryItemsGroup group = GetItemsGroup(groupName);
-            return group.Items.All(inventoryData => ItemsDictionary[inventoryData.Name].IsUnlockedToUse());
+            return group.Items.All(inventoryData => ItemsDictionary[inventoryData.Name].IsUnlockedToUse);
         }
     }
 }

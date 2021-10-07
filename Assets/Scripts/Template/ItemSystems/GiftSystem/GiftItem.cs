@@ -10,25 +10,28 @@ namespace Template.ItemSystems.GiftSystem
     public class GiftItem
     {
         private GiftItemData _giftData;
-        private PlayerPrefsProperty<int> _receiveLevelOffset;
+        private PlayerPrefsProperty<int> _receiveProgress;
         private PlayerPrefsProperty<bool> _isReceived;
 
         public GiftItem(GiftItemData giftData)
         {
             _giftData = giftData;
-            _receiveLevelOffset = new PlayerPrefsProperty<int>($"{Name}ReceiveLevel", 0);
+            _receiveProgress = new PlayerPrefsProperty<int>($"{Name}ReceiveProgress", 0);
             _isReceived = new PlayerPrefsProperty<bool>($"{Name}IsReceived", false);
         }
 
         public string Name => _giftData.InventoryData.Name;
         public Sprite Icon => _giftData.InventoryData.Icon;
         public UnlockType UnlockType => _giftData.UnlockType;
-        public int DefaultReceiveLevel => _giftData.ReceiveLevel;
+        public int ProgressToReceive => _giftData.ProgressToReceive;
+        public int RegularIncreaseValue => _giftData.RegularIncreaseValue;
+        public bool CanBeBoosted => _giftData.CanBeBoosted;
+        public int BoostIncreaseValue => _giftData.BoostIncreaseValue;
+
         public bool IsReceived => _isReceived.Value;
-        public int ReceiveLevelOffset => _receiveLevelOffset.Value;
-        public void IncreaseReceiveLevelOffset() => _receiveLevelOffset.Value++;
-        public int ActualReceiveLevel => DefaultReceiveLevel - ReceiveLevelOffset;
-        
+        public int ReceiveProgress => _receiveProgress.Value;
+        public void IncreaseReceiveProgress(int value) => _receiveProgress.Value += value;
+
         public void Receive()
         {
             _isReceived.Value = true;
@@ -44,14 +47,9 @@ namespace Template.ItemSystems.GiftSystem
             }
         }
         
-        public bool IsReceiveLevelReached()
+        public bool IsReceiveProgressReached()
         {
-            return LevelManager.Instance.CurrentDisplayLevelNumber >= ActualReceiveLevel;
-        }
-
-        public bool WillBeReceivedOnNextLevel()
-        {
-            return LevelManager.Instance.CurrentDisplayLevelNumber + 1 >= ActualReceiveLevel;
+            return ReceiveProgress >= ProgressToReceive;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Template.ItemSystems.ShopSystem
         public bool IsAllItemsUnlockedToShop(string groupName)
         {
             ShopItemsGroup group = GetItemsGroup(groupName);
-            return group.Items.All(shopData => ItemsDictionary[shopData.InventoryData.Name].IsUnlockedToShop());
+            return group.Items.All(shopData => ItemsDictionary[shopData.InventoryData.Name].IsUnlockedToShop);
         }
 
         public Sprite GetCurrencySprite(CurrencyType currencyType)

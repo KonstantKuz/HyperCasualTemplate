@@ -11,8 +11,6 @@ namespace Template.ItemSystems.GiftSystem
     {
         [SerializeField] private List<GiftItemData> _items;
 
-        private PlayerPrefsProperty<string> _lastReceivedGiftName = new PlayerPrefsProperty<string>("LastReceivedGift", "");
-       
         private List<GiftItem> _gifts;
 
         private List<GiftItem> Gifts
@@ -38,29 +36,38 @@ namespace Template.ItemSystems.GiftSystem
             }
         }
 
-        private void Awake()
+        public void IncreaseNextGiftProgress()
         {
-            TryGiveLastLockedGift();
-        }
+            if (AllGiftsReceived())
+            {
+                return;
+            }
 
-        private void TryGiveLastLockedGift()
-        {
             GiftItem nextGift = NextGift();
-            if (nextGift.IsReceiveLevelReached())
+            
+            nextGift.IncreaseReceiveProgress(nextGift.RegularIncreaseValue);
+            
+            if (nextGift.IsReceiveProgressReached())
             {
                 nextGift.Receive();
-                _lastReceivedGiftName.Value = nextGift.Name;
+            }
+        }
+
+        public void BoostNextGiftProgress()
+        {
+            GiftItem nextGift = NextGift();
+            
+            nextGift.IncreaseReceiveProgress(nextGift.BoostIncreaseValue);
+            
+            if (nextGift.IsReceiveProgressReached())
+            {
+                nextGift.Receive();
             }
         }
         
         public GiftItem GetItem(string itemName)
         {
             return Gifts.First(gift => gift.Name == itemName);
-        }
-
-        public GiftItem LastReceivedGift()
-        {
-            return _lastReceivedGiftName.Value == "" ? null : GetItem(_lastReceivedGiftName.Value);
         }
 
         public GiftItem NextGift()

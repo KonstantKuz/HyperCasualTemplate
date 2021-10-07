@@ -78,7 +78,7 @@ namespace Template.ItemSystems.ShopSystem.UI
 
         private bool IsItemEquipped(string itemName)
         {
-            return Inventory.Instance.GetItem(itemName).IsEquipped();
+            return Inventory.Instance.GetItem(itemName).IsEquipped;
         }
 
         public virtual void OnItemSelected(string itemName)
@@ -190,7 +190,7 @@ namespace Template.ItemSystems.ShopSystem.UI
         public override bool HasFreshItems()
         {
             return _shopItemsGroup.Items.Any(itemData => 
-                Shop.Instance.GetItem(itemData.InventoryData.Name).IsFreshInShop());
+                Shop.Instance.GetItem(itemData.InventoryData.Name).IsFreshInShop);
         }
     }
 }

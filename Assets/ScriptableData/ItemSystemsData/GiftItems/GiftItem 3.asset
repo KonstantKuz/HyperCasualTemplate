@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 135e5268194ca2e4ca16b5e47c8afac7, type: 3}
-  m_Name: Shop_Item 4
+  m_Script: {fileID: 11500000, guid: fee4c42f95a945fab01350219f890e0e, type: 3}
+  m_Name: GiftItem 3
   m_EditorClassIdentifier: 
-  InventoryData: {fileID: 11400000, guid: 4b5b3bd7a60840241b5e278ac77f9a58, type: 2}
-  UnlockedToShopByDefault: 0
-  currencyType: 1
-  PriceAmount: 5
+  InventoryData: {fileID: 11400000, guid: 49dc352a312b6c645b99645ad9b4cce5, type: 2}
+  UnlockType: 0
+  ProgressToReceive: 5
+  RegularIncreaseValue: 1
+  CanBeBoosted: 1
+  BoostIncreaseValue: 1

@@ -13,7 +13,11 @@ namespace Template.ItemSystems.GiftSystem
     public class GiftItemData : ScriptableObject
     {
         public InventoryItemData InventoryData;
-        public int ReceiveLevel;
         public UnlockType UnlockType;
+
+        public int ProgressToReceive;
+        public int RegularIncreaseValue;
+        public bool CanBeBoosted;
+        public int BoostIncreaseValue;
     }
 }

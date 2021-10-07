@@ -6,15 +6,15 @@ namespace Template.ItemSystems.ShopSystem
     public class ShopItem
     {
         private ShopItemData _shopData;
-        private PlayerPrefsProperty<bool> _unlockedToShopStatus;
-        private PlayerPrefsProperty<bool> _freshInShopStatus;
+        private PlayerPrefsProperty<bool> _isUnlockedToShop;
+        private PlayerPrefsProperty<bool> _isFreshInShop;
         private PlayerPrefsProperty<int> _priceAmount;
         
         public ShopItem(ShopItemData shopData)
         {
             _shopData = shopData;
-            _unlockedToShopStatus = new PlayerPrefsProperty<bool>($"{Name}IsAvailableToShop", false);
-            _freshInShopStatus = new PlayerPrefsProperty<bool>($"{Name}IsFreshInShop", false);
+            _isUnlockedToShop = new PlayerPrefsProperty<bool>($"{Name}IsUnlockedToShop", false);
+            _isFreshInShop = new PlayerPrefsProperty<bool>($"{Name}IsFreshInShop", false);
             _priceAmount = new PlayerPrefsProperty<int>($"{Name}PriceAmount", _shopData.PriceAmount);
         }
 
@@ -27,14 +27,17 @@ namespace Template.ItemSystems.ShopSystem
     
         public void UnlockToShop()
         {
-            _unlockedToShopStatus.Value = true;
-            _freshInShopStatus.Value = true;
+            _isUnlockedToShop.Value = true;
+            _isFreshInShop.Value = true;
         }
         
-        public bool IsUnlockedToShop() => IsUnlockedToShopByDefault() || _unlockedToShopStatus.Value;
-        public bool IsUnlockedToShopByDefault() => _shopData.UnlockedToShopByDefault;
+        public bool IsUnlockedToShop => IsUnlockedToShopByDefault || _isUnlockedToShop.Value;
+        public bool IsUnlockedToShopByDefault => _shopData.UnlockedToShopByDefault;
 
-        public void MarkAsViewedInShop() => _freshInShopStatus.Value = false;
-        public bool IsFreshInShop() => _freshInShopStatus.Value;
+        public bool IsPriceEqualsOneVideo => CurrencyType == CurrencyType.Video && PriceAmount == 1;
+        
+
+        public void MarkAsViewedInShop() => _isFreshInShop.Value = false;
+        public bool IsFreshInShop => _isFreshInShop.Value;
     }
 }

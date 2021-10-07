@@ -34,7 +34,7 @@ namespace Template.ItemSystems.ShopSystem.UI
 
         private void UpdatePriceView(CurrencyType currencyType, int priceAmount, bool playerHasCurrency)
         {
-            bool priceIsOneVideo = priceAmount == 1;
+            bool priceIsOneVideo = currencyType == CurrencyType.Video && priceAmount == 1;
             _buyForBlock.SetActive(!priceIsOneVideo);
             _oneVideoBlock.SetActive(priceIsOneVideo);
             

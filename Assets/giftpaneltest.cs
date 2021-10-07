@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class giftpaneltest : MonoBehaviour
 {
-    [SerializeField] private GiftPanel _giftPanel;
+    [SerializeField] private GiftProgressUpdatePanel giftProgressUpdatePanel;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            _giftPanel.ShowPanel(null);
-            _giftPanel.ShowBoostOrUnlockButton();
+            giftProgressUpdatePanel.ShowPanel();
         }
     }
 }

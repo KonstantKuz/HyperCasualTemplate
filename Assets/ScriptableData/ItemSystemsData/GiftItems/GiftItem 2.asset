@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee4c42f95a945fab01350219f890e0e, type: 3}
   m_Name: GiftItem 2
   m_EditorClassIdentifier: 
-  InventoryData: {fileID: 11400000, guid: 6978a1812addecf40bb4eb6992ba6773, type: 2}
-  ReceiveLevel: 10
+  InventoryData: {fileID: 11400000, guid: 4b5b3bd7a60840241b5e278ac77f9a58, type: 2}
   UnlockType: 0
+  ProgressToReceive: 2
+  RegularIncreaseValue: 1
+  CanBeBoosted: 0
+  BoostIncreaseValue: 0

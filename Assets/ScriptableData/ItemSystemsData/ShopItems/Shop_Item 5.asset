@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shop_Item 5
   m_EditorClassIdentifier: 
   InventoryData: {fileID: 11400000, guid: 49dc352a312b6c645b99645ad9b4cce5, type: 2}
-  UnlockedToShopByDefault: 1
+  UnlockedToShopByDefault: 0
   currencyType: 1
   PriceAmount: 1
