@@ -11,8 +11,8 @@ namespace Templates
 
     public class Currency
     {
-        public string Type;
-        public PlayerPrefsProperty<int> Current;
+        public readonly string Type;
+        public readonly PlayerPrefsProperty<int> Current;
 
         public Currency(string type, int defaultAmount)
         {

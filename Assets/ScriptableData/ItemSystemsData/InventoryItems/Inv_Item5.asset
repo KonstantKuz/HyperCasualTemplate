@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 135e5268194ca2e4ca16b5e47c8afac7, type: 3}
-  m_Name: Shop_Item 1
+  m_Script: {fileID: 11500000, guid: 3dcf56f672a893a46b388ce00e008fc0, type: 3}
+  m_Name: Inv_Item5
   m_EditorClassIdentifier: 
-  InventoryData: {fileID: 11400000, guid: 2c86b90f0b42bc14388811580f715eec, type: 2}
-  UnlockedToShopByDefault: 0
-  currencyType: 0
-  PriceAmount: 0
+  Name: Item5
+  Icon: {fileID: 21300000, guid: 61abe34f08c9ba64584ac62b1c7ff271, type: 3}
+  UnlockedToUseByDefault: 0

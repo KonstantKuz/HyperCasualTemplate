@@ -16,21 +16,16 @@ namespace Templates.ItemSystems.GiftSystem
             {
                 if (_gifts == null)
                 {
-                    InitializeGifts();
+                    InitializeGiftItems();
                 }
 
                 return _gifts;
             }
         }
 
-        private void InitializeGifts()
+        private void InitializeGiftItems()
         {
-            _gifts = new List<GiftItem>();
-
-            foreach (GiftItem giftItem in _items.Select(giftData => new GiftItem(giftData)))
-            {
-                _gifts.Add(giftItem);
-            }
+            _gifts = _items.Select(giftData => new GiftItem(giftData)).ToList();
         }
 
         public void IncreaseNextGiftProgress()
@@ -40,21 +35,19 @@ namespace Templates.ItemSystems.GiftSystem
                 return;
             }
 
-            GiftItem nextGift = NextGift();
-            
-            nextGift.IncreaseReceiveProgress(nextGift.RegularIncreaseValue);
-            
-            if (nextGift.IsReceiveProgressReached())
-            {
-                nextGift.Receive();
-            }
+            NextGift().RegularIncreaseProgress();
+            TryReceiveNextGift();
         }
 
         public void BoostNextGiftProgress()
         {
+            NextGift().BoostIncreaseProgress();
+            TryReceiveNextGift();
+        }
+
+        private void TryReceiveNextGift()
+        {
             GiftItem nextGift = NextGift();
-            
-            nextGift.IncreaseReceiveProgress(nextGift.BoostIncreaseValue);
             
             if (nextGift.IsReceiveProgressReached())
             {

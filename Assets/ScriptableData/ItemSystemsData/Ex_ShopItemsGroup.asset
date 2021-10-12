@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48b05355cf914ae3a5f2b0be198a4458, type: 3}
-  m_Name: ShopItemsGroup
+  m_Name: Ex_ShopItemsGroup
   m_EditorClassIdentifier: 
-  Name: Items1
+  Name: Example_Shop_Items
   Items:
   - {fileID: 11400000, guid: 4bd7e75ba18311f46be0c1982433af7b, type: 2}
   - {fileID: 11400000, guid: 2c618c34ab595da46839e62e2161b5e1, type: 2}

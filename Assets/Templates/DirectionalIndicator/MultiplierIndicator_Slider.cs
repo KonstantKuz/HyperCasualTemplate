@@ -1,4 +1,5 @@
 ﻿using System;
+using Templates.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +10,8 @@ public class MultiplierIndicator_Slider : MonoBehaviour
     [SerializeField] private Slider _angleSlider;
     
     private bool _isActive;
-    private bool _increaseValue;
-    private int _finalMultiplier = 1;
+    private int _multiplierValue = 1;
+    private int _prevMultiplierValue;
 
     public Action<int> OnMultiplierValueChanged;
 
@@ -30,41 +31,46 @@ public class MultiplierIndicator_Slider : MonoBehaviour
         {
             return;
         }
-
-        if (_angleSlider.value >= _maxAngle)
-        {
-            _increaseValue = false;
-        }
-        if (_angleSlider.value <= -_maxAngle)
-        {
-            _increaseValue = true;
-        }
         
-        _angleSlider.value += _increaseValue ? _angleStep : -_angleStep;
+        UpdateSliderValue();
+        UpdateMultiplierValue();
+    }
 
-        CheckMultiplier();
+    private void UpdateSliderValue()
+    {
+        _angleSlider.value += _angleStep;
+        
+        if (Mathf.Abs(_angleSlider.value) >= _maxAngle)
+        {
+            _angleStep = -_angleStep;
+        }
     }
     
-    private void CheckMultiplier()
+    private void UpdateMultiplierValue()
     {
-        float val = _angleSlider.value;
-        if (val >= -50 && val <= 50)
+        float angleValue = _angleSlider.value;
+        if (angleValue.IsInRange(-50, 50))
         {
-            _finalMultiplier = 5;
+            _multiplierValue = 5;
         }
-        else if ((val >= -100 && val <= -50) || (val <= 100 && val >= 50))
+        else if (angleValue.IsInRange(-100, -50) || angleValue.IsInRange(50, 100))
         {
-            _finalMultiplier = 4;
+            _multiplierValue = 4;
         }
-        else if ((val >= -140 && val <= -100) || (val <= 140 && val >= 100))
+        else if (angleValue.IsInRange(-140, -100) || angleValue.IsInRange(100, 140))
         {
-            _finalMultiplier = 3;
+            _multiplierValue = 3;
         }
         else
         {
-            _finalMultiplier = 2;
+            _multiplierValue = 2;
         }
-        
-        OnMultiplierValueChanged?.Invoke(_finalMultiplier);
+
+        if (_multiplierValue != _prevMultiplierValue)
+        {
+            OnMultiplierValueChanged?.Invoke(_multiplierValue);
+        }
+
+        _prevMultiplierValue = _multiplierValue;
     }
 }

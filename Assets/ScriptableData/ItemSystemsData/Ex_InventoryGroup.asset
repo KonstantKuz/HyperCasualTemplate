@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a739470670f34bf9a5805fe20ef6520a, type: 3}
-  m_Name: Inventory
+  m_Name: Ex_InventoryGroup
   m_EditorClassIdentifier: 
-  Name: Items1
+  Name: Example_Inventory_Items
   Items:
   - {fileID: 11400000, guid: 2c86b90f0b42bc14388811580f715eec, type: 2}
   - {fileID: 11400000, guid: ce51d129a9853eb4eb8052dbe782e155, type: 2}

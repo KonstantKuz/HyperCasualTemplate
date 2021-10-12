@@ -32,7 +32,7 @@ namespace Templates.ItemSystems.ShopSystem
         }
         
         public bool IsUnlockedToShop => IsUnlockedToShopByDefault || _isUnlockedToShop.Value;
-        public bool IsUnlockedToShopByDefault => _shopData.UnlockedToShopByDefault;
+        public bool IsUnlockedToShopByDefault => _shopData.UnlockedToShopByDefault || _shopData.InventoryData.UnlockedToUseByDefault;
 
         public bool IsPriceEqualsOneVideo => CurrencyType == CurrencyType.Video && PriceAmount == 1;
         

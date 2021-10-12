@@ -1,4 +1,5 @@
-﻿using Templates.ItemSystems.InventorySystem;
+﻿using System;
+using Templates.ItemSystems.InventorySystem;
 using Templates.ItemSystems.ShopSystem;
 using Templates.Tools;
 using UnityEngine;
@@ -28,7 +29,9 @@ namespace Templates.ItemSystems.GiftSystem
         public bool IsReceived => _isReceived.Value;
         public int ReceiveProgress => _receiveProgress.Value;
         public void IncreaseReceiveProgress(int value) => _receiveProgress.Value += value;
-
+        public void RegularIncreaseProgress() => _receiveProgress.Value += _giftData.RegularIncreaseValue;
+        public void BoostIncreaseProgress() => _receiveProgress.Value += _giftData.BoostIncreaseValue;
+        
         public void Receive()
         {
             _isReceived.Value = true;
@@ -39,6 +42,7 @@ namespace Templates.ItemSystems.GiftSystem
                     Shop.Instance.GetItem(Name).UnlockToShop();
                     break;
                 case UnlockType.UnlockToUse:
+                    Shop.Instance.GetItem(Name).UnlockToShop();
                     Inventory.Instance.GetItem(Name).UnlockToUse();
                     break;
             }
@@ -47,6 +51,38 @@ namespace Templates.ItemSystems.GiftSystem
         public bool IsReceiveProgressReached()
         {
             return ReceiveProgress >= 100;
+        }
+        
+        public GiftStatus CurrentStatus()
+        {
+            if (IsReceived && UnlockType == UnlockType.UnlockToUse)
+            {
+                return GiftStatus.UnlockedToUse;
+            }
+            else if (IsReceived && UnlockType == UnlockType.UnlockToShop)
+            {
+                return Shop.Instance.GetItem(Name).IsPriceEqualsOneVideo ? 
+                    GiftStatus.UnlockedToShopForOneVideo : GiftStatus.UnlockedToShop;
+            }
+            else if (!IsReceived && CanBeBoosted)
+            {
+                return GiftStatus.LockedCanBeBoosted;
+            }
+            else if (!IsReceived && !CanBeBoosted)
+            {
+                return GiftStatus.LockedCanNotBeBoosted;
+            }
+            
+            throw new Exception("Not specified type.");
+        }
+        
+        public enum GiftStatus
+        {
+            UnlockedToUse,
+            UnlockedToShop,
+            UnlockedToShopForOneVideo,
+            LockedCanBeBoosted,
+            LockedCanNotBeBoosted,
         }
     }
 }

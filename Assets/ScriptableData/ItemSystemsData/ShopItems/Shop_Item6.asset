@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 135e5268194ca2e4ca16b5e47c8afac7, type: 3}
-  m_Name: Shop_Item 2
+  m_Name: Shop_Item6
   m_EditorClassIdentifier: 
-  InventoryData: {fileID: 11400000, guid: ce51d129a9853eb4eb8052dbe782e155, type: 2}
-  UnlockedToShopByDefault: 1
+  InventoryData: {fileID: 11400000, guid: 6978a1812addecf40bb4eb6992ba6773, type: 2}
+  UnlockedToShopByDefault: 0
   currencyType: 0
-  PriceAmount: 100
+  PriceAmount: 5000

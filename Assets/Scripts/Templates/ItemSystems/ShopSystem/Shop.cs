@@ -34,16 +34,8 @@ namespace Templates.ItemSystems.ShopSystem
 
         private void InitializeItemsDictionary()
         {
-            _itemsDictionary = new Dictionary<string, ShopItem>();
-        
-            foreach (ShopItemsGroup group in _itemsGroups)
-            {
-                foreach (ShopItemData shopData in group.Items)
-                {
-                    ShopItem shopItem = new ShopItem(shopData);
-                    _itemsDictionary.Add(shopData.InventoryData.Name, shopItem);
-                }
-            }
+            _itemsDictionary = _itemsGroups.SelectMany(group => group.Items).
+                ToDictionary(itemData => itemData.InventoryData.Name, itemData => new ShopItem(itemData));
         }
 
         private ShopItemsGroup GetItemsGroup(string groupName)

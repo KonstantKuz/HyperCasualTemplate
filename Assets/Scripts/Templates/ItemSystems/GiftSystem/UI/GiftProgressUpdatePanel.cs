@@ -1,10 +1,10 @@
 using System;
 using Templates.Ads;
 using Templates.ItemSystems.InventorySystem;
-using Templates.ItemSystems.ShopSystem;
 using Templates.UI;
 using UnityEngine;
 using UnityEngine.UI;
+using GiftStatus = Templates.ItemSystems.GiftSystem.GiftItem.GiftStatus;
 
 namespace Templates.ItemSystems.GiftSystem.UI
 {
@@ -57,7 +57,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
             _giftGiver.IncreaseNextGiftProgress();
             _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
 
-            switch (CurrentGiftStatus())
+            switch (_nextGift.CurrentStatus())
             {
                 case GiftStatus.UnlockedToShopForOneVideo:
                     _unlockPanel.ShowPanel(TryUnlockItemToUse, Close);
@@ -86,7 +86,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
             _giftGiver.BoostNextGiftProgress();
             _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
         
-            if (CurrentGiftStatus() == GiftStatus.UnlockedToShopForOneVideo)
+            if (_nextGift.CurrentStatus() == GiftStatus.UnlockedToShopForOneVideo)
             {
                 _unlockPanel.ShowPanel(TryUnlockItemToUse, Close);
             }
@@ -117,38 +117,6 @@ namespace Templates.ItemSystems.GiftSystem.UI
         {
             _panelContainer.SetActive(false);
             _onPanelClosed?.Invoke();
-        }
-
-        private GiftStatus CurrentGiftStatus()
-        {
-            if (_nextGift.IsReceived && _nextGift.UnlockType == UnlockType.UnlockToUse)
-            {
-                return GiftStatus.UnlockedToUse;
-            }
-            else if (_nextGift.IsReceived && _nextGift.UnlockType == UnlockType.UnlockToShop)
-            {
-                return Shop.Instance.GetItem(_nextGift.Name).IsPriceEqualsOneVideo ? 
-                    GiftStatus.UnlockedToShopForOneVideo : GiftStatus.UnlockedToShop;
-            }
-            else if (!_nextGift.IsReceived && _nextGift.CanBeBoosted)
-            {
-                return GiftStatus.LockedCanBeBoosted;
-            }
-            else if (!_nextGift.IsReceived && !_nextGift.CanBeBoosted)
-            {
-                return GiftStatus.LockedCanNotBeBoosted;
-            }
-            
-            throw new Exception("Not specified type.");
-        }
-        
-        private enum GiftStatus
-        {
-            UnlockedToUse,
-            UnlockedToShop,
-            UnlockedToShopForOneVideo,
-            LockedCanBeBoosted,
-            LockedCanNotBeBoosted,
         }
     }
 }

@@ -28,6 +28,9 @@ namespace Templates.ItemSystems.ShopSystem.UI
             UpdateNewItemsIndication();
             PlayerWallet.Instance.OnCurrencyChanged += UpdateTabsItemsStatuses;
             PlayerWallet.Instance.OnCurrencyChanged += UpdateNewItemsIndication;
+
+            Observer.Instance.OnWinLevel += Hide;
+            Observer.Instance.OnLoseLevel += Hide;
         }
 
         private void OpenShop()
@@ -45,6 +48,11 @@ namespace Templates.ItemSystems.ShopSystem.UI
             tabs.ForEach(tab => tab.OnShopClosed());
         
             UpdateNewItemsIndication();
+        }
+
+        private void Hide()
+        {
+            gameObject.SetActive(false);
         }
 
         public void SwitchTabs(ShopTab clickedTab)
