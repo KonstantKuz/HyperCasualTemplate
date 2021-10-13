@@ -15,8 +15,8 @@ namespace Templates.ItemSystems.GiftSystem
         public InventoryItemData InventoryData;
         public UnlockType UnlockType;
 
-        public int RegularIncreaseValue;
+        public int IncreaseValue;
         public bool CanBeBoosted;
-        public int BoostIncreaseValue;
+        public int BoostValue;
     }
 }

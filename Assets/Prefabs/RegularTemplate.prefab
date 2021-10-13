@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 8459947391863828906}
   - component: {fileID: 5214695603951299911}
   m_Layer: 0
-  m_Name: GiftGiver
+  m_Name: GiftQueue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47372c43ef394434db94d8fadce05973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _items:
+  _receivingQueue:
   - {fileID: 11400000, guid: b8ca0be96220f844f85f2d157f3e7c62, type: 2}
   - {fileID: 11400000, guid: 80a629a0ce24a2347886cbeddeab5967, type: 2}
   - {fileID: 11400000, guid: 92ca197932e6f614a8e2b5340a260ca6, type: 2}

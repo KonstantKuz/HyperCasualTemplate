@@ -4,12 +4,9 @@ using UnityEngine;
 
 namespace Templates.ItemSystems.GiftSystem.UI
 {
-    public class NextGiftProgressBar : SceneLineProgressBar<NextGiftProgressBar>
+    public class NextGiftProgressBar : GOLineProgressBar
     {
         [SerializeField] private TextMeshProUGUI progressText;
-
-        private InitialData<NextGiftProgressBar> _initialData;
-        private UpdateData<NextGiftProgressBar> _updateData;
 
         private float _lastProgress;
         private float _currentProgress;
@@ -20,22 +17,15 @@ namespace Templates.ItemSystems.GiftSystem.UI
             
             progressText.SetText($"{_lastProgress * 100}%");
 
-            _initialData.MinValue = 0;
-            _initialData.MaxValue = 1;
-            _initialData.CurrentValue = _lastProgress;
-        
-            Initialize(_initialData);
+            Initialize(0, 1, _lastProgress);
         }
 
         public void UpdateVisualProgress(float giftReceiveProgress)
         {
-            _currentProgress = giftReceiveProgress / 100;
-            _currentProgress = Mathf.Clamp(_currentProgress, 0, 1);
-         
+            _currentProgress = Mathf.Clamp(giftReceiveProgress / 100, 0, 1);
+            UpdateCurrentProgress(_currentProgress);
+     
             AnimateProgressText();
-
-            _updateData.CurrentValue = _currentProgress;
-            UpdateCurrentProgress(_updateData);
         }
         
         private void AnimateProgressText()

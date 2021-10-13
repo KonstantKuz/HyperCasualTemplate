@@ -22,18 +22,38 @@ namespace Templates.ItemSystems.GiftSystem
         public string Name => _giftData.InventoryData.Name;
         public Sprite Icon => _giftData.InventoryData.Icon;
         public UnlockType UnlockType => _giftData.UnlockType;
-        public int RegularIncreaseValue => _giftData.RegularIncreaseValue;
+        public int IncreaseValue => _giftData.IncreaseValue;
         public bool CanBeBoosted => _giftData.CanBeBoosted;
-        public int BoostIncreaseValue => _giftData.BoostIncreaseValue;
+        public int BoostValue => _giftData.BoostValue;
 
-        public bool IsReceived => _isReceived.Value;
         public int ReceiveProgress => _receiveProgress.Value;
-        public void IncreaseReceiveProgress(int value) => _receiveProgress.Value += value;
-        public void RegularIncreaseProgress() => _receiveProgress.Value += _giftData.RegularIncreaseValue;
-        public void BoostIncreaseProgress() => _receiveProgress.Value += _giftData.BoostIncreaseValue;
+        public bool IsReceived => _isReceived.Value;
         
-        public void Receive()
+        public void IncreaseProgress(int value)
         {
+            _receiveProgress.Value += value;
+            TryReceive();
+        }
+        
+        public void IncreaseProgress()
+        {
+            _receiveProgress.Value += _giftData.IncreaseValue;
+            TryReceive();
+        }
+        
+        public void BoostProgress()
+        {
+            _receiveProgress.Value += _giftData.BoostValue;
+            TryReceive();
+        }
+        
+        private void TryReceive()
+        {
+            if (!IsReceiveProgressReached())
+            {
+                return;
+            }
+            
             _isReceived.Value = true;
             
             switch (UnlockType)
@@ -47,8 +67,8 @@ namespace Templates.ItemSystems.GiftSystem
                     break;
             }
         }
-        
-        public bool IsReceiveProgressReached()
+
+        private bool IsReceiveProgressReached()
         {
             return ReceiveProgress >= 100;
         }

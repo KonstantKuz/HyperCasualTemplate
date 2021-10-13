@@ -19,7 +19,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
 
         private Action _onPanelClosed;
 
-        private GiftGiver _giftGiver;
+        private GiftQueue _giftQueue;
         private GiftItem _nextGift;
 
         private const float ShowProgressDelay = 2f;
@@ -28,14 +28,14 @@ namespace Templates.ItemSystems.GiftSystem.UI
         {
             _panelContainer.SetActive(false);
 
-            _giftGiver = GiftGiver.Instance;
+            _giftQueue = GiftQueue.Instance;
             
-            if (_giftGiver.AllGiftsReceived())
+            if (_giftQueue.AllGiftsReceived())
             {
                 return;
             }
             
-            _nextGift = _giftGiver.NextGift();
+            _nextGift = _giftQueue.NextGift();
             _giftImage.sprite = _nextGift.Icon;
             _giftShadowImage.sprite = _nextGift.Icon;
 
@@ -48,13 +48,13 @@ namespace Templates.ItemSystems.GiftSystem.UI
             
             _panelContainer.SetActive(true);
             
-            if (_giftGiver.AllGiftsReceived())
+            if (_giftQueue.AllGiftsReceived())
             {
                 Close();
                 return;
             }
             
-            _giftGiver.IncreaseNextGiftProgress();
+            _nextGift.IncreaseProgress();
             _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
 
             switch (_nextGift.CurrentStatus())
@@ -83,7 +83,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
 
         private void BoostProgress()
         {
-            _giftGiver.BoostNextGiftProgress();
+            _nextGift.BoostProgress();
             _nextGiftProgress.UpdateVisualProgress(_nextGift.ReceiveProgress);
         
             if (_nextGift.CurrentStatus() == GiftStatus.UnlockedToShopForOneVideo)
