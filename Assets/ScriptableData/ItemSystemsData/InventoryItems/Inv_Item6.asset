@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dcf56f672a893a46b388ce00e008fc0, type: 3}
+  m_Name: Inv_Item6
+  m_EditorClassIdentifier: 
+  Name: Item6
+  Icon: {fileID: 21300000, guid: 36144856fb5d5b3469cb3cbe4c3325e5, type: 3}
+  UnlockedToUseByDefault: 0
