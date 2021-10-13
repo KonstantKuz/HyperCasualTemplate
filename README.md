@@ -13,7 +13,7 @@
 В Template Scene -> RegularTemplate висят обязательные Observer и LevelManager. RegularTemplate должен быть в каждой сцене. Так же в префаб RegularTemplate отправляются все компоненты и объекты необходимые в каждой сцене-уровне.  
 Observer является связующим компонентом между игровыми сущностями и\или интерфейсом со списком всех событий в игре.  
 
-- Основа Observer :  
+- # Observer :  
 IsGameLaunched - флаг, который возвращает true с момента вызова OnGameStarted и до момента вызова OnWinLevel\OnLoseLevel.  
 OnGameStarted - событие, срабатывает по нажатию кнопки-туториала (описано ниже).  
 OnWinLevel - событие, которое необходимо вызывать при финише\выигрыша сцены. После вызова вылетает панель победы (и другое в зависимости от подписок).  
@@ -29,7 +29,7 @@ Observer.Instance.OnWinLevel += delegate { SomeMethod(2f); };
 Observer.Instance.OnWinLevel();  
 Observer.Instance.CallOnWinLevel();  
 
- - Основа LevelManager :  
+- # LevelManager :  
 Загрузка сцен производится со стартовой сцены Preload, необходимой для префаба аналитики и других неуничтожаемых объектов при загрузке сцен.  
 Последовательность уровней прописывается в файле ScriptableData -> LevelsQueue (можно сделать несколько файлов с разными последовательностями уровней. Create -> Levels Queue).
 Чтобы уровни всегда запускались зацикленно по порядку нужно в LevelManager установить LoadType на Linear.  
@@ -37,19 +37,19 @@ Observer.Instance.CallOnWinLevel();
 Чтобы уровни запускались рандомно после одного последовательного прохождения нужно в LevelManager установить ScenesLoadType на RandomAfterLinear. 
 Чтобы поменять загружаемую при запуске игры сцену (в эдиторе) нужно в RegularTemplate -> LevelManager вписать индекс нужной сцены и нажать Set current level index.  
 
- - AdsManager :
-Для работы с рекламой необходима реализация IAdsImpl, которая передается в AdsManager.  
-Перед показом интерстишиал рекламы (AdsManager.Instance.ShowInterstitialAd()) для обработки показа нужно подписаться на событие AdsManager.Instance.onInterAdShowedOrFailed.  
-Перед показом ревард видео для обработки награждения игрока нужно подписаться на события AdsManager.Instance.onRewardedAdFailedOrDiscarded и AdsManager.Instance.onRewardedAdRewarded.  
-
- - ItemSystems :
+- # ItemSystems :  
 Система айтемов включает в себя инвентарь, магазин и выдачу подарков. Предметы в инвентаре могут делиться на группы, могут быть экипируемыми.  
 Предметы могут быть доступны для использования изначально, могут покупаться в магазине, могут выдаваться в качестве подарка для использования/для покупки в магазине.  
 Для каждого предмета необходимо создать файлы данных для инвентаря, для магазина и для списка подарков.  Пр. смотреть в папке ScriptableData -> ItemSystemsData.  
 Созданные файлы предметов для инвентаря должны заполняться в соответствующий предмету файл группы инвентаря, файлы групп инвентаря должны заполняться в список групп в Prefabs -> RegularTemplate -> Inventory -> ItemsGroups.  
 Созданные файлы предметов для покупки должны заполняться в соответствующий предмету файл группы покупок, файлы групп покупок должны заполняться  в список групп в Prefabs -> UI -> Shop -> Shop -> Shop -> ItemsGroups и в соответствующий ShopTab. (пр. ExampleShopTab)  
-Созданные файлы предметов для выдачи в качестве награды заполняться в Prefabs -> RegularTemplate -> GiftGiver -> Items.  
-Отображение прогрессии выдачи подарков реализовано в GiftProgressUpdatePanel.  
+Созданные файлы предметов для выдачи в качестве награды должны заполняться в Prefabs -> RegularTemplate -> GiftsQueue -> ReceivingQueue.  
+Обработка и отображение прогресса выдачи подарков реализовано в GiftProgressUpdatePanel.  
+
+- # AdsManager :  
+Для работы с рекламой необходима реализация IAdsImpl, которая передается в AdsManager.  
+Перед показом интерстишиал рекламы (AdsManager.Instance.ShowInterstitialAd()) для обработки показа нужно подписаться на событие AdsManager.Instance.onInterAdShowedOrFailed.  
+Перед показом ревард видео для обработки награждения игрока нужно подписаться на события AdsManager.Instance.onRewardedAdFailedOrDiscarded и AdsManager.Instance.onRewardedAdRewarded.  
 
  - В папке префабов есть два прогресс бара уровня.  
 
