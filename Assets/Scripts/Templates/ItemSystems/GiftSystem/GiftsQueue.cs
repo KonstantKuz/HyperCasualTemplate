@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Templates.ItemSystems.GiftSystem
 {
-    public class GiftQueue : Singleton<GiftQueue>
+    public class GiftsQueue : Singleton<GiftsQueue>
     {
         [SerializeField] private List<GiftItemData> _receivingQueue;
 
@@ -15,24 +15,24 @@ namespace Templates.ItemSystems.GiftSystem
             {
                 if (_items == null)
                 {
-                    InitializeGiftItems();
+                    InitializeItems();
                 }
 
                 return _items;
             }
         }
 
-        private void InitializeGiftItems()
+        private void InitializeItems()
         {
             _items = _receivingQueue.Select(giftData => new GiftItem(giftData)).ToList();
         }
 
-        public GiftItem NextGift()
+        public GiftItem Next()
         {
             return Items.First(gift => !gift.IsReceived);
         }
 
-        public bool AllGiftsReceived()
+        public bool IsAllReceived()
         {
             return Items.All(gift => gift.IsReceived);
         }

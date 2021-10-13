@@ -19,7 +19,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
 
         private Action _onPanelClosed;
 
-        private GiftQueue _giftQueue;
+        private GiftsQueue _giftsQueue;
         private GiftItem _nextGift;
 
         private const float ShowProgressDelay = 2f;
@@ -28,14 +28,14 @@ namespace Templates.ItemSystems.GiftSystem.UI
         {
             _panelContainer.SetActive(false);
 
-            _giftQueue = GiftQueue.Instance;
+            _giftsQueue = GiftsQueue.Instance;
             
-            if (_giftQueue.AllGiftsReceived())
+            if (_giftsQueue.IsAllReceived())
             {
                 return;
             }
             
-            _nextGift = _giftQueue.NextGift();
+            _nextGift = _giftsQueue.Next();
             _giftImage.sprite = _nextGift.Icon;
             _giftShadowImage.sprite = _nextGift.Icon;
 
@@ -48,7 +48,7 @@ namespace Templates.ItemSystems.GiftSystem.UI
             
             _panelContainer.SetActive(true);
             
-            if (_giftQueue.AllGiftsReceived())
+            if (_giftsQueue.IsAllReceived())
             {
                 Close();
                 return;
