@@ -11,16 +11,50 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
     [SerializeField] private List<Pool> pools;
     [SerializeField] private List<PoolGroup> poolGroups;
 
-    private Dictionary<string, Pool> poolsDictionary;
-    private Dictionary<string, PoolGroup> poolGroupsDictionary;
-    private Dictionary<string, List<string>> groupTagToHisPoolTagsDictionary;
+    private Dictionary<string, Pool> _poolsDictionary;
+    private Dictionary<string, PoolGroup> _poolGroupsDictionary;
+    private Dictionary<string, List<string>> _groupTagToHisPoolTagsDictionary;
+
+    private Dictionary<string, Pool> PoolsDictionary
+    {
+        get
+        {
+            if (_poolsDictionary == null)
+            {
+                InitializePooler();
+            }
+
+            return _poolsDictionary;
+        }
+    }
+
+    private Dictionary<string, PoolGroup> PoolGroupsDictionary
+    {
+        get
+        {
+            if (_poolGroupsDictionary == null)
+            {
+                InitializePooler();
+            }
+
+            return _poolGroupsDictionary;
+        }
+    }
+    
+    private Dictionary<string, List<string>> GroupTagToHisPoolTagsDictionary
+    {
+        get
+        {
+            if (_groupTagToHisPoolTagsDictionary == null)
+            {
+                InitializePooler();
+            }
+
+            return _groupTagToHisPoolTagsDictionary;
+        }
+    }
     
     #region Initialization
-
-    private void Awake()
-    {
-        InitializePooler();
-    }
 
     private void InitializePooler()
     {
@@ -29,29 +63,9 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
         InitializeObjectPoolGroups();
     }
 
-    public void TryResolveUnassignedPools()
-    {
-        if (pools == null || poolGroups == null)
-            return;
-        
-        for (int i = 0; i < poolGroups.Count; i++)
-        {
-            for (int j = 0; j < poolGroups[i].poolsInGroup.Count; j++)
-            {
-                Pool poolInGroup = poolGroups[i].poolsInGroup[j].pool;
-                if(!pools.Contains(poolInGroup))
-                {
-                    Debug.LogWarning($"There is {poolInGroup.poolTag} pool in {poolGroups[i].groupTag} pool group, " +
-                                     $"but not in Pools! Added automatically.");
-                    pools.Add(poolInGroup);
-                }
-            }
-
-        }
-    }
     private void InitializeSingleObjectPools()
     {
-        poolsDictionary = new Dictionary<string, Pool>();
+        _poolsDictionary = new Dictionary<string, Pool>();
 
         for (int i = 0; i < pools.Count; i++)
         {
@@ -62,25 +76,25 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
                 pools[i].poolTag = pools[i].prefab.name;
             }
 
-            poolsDictionary.Add(pools[i].poolTag, pools[i]);
+            _poolsDictionary.Add(pools[i].poolTag, pools[i]);
         }
     }
     private void InitializeObjectPoolGroups()
     {
-        poolGroupsDictionary = new Dictionary<string, PoolGroup>();
-        groupTagToHisPoolTagsDictionary = new Dictionary<string, List<string>>();
+        _poolGroupsDictionary = new Dictionary<string, PoolGroup>();
+        _groupTagToHisPoolTagsDictionary = new Dictionary<string, List<string>>();
 
         for (int groupIndex = 0; groupIndex < poolGroups.Count; groupIndex++)
         {
             poolGroups[groupIndex].CalculateTotalWeight();
-            poolGroupsDictionary.Add(poolGroups[groupIndex].groupTag, poolGroups[groupIndex]);
+            _poolGroupsDictionary.Add(poolGroups[groupIndex].groupTag, poolGroups[groupIndex]);
             
             List<string> poolTagsInGroup = new List<string>();
             for (int singleIndex = 0; singleIndex < poolGroups[groupIndex].poolsInGroup.Count; singleIndex++)
             {
                 poolTagsInGroup.Add(poolGroups[groupIndex].poolsInGroup[singleIndex].pool.poolTag);
             }
-            groupTagToHisPoolTagsDictionary.Add(poolGroups[groupIndex].groupTag, poolTagsInGroup);
+            _groupTagToHisPoolTagsDictionary.Add(poolGroups[groupIndex].groupTag, poolTagsInGroup);
         }
     }
     #endregion
@@ -92,32 +106,32 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
 
         TryFindPoolTag(poolTag);
 
-        if (poolsDictionary[poolTag].poolQueue.Count > 0)
+        if (PoolsDictionary[poolTag].poolQueue.Count > 0)
         {
-            objToReturn = poolsDictionary[poolTag].poolQueue.Dequeue();
+            objToReturn = PoolsDictionary[poolTag].poolQueue.Dequeue();
             objToReturn.gameObject.SetActive(true);
         }
         else
         {
-            if(poolsDictionary[poolTag].parent == null)
+            if(PoolsDictionary[poolTag].parent == null)
             {
-                poolsDictionary[poolTag].parent = new GameObject(poolTag + "Pool").transform;
-                poolsDictionary[poolTag].parent.parent = transform;
+                PoolsDictionary[poolTag].parent = new GameObject(poolTag + "Pool").transform;
+                PoolsDictionary[poolTag].parent.parent = transform;
             }
-            objToReturn = Instantiate(poolsDictionary[poolTag].prefab, poolsDictionary[poolTag].parent);
-            objToReturn.name = poolsDictionary[poolTag].prefab.name;
+            objToReturn = Instantiate(PoolsDictionary[poolTag].prefab, PoolsDictionary[poolTag].parent);
+            objToReturn.name = PoolsDictionary[poolTag].prefab.name;
         }
 
-        if(poolsDictionary[poolTag].autoReturn)
+        if(PoolsDictionary[poolTag].autoReturn)
         {
-            DelayedReturnObject(objToReturn, poolTag, poolsDictionary[poolTag].autoReturnDelay);
+            DelayedReturnObject(objToReturn, poolTag, PoolsDictionary[poolTag].autoReturnDelay);
         }
 
         return objToReturn;
     }
     private void TryFindPoolTag(string poolTag)
     {
-        if (!poolsDictionary.ContainsKey(poolTag))
+        if (!PoolsDictionary.ContainsKey(poolTag))
         {
             Debug.LogError($"Threse is no pool with pooltag == {poolTag}");
         }
@@ -137,14 +151,14 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
     {
         TryFindGroupTag(groupTag);
 
-        int rndSingleObjectPoolTagIndex = Random.Range(0, groupTagToHisPoolTagsDictionary[groupTag].Count);
-        string rndSingleObjectPoolTag = groupTagToHisPoolTagsDictionary[groupTag][rndSingleObjectPoolTagIndex];
+        int rndSingleObjectPoolTagIndex = Random.Range(0, GroupTagToHisPoolTagsDictionary[groupTag].Count);
+        string rndSingleObjectPoolTag = GroupTagToHisPoolTagsDictionary[groupTag][rndSingleObjectPoolTagIndex];
 
         return SpawnObject(rndSingleObjectPoolTag);
     }
     private void TryFindGroupTag(string groupTag)
     {
-        if (!groupTagToHisPoolTagsDictionary.ContainsKey(groupTag))
+        if (!GroupTagToHisPoolTagsDictionary.ContainsKey(groupTag))
         {
             Debug.LogError($"Threse is no poolgroup with grouptag == {groupTag}");
         }
@@ -161,11 +175,11 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
     {
         TryFindGroupTag(groupTag);
         
-        int randomValue = Random.Range(0, poolGroupsDictionary[groupTag].totalWeight + 1);
+        int randomValue = Random.Range(0, PoolGroupsDictionary[groupTag].totalWeight + 1);
 
-        for (int i = 0; i < poolGroupsDictionary[groupTag].poolsInGroup.Count; i++)
+        for (int i = 0; i < PoolGroupsDictionary[groupTag].poolsInGroup.Count; i++)
         {
-            WeightedPool weightedPool = poolGroupsDictionary[groupTag].poolsInGroup[i];
+            WeightedPool weightedPool = PoolGroupsDictionary[groupTag].poolsInGroup[i];
             if (randomValue <=  weightedPool.weight)
             {
                 return SpawnObject(weightedPool.pool.poolTag);
@@ -193,10 +207,10 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
     {
         TryFindPoolTag(poolTag);
 
-        if (!poolsDictionary[poolTag].poolQueue.Contains(toReturn))
+        if (!PoolsDictionary[poolTag].poolQueue.Contains(toReturn))
         {
             toReturn.SetActive(false);
-            poolsDictionary[poolTag].poolQueue.Enqueue(toReturn);
+            PoolsDictionary[poolTag].poolQueue.Enqueue(toReturn);
         }
     }
     public async void DelayedReturnObject(GameObject toReturn, string poolTag, float delay)
@@ -213,6 +227,35 @@ public class ObjectPooler : PoolerSingleton<ObjectPooler>
     #endregion
     
 #if UNITY_EDITOR
+    public void TryResolveUnassignedPools()
+    {
+        if (poolGroups == null)
+        {
+            return;
+        }
+        
+        for (int i = 0; i < poolGroups.Count; i++)
+        {
+            for (int j = 0; j < poolGroups[i].poolsInGroup.Count; j++)
+            {
+                Pool poolInGroup = poolGroups[i].poolsInGroup[j].pool;
+
+                if (pools == null)
+                {
+                    pools = new List<Pool> {poolInGroup};
+                    continue;
+                }
+                
+                if(!pools.Contains(poolInGroup))
+                {
+                    Debug.LogWarning($"There is {poolInGroup.poolTag} pool in {poolGroups[i].groupTag} pool group, " +
+                                     $"but not in Pools! Added automatically.");
+                    pools.Add(poolInGroup);
+                }
+            }
+        }
+    }
+    
     #region EditorOnly
     public List<Pool> EditorOnlyPools
     {
